@@ -14,10 +14,10 @@ Repositorio oficial del grupo de trabajo AccesibleSolutions de la asignatura DGP
 
 * Luis
 * Ana
-* Javier
-* Víctor
+* Javier Linde
+* Víctor Pérez Barranco
 * Jesús
-* Carlos
+* Carlos Pérez Cruz
 * Juanma
 * Noe
 
