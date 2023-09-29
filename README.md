@@ -59,8 +59,22 @@ usabilidad y accesiblidad del proyecto.
   18 de Octubre de 2023.
 
 #### Descripción
-Realizar el manual de coordinación para organizar el trabajo de equipo y las tecnologías y metodologías a utilizar. Posteriormente, rellenar la propuesta técnica para el cliente siguiendo el esquema propuesto a continuación:
+Realizar el [manual de coordinación](#Enlaces-de-desarrollo-y-documentación) para organizar el trabajo de equipo y las tecnologías y metodologías a utilizar. Posteriormente, rellenar la [propuesta técnica](#Enlaces-de-desarrollo-y-documentación) para el cliente siguiendo el esquema propuesto a continuación.
 
+#### Manual de coordinación
+* Metodología desarrollo y ciclo de vida: SCRUM
+* Recursos software desarrollo
+* Organización Equipo Trabajo
+* Herramientas de comunicación: Whatsapp, GitHub, Jira...
+* Relaciones con el cliente: Reuniones, tutorías...
+* Estandares de documentación: cómo comentar código (inglés, español...)
+* Plan de gestión de cambios: Cambios de requisitos, no da tiempo en iteración, omo se decide etc
+* Control de versiones: Si hay herbas etc (usar ramas github)
+* Gestión de calidad: Remarcar actividades de calidad
+* Plan de medición del desempeño: Horas de formación, reuniones, trabajo etc
+* Recompensas: Invitar a cerveza, recompensar trabajo etc
+
+#### Propuesta técnica
 * Portada (Título, nombre de equipo, integrantes, fecha, versión, logo).
 * Duración en meses.
 * Tipo de caso de negocio (demanda)
