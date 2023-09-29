@@ -7,8 +7,19 @@ Repositorio oficial del grupo de trabajo AccesibleSolutions de la asignatura DGP
 ![](images/logo.jpeg)
 
 ## Índice
-
+* [Integrantes del grupo](#Integrantes-del-grupo)
 * [Enlaces de desarrollo y documentación](#Enlaces-de-desarrollo-y-documentación)
+
+## Integrantes del grupo
+
+* Luis
+* Ana
+* Javier
+* Víctor
+* Jesús
+* Carlos
+* Juanma
+* Noe
 
 ## Enlaces de desarrollo y documentación
 
