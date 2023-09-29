@@ -5,12 +5,12 @@
 Repositorio oficial del grupo de trabajo AccesibleSolutions de la asignatura DGP y MDA, ETSIIT, UGR
 
 ![](images/logo.jpeg)
-
+***
 ## Índice
 * [Roles de trabajo](#Roles-de-trabajo)
 * [Integrantes y Roles. Iteración I.](#Integrantes-y-roles.-Iteración-I.)
 * [Enlaces de desarrollo y documentación](#Enlaces-de-desarrollo-y-documentación)
-
+***
 ## Roles de trabajo
 ### Coordinador
 Será el responsable del cumplimiento de los objetivos
@@ -39,7 +39,7 @@ se apliquen sigan los estándares presentados en clase.
 ### Gestor de Accesibilidad
 Será el responsable de planificar y asegurar la
 usabilidad y accesiblidad del proyecto.
-
+***
 ## Integrantes y roles. Iteración I.
 
 * Luis                   - [Gestor de Calidad](#Gestor-de-Calidad)
@@ -50,7 +50,93 @@ usabilidad y accesiblidad del proyecto.
 * Carlos Pérez Cruz      - [Presentador](#Presentador)
 * Juanma
 * Noe
+***
+## Prácticas
+## DGP
+### Práctica 1.
 
+#### Fecha límite de entrega
+  18 de Octubre de 2023.
+
+#### Descripción
+Realizar el manual de coordinación para organizar el trabajo de equipo y las tecnologías y metodologías a utilizar. Posteriormente, rellenar la propuesta técnica para el cliente siguiendo el esquema propuesto a continuación:
+
+* Portada (Título, nombre de equipo, integrantes, fecha, versión, logo).
+* Duración en meses.
+* Tipo de caso de negocio (demanda)
+* Objetivos principales
+* Objetivos específicos (ejs: aprender tecnologías, desarrollar una aplicación móvil para el alumnado del colegio, coordinarnos en el equipo...)
+* Antecedentes del equipo de trabajo (poner experiencias de los integrantes: C++, Desarrollo Web, Flutter etc etc)
+* Justificación (Buscar herramientas y apps que se podrían haber usado en lugar de la nuestra y decir por qué la nuestra es mejor (ej: es más accesible))
+* Descripción y esquema de la solución
+* Actividades a realizar (No para práctica 1)
+* Cronograma (No para práctica 1)
+* Cauces de seguimiento (ejs: jira para el profesor y github-Readme)
+* Valor añadido (Recomendado no añadir ya que no se podrá desarrollar toda la funcionalidad básica requerida)
+* Beneficios y beneficiarios (qué se gana con nuestra aplicación)
+  
+#### Entregables
+- [ ] Manual de coordinación.
+- [ ] Propuesta técnica.
+
+***
+### Práctica 2.
+
+***
+### Práctica 3.
+
+***
+### Práctica 4.
+
+***
+## MDA
+### Práctica 0.
+#### Fecha límite de entrega
+  9 de Octubre de 2023.
+
+#### Descripción
+Organizar el grupo de prácticas. Asignar a cada uno de los miembros del grupo
+uno de los roles que se han descrito en el punto anterior. Esta asignación
+debería de mantenerse a lo largo del proyecto y en cualquier caso debe
+notificarse al profesor cambios en sus asignaciones.
+  
+#### Entregables
+- [ ] Lista de asignación de roles del grupo de trabajo.
+
+***
+### Práctica 1.
+#### Fecha límite de entrega
+  9 de Octubre de 2023.
+
+#### Descripción
+1. Describir un conjunto de usuarios prioritarios de nuestro sistema. Se
+puede usar la plantilla de descripción de Personas vista en clase de
+teoría (se encuentra disponible en Prado), añadiendo los campos que se
+crean convenientes. También se puede utilizar otra plantilla que
+consideréis oportuna.
+
+1. Pensando en los usuarios definidos en la tarea anterior describir un
+conjunto de escenarios de uso que nos den una idea de la utilidad y la
+solución propuesta al problema. Usar la plantilla de descripción de
+escenarios vista en clase de teoría (se encuentra disponible en Prado).
+
+1. Crear una visión del producto usando el esquema del Elevator Pitch.
+  
+#### Entregables
+- [ ] Conjunto de plantillas Persona con la descripción de usuarios prioritarios del sistema.
+- [ ] Conjunto de plantillas con la descripción de los escenarios seleccionados de uso del sistema.
+- [ ] Esquema de Elevator Pitch para la Visión del producto.
+
+***
+### Práctica 2.
+
+***
+### Práctica 3.
+
+***
+### Práctica 4.
+
+***
 ## Enlaces de desarrollo y documentación
 
 * [Google Drive](https://drive.google.com/drive/u/1/folders/1LovabXaKL-sQex8Xd8ZFdd958zCO_iSp)
