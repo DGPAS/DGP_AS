@@ -13,25 +13,41 @@ Repositorio oficial del grupo de trabajo AccesibleSolutions de la asignatura DGP
 
 ## Roles de trabajo
 ### Coordinador
+Será el responsable del cumplimiento de los objetivos
+grupales así como de la gestión del grupo (comunicación, coordinación,
+planificación, etc.).
 
 ### Catalogador
+Será responsable de recopilar, analizar y clasificar la
+información generada por el grupo en las diferentes tareas asociadas a las
+prácticas.
 
 ### Moderador
+Responsable de plantear y moderar los debates y de
+seleccionar las ideas y decisiones grupales.
 
 ### Presentador
+Responsable de elaborar y presentar resúmenes, resultados
+y presentaciones tanto al profesor como a los compañeros de otros grupos.
 
 ### Gestor de Calidad
+Será el responsable de asegurar la calidad de los
+productos generados y del proceso de desarrollo que se realice. Se
+encargará de velar por que los documentos generados y las técnicas que
+se apliquen sigan los estándares presentados en clase. 
 
 ### Gestor de Accesibilidad
+Será el responsable de planificar y asegurar la
+usabilidad y accesiblidad del proyecto.
 
 ## Integrantes y roles. Iteración I.
 
-* Luis
-* Ana
-* Javier Linde
-* Víctor Pérez Barranco
-* Jesús
-* Carlos Pérez Cruz  - [Presentador](#Presentador)
+* Luis                   - [Gestor de Calidad](#Gestor-de-Calidad)
+* Ana                    - [Gestora de Accesibilidad](#Gestor-de-Accesibilidad)
+* Javier Linde           - [Catalogador](#Catalogador)
+* Víctor Pérez Barranco  - [Moderador](#Moderador)
+* Jesús                  - [Coordinador](#Coordinador)
+* Carlos Pérez Cruz      - [Presentador](#Presentador)
 * Juanma
 * Noe
 
