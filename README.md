@@ -7,17 +7,31 @@ Repositorio oficial del grupo de trabajo AccesibleSolutions de la asignatura DGP
 ![](images/logo.jpeg)
 
 ## Índice
-* [Integrantes del grupo](#Integrantes-del-grupo)
+* [Roles de trabajo](#Roles-de-trabajo)
+* [Integrantes y Roles. Iteración I.](#Integrantes-y-roles.-Iteración-I.)
 * [Enlaces de desarrollo y documentación](#Enlaces-de-desarrollo-y-documentación)
 
-## Integrantes del grupo
+## Roles de trabajo
+### Coordinador
+
+### Catalogador
+
+### Moderador
+
+### Presentador
+
+### Gestor de Calidad
+
+### Gestor de Accesibilidad
+
+## Integrantes y roles. Iteración I.
 
 * Luis
 * Ana
 * Javier Linde
 * Víctor Pérez Barranco
 * Jesús
-* Carlos Pérez Cruz
+* Carlos Pérez Cruz  - [Presentador](#Presentador)
 * Juanma
 * Noe
 
