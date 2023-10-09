@@ -115,7 +115,7 @@ debería de mantenerse a lo largo del proyecto y en cualquier caso debe
 notificarse al profesor cambios en sus asignaciones.
   
 #### Entregables
-- [ ] Lista de asignación de roles del grupo de trabajo.
+- [x] Lista de asignación de roles del grupo de trabajo.
 
 ***
 ### Práctica 1.
