@@ -42,11 +42,11 @@ usabilidad y accesiblidad del proyecto.
 ***
 ## Integrantes y roles. Iteración I.
 
-* Luis                   - [Gestor de Calidad](#Gestor-de-Calidad)
-* Ana                    - [Gestora de Accesibilidad](#Gestor-de-Accesibilidad)
-* Javier Linde           - [Catalogador](#Catalogador)
-* Víctor Pérez Barranco  - [Moderador](#Moderador)
-* Jesús                  - [Coordinador](#Coordinador)
+* Luis Orts Ferrer           - [Gestor de Calidad](#Gestor-de-Calidad)
+* Ana López Mohedano         - [Gestora de Accesibilidad](#Gestor-de-Accesibilidad)
+* Javier Linde Martínez      - [Catalogador](#Catalogador)
+* Víctor Pérez Barranco      - [Moderador](#Moderador)
+* Jesús Palomares Fernández  - [Coordinador](#Coordinador)
 * Carlos Pérez Cruz      - [Presentador](#Presentador)
 * Juanma
 * Noe
