@@ -137,9 +137,9 @@ escenarios vista en clase de teoría (se encuentra disponible en Prado).
 1. Crear una visión del producto usando el esquema del Elevator Pitch.
   
 #### Entregables
-- [ ] Conjunto de plantillas Persona con la descripción de usuarios prioritarios del sistema.
-- [ ] Conjunto de plantillas con la descripción de los escenarios seleccionados de uso del sistema.
-- [ ] Esquema de Elevator Pitch para la Visión del producto.
+- [x] Conjunto de plantillas Persona con la descripción de usuarios prioritarios del sistema.
+- [x] Conjunto de plantillas con la descripción de los escenarios seleccionados de uso del sistema.
+- [x] Esquema de Elevator Pitch para la Visión del producto.
 
 ***
 ### Práctica 2.
