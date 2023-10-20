@@ -90,8 +90,8 @@ Realizar el [manual de coordinación](#Enlaces-de-desarrollo-y-documentación) p
 * Beneficios y beneficiarios (qué se gana con nuestra aplicación)
   
 #### Entregables
-- [ ] Manual de coordinación.
-- [ ] Propuesta técnica.
+- [x] Manual de coordinación.
+- [x] Propuesta técnica.
 
 ***
 ### Práctica 2.
@@ -143,10 +143,70 @@ escenarios vista en clase de teoría (se encuentra disponible en Prado).
 
 ***
 ### Práctica 2.
+#### Fecha límite de entrega
+  3 de Octubre de 2023.
 
+#### Descripción
+1. Realizar un brainstorming para obtener una lista inicial de historias de
+usuario para nuestro proyecto.
+
+1. Priorizar las historias de usuario.
+   
+1. Estimar el esfuerzo necesario para realizar cada una de las historias de
+usuario. (Para la realización de la actividad 2 y 3 realizaremos una
+reunión de todo el equipo de desarrollo, junto con el cliente, en la que
+analizaremos cada una de las HU. En el caso de la estimación podemos
+usar la herramienta del “Planning Poker” para la estimación).
+
+1. Estimar la velocidad del equipo de desarrollo.
+
+1. Agrupar las HU definiendo un conjunto de entregas e iteraciones
+asociadas a ellas (realizaremos una reunión de planificación de
+entregas).
+
+1. Ampliar las HU que van a ser desarrolladas en la primera iteración
+incluyéndoles los criterios de aceptación de las mismas.
+
+1. Realizar un documento que describa el plan de entregas del producto.
+  
+#### Entregables
+- [x] Historias de usuario, estimación de tiempo de desarrollo y prioridad.
+- [x] Velocidad estimada de equipo.
+- [x] Distribución de las HU en iteraciones.  
 ***
 ### Práctica 3.
+#### Fecha límite de entrega
+  8 de Noviembre de 2023.
 
+#### Descripción
+1. . Realizar una reunión de planificación del SPRINT y generar un
+documento del plan de la iteración.
+
+1. Realizar un tablón con la información visual de las HU y tareas de la
+iteración. Este tablón se debe ir actualizando a lo largo de las 3
+semanas, con la evolución del SPRINT.
+
+1. Cada uno de los miembros del equipo de desarrollo se encargará de ir
+cogiendo la primera tarea que tenga asignada en el SPRINT Backlog y
+la realizará, finalizando este proceso cuando todas las tareas que tenga
+asignadas estén terminadas o se decida que se dejan para otro SPRINT.
+
+1. A lo largo del desarrollo hay que ir integrando los elementos generados
+(código, bocetos, storyboard, etc.) en el repositorio del producto.
+Práctica 3 – Metodologías de desarrollo Ágiles (Grado en Ingeniería Informática) Curso 2023/2024
+©Lenguajes y Sistemas Informáticos (Universidad de Granada) Página 3 de 5
+
+1. Realizar una reunión revisión del SPRINT y generar un informe con los
+resultados obtenidos en ella.
+
+1. Realizar una reunión de retrospectiva y generar un informe donde se
+analice cómo se está aplicando la metodología de desarrollo y cómo se
+podría mejorar.
+  
+#### Entregables
+- [ ] Planificación de iteración de la 1a iteración.
+- [ ] Desarrollo de las subtareas diseñadas en la planificación de iteración.
+- [ ] Informe de Sprint.
 ***
 ### Práctica 4.
 
@@ -156,3 +216,4 @@ escenarios vista en clase de teoría (se encuentra disponible en Prado).
 * [Google Drive](https://drive.google.com/drive/u/1/folders/1LovabXaKL-sQex8Xd8ZFdd958zCO_iSp)
 * [Manual de Coordinación](https://docs.google.com/document/d/1RdoVJ93s8qINVAa6laEMrOh9KG8aMlf8RoIHQhvl6B4/edit#heading=h.6olvoqspjz34)
 * [Propuesta Técnica](https://docs.google.com/document/d/14vmPwP99a5Nyo2jQv39nDkFfgl-0UDEg9jmXGvpY9SA/edit#heading=h.pu7aoxtbe6bs)
+* [Diseño en Figma](https://www.figma.com/file/0eMhQn6Zauh4bX2wr4P4RI/D-Ability?type=design&node-id=0-1&mode=design&t=KZax9g90xWF7p7RM-0)
