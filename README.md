@@ -48,8 +48,8 @@ usabilidad y accesiblidad del proyecto.
 * Víctor Pérez Barranco      - [Moderador](#Moderador)
 * Jesús Palomares Fernández  - [Coordinador](#Coordinador)
 * Carlos Pérez Cruz      - [Presentador](#Presentador)
-* Juanma
-* Noe
+* Juanma Manuel García Ortega
+* Noé Arthur Mateo Boulud
 ***
 ## Prácticas
 ## DGP
