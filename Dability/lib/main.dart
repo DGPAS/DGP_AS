@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dability/add_task.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const AddTask(),
     );
   }
 }
@@ -68,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // than haviScang to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by

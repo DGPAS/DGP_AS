@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:dability/text_form.dart';
 
 
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
 
-  @Override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -12,9 +13,12 @@ class AddTask extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Form(child: child),
+          Container(
+            padding: EdgeInsets.all(30.0),
+            child: const TextForm(),
+          ),
         ],
       ),
-    )
+    );
   }
 }

@@ -25,17 +25,29 @@ class TextFormState extends State<TextForm> {
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
-      child: const Column(
-        children: <Widget>[
-          Column(
-            TextField(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(20),
+
+        ),
+        position: DecorationPosition.background,
+        child: Column(
+          children: <Widget>[
+            Container (
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: const Text("Nombre de la tarea"),
+            ),
+            TextField (
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Enter a search term',
+                hintText: 'Nombre de la tarea',
               ),
             ),
-          )
-        ],
+          ],
+        ),
+
       ),
     );
   }
