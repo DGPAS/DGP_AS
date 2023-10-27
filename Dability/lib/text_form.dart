@@ -1,53 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:dability/form_type.dart';
 
-// Define a custom Form widget.
 class TextForm extends StatefulWidget {
-  const TextForm({super.key});
+  final bool requiredField;
+  final String titulo;
+  final FormType tipo;
+
+  const TextForm({
+    Key? key,
+    required this.requiredField,
+    required this.titulo,
+    required this.tipo,
+  }) : super(key: key);
 
   @override
-  TextFormState createState() {
-    return TextFormState();
-  }
+  _TextFormState createState() => _TextFormState(requiredField: requiredField, titulo: titulo, tipo: tipo);
 }
 
-// Define a corresponding State class.
-// This class holds data related to the form.
-class TextFormState extends State<TextForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a `GlobalKey<FormState>`,
-  // not a GlobalKey<MyCustomFormState>.
+class _TextFormState extends State<TextForm> {
   final _formKey = GlobalKey<FormState>();
+  String campoRequerido = "* Campo requerido";
+  String titulo = "";
+  FormType tipo = FormType.title;
+  final bool requiredField;
+
+  _TextFormState({required this.requiredField, required this.titulo, required this.tipo});
+
+  double getContentPadding () {
+    if (tipo == FormType.title) {
+      return 12.0;
+    } else if (tipo == FormType.description) {
+      return 200.0;
+    } else {
+      return 12.0; // Valor por defecto
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.circular(20),
-
-        ),
-        position: DecorationPosition.background,
-        child: Column(
-          children: <Widget>[
-            Container (
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              child: const Text("Nombre de la tarea"),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              '$titulo${requiredField ? ' *' : ''}',
             ),
-            TextField (
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Nombre de la tarea',
-              ),
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              contentPadding: EdgeInsets.fromLTRB(10,0,0,getContentPadding()),
+              helperText: requiredField ? campoRequerido : null,
+              //labelText: '$titulo${requiredField ? ' *' : ''}',
+              alignLabelWithHint: true,
             ),
-          ],
-        ),
-
+            onSaved: (String? value) {
+              // This optional block of code can be used to run
+              // code when the user saves the form.
+            },
+            validator: (String? value) {
+              return (value != null && value.contains('@')) ? 'Do not use the @ char.' : null;
+            },
+          ),
+        ],
       ),
     );
   }
