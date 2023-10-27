@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dability/form_type.dart';
+import 'package:dability/Components/form_type.dart';
 
 class TextForm extends StatefulWidget {
   final bool requiredField;
@@ -51,11 +51,11 @@ class _TextFormState extends State<TextForm> {
           TextFormField(
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              contentPadding: EdgeInsets.fromLTRB(10,0,0,getContentPadding()),
+              contentPadding: EdgeInsets.fromLTRB(10,20,0,getContentPadding()),
               helperText: requiredField ? campoRequerido : null,
-              //labelText: '$titulo${requiredField ? ' *' : ''}',
               alignLabelWithHint: true,
             ),
+            textAlignVertical: TextAlignVertical.top,
             onSaved: (String? value) {
               // This optional block of code can be used to run
               // code when the user saves the form.

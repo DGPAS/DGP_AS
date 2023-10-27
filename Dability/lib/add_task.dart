@@ -1,6 +1,6 @@
+import 'package:dability/add_task_forms.dart';
 import 'package:flutter/material.dart';
-import 'package:dability/text_form.dart';
-import 'package:dability/form_type.dart';
+import 'package:dability/add_task.dart';
 
 
 class AddTask extends StatelessWidget {
@@ -12,18 +12,7 @@ class AddTask extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Crer Tareas"),
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(30.0),
-            child: const TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: FormType.title,),
-          ),
-          Container(
-            padding: const EdgeInsets.all(30.0),
-            child: const TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: FormType.description),
-          ),
-        ],
-      ),
+      body: AddTaskForms(),
     );
   }
 }
