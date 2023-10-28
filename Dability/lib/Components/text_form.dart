@@ -51,7 +51,9 @@ class _TextFormState extends State<TextForm> {
           TextFormField(
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              contentPadding: EdgeInsets.fromLTRB(10,20,0,getContentPadding()),
+              filled: true,
+              fillColor: Colors.white,
+            contentPadding: EdgeInsets.fromLTRB(10,20,0,getContentPadding()),
               helperText: requiredField ? campoRequerido : null,
               alignLabelWithHint: true,
             ),

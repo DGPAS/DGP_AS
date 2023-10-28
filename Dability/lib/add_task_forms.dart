@@ -10,61 +10,65 @@ class AddTaskForms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                )
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 30.0, top: 30.0, left: 10.0, right: 10.0),
+        child: Column(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  )
+              ),
+              padding: const EdgeInsets.all(20.0),
+              margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+              child: const TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: FormType.title,),
             ),
-            padding: const EdgeInsets.all(20.0),
-            margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 20.0),
-            child: const TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: FormType.title,),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                )
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  )
+              ),
+              padding: const EdgeInsets.all(20.0),
+              margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+              child: const TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: FormType.description),
             ),
-            padding: const EdgeInsets.all(20.0),
-            margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-            child: const TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: FormType.description),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                )
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  )
+              ),
+              padding: const EdgeInsets.all(20.0),
+              margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+              child: Column (
+
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+                    child: const UploadForm(requiredField: false, titulo: "Añadir pictogramas del proceso a realizar", tipo: FormType.imagesUpload),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
+                    child: const TextForm(requiredField: false, titulo: "Descripción de las imágenes", tipo: FormType.description),
+                  ),
+                ],
+              ),
             ),
-            padding: const EdgeInsets.all(20.0),
-            margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-            child: Column (
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                  child: const UploadForm(requiredField: false, titulo: "Añadir pictogramas del proceso a realizar", tipo: FormType.imagesUpload),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
-                  child: const TextForm(requiredField: false, titulo: "Descripción de las imágenes", tipo: FormType.description),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

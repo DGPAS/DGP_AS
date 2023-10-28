@@ -51,6 +51,8 @@ class _UploadFormState extends State<UploadForm> {
           TextFormField(
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
+              filled: true,
+              fillColor: Colors.white,
               contentPadding: EdgeInsets.fromLTRB(10,20,0,getContentPadding()),
               helperText: requiredField ? campoRequerido : null,
               alignLabelWithHint: true,
