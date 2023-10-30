@@ -25,7 +25,7 @@ class AddTaskForms extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(20.0),
               margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-              child: const TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: FormType.title,),
+              child: const TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: TextFormType.title,),
             ),
             Container(
               decoration: BoxDecoration(
@@ -38,7 +38,7 @@ class AddTaskForms extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(20.0),
               margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-              child: const TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: FormType.description),
+              child: const TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: TextFormType.description),
             ),
             Container(
               decoration: BoxDecoration(
@@ -54,15 +54,21 @@ class AddTaskForms extends StatelessWidget {
               child: Column (
 
                 children: <Widget>[
+                  const Text('Puede añadir imágenes a la tarea.'),
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                    child: UploadForm(requiredField: false, titulo: "Añadir pictogramas del proceso a realizar", tipo: FormType.imagesUpload),
+                    child: UploadForm(requiredField: false, titulo: "Seleccionar pictogramas de la galería: ", tipo: ImageFormType.gallery),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
+                    child: UploadForm(requiredField: false, titulo: "Realizar una foto: ", tipo: ImageFormType.camera),
                   ),
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
-                    child: const TextForm(requiredField: false, titulo: "Descripción de las imágenes", tipo: FormType.description),
+                    child: const TextForm(requiredField: false, titulo: "Descripción de las imágenes", tipo: TextFormType.description),
                   ),
                 ],
               ),

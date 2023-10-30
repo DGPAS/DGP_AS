@@ -4,7 +4,7 @@ import 'package:dability/Components/form_type.dart';
 class TextForm extends StatefulWidget {
   final bool requiredField;
   final String titulo;
-  final FormType tipo;
+  final TextFormType tipo;
 
   const TextForm({
     Key? key,
@@ -21,15 +21,15 @@ class _TextFormState extends State<TextForm> {
   final _formKey = GlobalKey<FormState>();
   String campoRequerido = "* Campo requerido";
   String titulo = "";
-  FormType tipo = FormType.title;
+  TextFormType tipo = TextFormType.title;
   final bool requiredField;
 
   _TextFormState({required this.requiredField, required this.titulo, required this.tipo});
 
   double getContentPadding () {
-    if (tipo == FormType.title) {
+    if (tipo == TextFormType.title) {
       return 12.0;
-    } else if (tipo == FormType.description) {
+    } else if (tipo == TextFormType.description) {
       return 200.0;
     } else {
       return 12.0; // Valor por defecto

@@ -1,5 +1,9 @@
-enum FormType {
+enum TextFormType {
   title,
-  description,
-  imagesUpload
+  description
+}
+
+enum ImageFormType {
+  gallery,
+  camera
 }

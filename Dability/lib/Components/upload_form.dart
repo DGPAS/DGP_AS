@@ -2,13 +2,13 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/form_type.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dability/Components/current_images.dart';
 import 'dart:io';
 
 class UploadForm extends StatefulWidget {
   final bool requiredField;
   final String titulo;
-  final FormType tipo;
-  String? pickedFilePath;
+  final ImageFormType tipo;
 
   UploadForm({
     Key? key,
@@ -25,19 +25,18 @@ class _UploadFormState extends State<UploadForm> {
   final _formKey = GlobalKey<FormState>();
   String campoRequerido = "* Campo requerido";
   String titulo = "";
-  FormType tipo = FormType.title;
+  ImageFormType tipo;
   final bool requiredField;
+  List<String> pickedFilePaths = [];
 
   _UploadFormState({required this.requiredField, required this.titulo, required this.tipo});
 
 
-  double getContentPadding () {
-    if (tipo == FormType.title) {
-      return 12.0;
-    } else if (tipo == FormType.description) {
-      return 200.0;
+  ImageSource _getImageSourceType () {
+    if (tipo == ImageFormType.camera) {
+      return ImageSource.camera;
     } else {
-      return 12.0; // Valor por defecto
+      return ImageSource.gallery;
     }
   }
 
@@ -62,25 +61,39 @@ class _UploadFormState extends State<UploadForm> {
               '$titulo${requiredField ? ' *' : ''}',
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: DottedBorder(
-              color: Colors.black,
-              strokeWidth: 1,
-              dashPattern: [10,6],
-              borderType: BorderType.RRect,
-              radius: Radius.circular(20),
-              child: Container(
-                height: 200,
-                width: 800,
-                decoration: _buildBoxDecoration(),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(45),
-                    child: _getImage(null)
+          GestureDetector(
+            onTap: () async {
+              final picker = ImagePicker();
+              final XFile? pickedFile = await picker.pickImage(source: _getImageSourceType(), imageQuality: 100);
+
+              setState(() {
+                pickedFilePaths.add(pickedFile!.path);
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: DottedBorder(
+                color: Colors.black,
+                strokeWidth: 1,
+                dashPattern: [10,6],
+                borderType: BorderType.RRect,
+                radius: const Radius.circular(20),
+                child: Container(
+                  height: 200,
+                  width: 800,
+                  decoration: _buildBoxDecoration(),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(45),
+                      child: _getImage(null)
+                  ),
                 ),
               ),
             ),
           ),
+
+          Container(
+            child: pickedFilePaths.isNotEmpty ? CurrentImages(images: pickedFilePaths) : const Text('Aqui se mostrarán las imágenes añadidas'),
+          )
         ],
       ),
     );
