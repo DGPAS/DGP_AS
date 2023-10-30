@@ -57,7 +57,7 @@ class AddTaskForms extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                    child: const UploadForm(requiredField: false, titulo: "Añadir pictogramas del proceso a realizar", tipo: FormType.imagesUpload),
+                    child: UploadForm(requiredField: false, titulo: "Añadir pictogramas del proceso a realizar", tipo: FormType.imagesUpload),
                   ),
                   Container(
                     padding: const EdgeInsets.all(20.0),
