@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/form_type.dart';
 
-
 class AddTaskForms extends StatelessWidget {
   const AddTaskForms({super.key});
 
@@ -64,11 +63,6 @@ class AddTaskForms extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
                     child: UploadForm(requiredField: false, titulo: "Realizar una foto: ", tipo: ImageFormType.camera),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(20.0),
-                    margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
-                    child: const TextForm(requiredField: false, titulo: "Descripción de las imágenes", tipo: TextFormType.description),
                   ),
                 ],
               ),

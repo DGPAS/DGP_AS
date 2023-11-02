@@ -2,7 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/form_type.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:dability/Components/current_images.dart';
+import 'package:dability/Components/full_screen_image.dart';
+import 'package:dability/Components/text_form.dart';
+import 'dart:io';
 import 'dart:io';
 
 class UploadForm extends StatefulWidget {
@@ -27,7 +29,8 @@ class _UploadFormState extends State<UploadForm> {
   String titulo = "";
   ImageFormType tipo;
   final bool requiredField;
-  List<String> pickedFilePaths = [];
+  List<String> pickedFilePaths = ['assets/images/no_image.png','assets/images/no_image.png'];
+  List<String> imageDescriptions = [''];
 
   _UploadFormState({required this.requiredField, required this.titulo, required this.tipo});
 
@@ -47,6 +50,28 @@ class _UploadFormState extends State<UploadForm> {
     else {
       return Image.file(File(urlPath),fit: BoxFit.cover);
     }
+  }
+
+  List<Widget> _getCurrentImages () {
+    List<Widget> contenedores = [];
+    for (String path in pickedFilePaths) {
+      contenedores.add(
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => FullScreenImage(image: path, text: imageDescriptions[0]),
+              ));
+            },
+            child: Container (
+              height: 100,
+              padding: const EdgeInsets.all(10),
+              child: Image(image: AssetImage(path),fit: BoxFit.contain),
+            ),
+          ),
+      );
+    }
+
+    return contenedores;
   }
 
   @override
@@ -90,10 +115,19 @@ class _UploadFormState extends State<UploadForm> {
               ),
             ),
           ),
-
-          Container(
-            child: pickedFilePaths.isNotEmpty ? CurrentImages(images: pickedFilePaths) : const Text('Aqui se mostrarán las imágenes añadidas'),
+          if (tipo == ImageFormType.camera && pickedFilePaths.isNotEmpty)
+            Row(
+              children:
+                _getCurrentImages(),
           )
+          else const Text(''),
+          if (tipo == ImageFormType.camera)
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
+              child: const TextForm(requiredField: false, titulo: "Descripción de la imagen añadida", tipo: TextFormType.description),
+            )
+          else const Text(''),
         ],
       ),
     );
