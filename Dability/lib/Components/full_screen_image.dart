@@ -7,7 +7,7 @@ class FullScreenImage extends StatelessWidget {
   const FullScreenImage({
     Key? key,
     required this.image,
-    required this.text
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -22,8 +22,13 @@ class FullScreenImage extends StatelessWidget {
             tag: 'mi-imagen-hero', // Utiliza el mismo tag que en la página inicial
             child: Column (
               children: [
-                Image(image: AssetImage(image),fit: BoxFit.contain),
-                Text(text),
+                Container(
+                  height: 400,
+                    child: Image(image: AssetImage(image),fit: BoxFit.contain),
+                ),
+                Container(
+                  child: Text(text),
+                ),
               ],
             ),
           ),

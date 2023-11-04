@@ -1,4 +1,4 @@
-import 'package:dability/Components/upload_form.dart';
+import 'package:dability/Components/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/form_type.dart';
@@ -24,7 +24,7 @@ class AddTaskForms extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(20.0),
               margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-              child: const TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: TextFormType.title,),
+              child: TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: TextFormType.title,),
             ),
             Container(
               decoration: BoxDecoration(
@@ -37,7 +37,7 @@ class AddTaskForms extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(20.0),
               margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-              child: const TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: TextFormType.description),
+              child: TextForm(requiredField: false, titulo: "Descripción de la tarea", tipo: TextFormType.description),
             ),
             Container(
               decoration: BoxDecoration(
@@ -57,12 +57,12 @@ class AddTaskForms extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                    child: UploadForm(requiredField: false, titulo: "Seleccionar pictogramas de la galería: ", tipo: ImageFormType.gallery),
+                    child: StepsTaskForm(requiredField: false, titulo: "Seleccionar pictogramas de la galería: ", tipo: StepsFormType.gallery),
                   ),
                   Container(
                     padding: const EdgeInsets.all(20.0),
                     margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                    child: UploadForm(requiredField: false, titulo: "Realizar una foto: ", tipo: ImageFormType.camera),
+                    child: StepsTaskForm(requiredField: false, titulo: "Realizar una foto: ", tipo: StepsFormType.camera),
                   ),
                 ],
               ),

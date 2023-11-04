@@ -3,7 +3,9 @@ enum TextFormType {
   description
 }
 
-enum ImageFormType {
+enum StepsFormType {
   gallery,
-  camera
+  camera,
+  description,
+  video
 }
