@@ -7,15 +7,21 @@ class InicioAdmin extends StatefulWidget {
 
 class _InicioAdminState extends State<InicioAdmin> {
   final ButtonStyle style = ElevatedButton.styleFrom(
-    minimumSize: Size(180, 150),
-    textStyle: const TextStyle(fontSize: 40),
-    //alignment: Alignment.center,
+    minimumSize: Size(double.infinity, 80), // 180, 150
+    textStyle: const TextStyle(fontSize: 30,
+      color: Colors.black,),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30), // Redondear los bordes del botón
+    ),
+    primary: Color(0xFF4A6987),
+    padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
   );
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio Admin'),
+        backgroundColor: Color(0xFF4A6987),
       ),
       body:
       Container(

@@ -43,7 +43,10 @@ class _GestionTareasState extends State<GestionTareas> {
                   padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
                 ),
                 onPressed: () {
-                  // Acción cuando se presiona el primer botón
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => AddTask()),
+                  // );
                 },
                 child: Text('Añadir tarea',
                   textAlign: TextAlign.center,),
@@ -57,12 +60,12 @@ class _GestionTareasState extends State<GestionTareas> {
               ),
               width: MediaQuery.of(context).size.width - 30,
               padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
-              child:
-                Column(
+              child: SingleChildScrollView(
+                child: Column(
                     children: [
                       SizedBox(height: 30,),
                       ...List.generate(
-                        3,
+                        7,
                         (index) {
                           return Column(
                             children: [
@@ -147,6 +150,8 @@ class _GestionTareasState extends State<GestionTareas> {
                       )
                   ]
                 ),
+              ),
+              //////
             ),
           ],
         ),
