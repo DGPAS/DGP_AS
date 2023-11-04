@@ -22,6 +22,7 @@ class _GestionTareasState extends State<GestionTareas> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Gestión tareas'),
+        backgroundColor: Color(0xFF4A6987),
       ),
       body:
       Container(
@@ -32,8 +33,8 @@ class _GestionTareasState extends State<GestionTareas> {
               alignment: Alignment.center,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 150), // 180, 150
-                  textStyle: const TextStyle(fontSize: 40,
+                  minimumSize: Size(double.infinity, 80), // 180, 150
+                  textStyle: const TextStyle(fontSize: 30,
                     color: Colors.black,),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Redondear los bordes del botón
@@ -68,20 +69,74 @@ class _GestionTareasState extends State<GestionTareas> {
 
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(double.infinity, 150), // 180, 150
-                                  textStyle: const TextStyle(fontSize: 40,
+                                  minimumSize: Size(double.infinity, 80), // 180, 150
+                                  textStyle: const TextStyle(fontSize: 20,
                                     color: Colors.black,),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30), // Redondear los bordes del botón
                                   ),
                                   primary: Color(0xFFF5F5F5),
-                                  padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
+                                  padding: EdgeInsets.symmetric(horizontal: 20), // Margen horizontal del texto
                                 ),
                                 onPressed: () {
                                   // acción
                                 },
-                                child: Text('Tarea ' + index.toString(),
-                                  textAlign: TextAlign.center,),
+                                child:
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Tarea ' + index.toString(),
+                                        //textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black, // Cambia el color del texto a rojo
+                                        ),
+                                      ),
+
+                                      /////
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          //color: Colors.blue,
+                                          child: Row(
+                                            children: [
+
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // Acción del botón
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  minimumSize: Size(10, 20),
+                                                  primary: Color(0xFF4A6987)
+                                                ),
+                                                child: Icon(
+                                                    Icons.edit,
+                                                ),
+                                              ),
+
+                                              SizedBox(width: 10,), // cambiar?
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // Acción del botón
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                    minimumSize: Size(10, 20),
+                                                    primary: Color(0xFF4A6987)
+                                                ),
+                                                child: Icon(
+                                                  Icons.delete,
+                                                ),
+                                              ),
+
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      /////
+                                    ]
+                                  ),
+
+
+
                               ),
 
                               SizedBox(height: 30),
