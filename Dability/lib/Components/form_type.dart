@@ -7,5 +7,8 @@ enum StepsFormType {
   gallery,
   camera,
   description,
-  video
+  image_description,
+  video,
+  currentImages,
+  addStep
 }

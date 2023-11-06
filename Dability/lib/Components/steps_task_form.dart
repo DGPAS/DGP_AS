@@ -5,22 +5,25 @@ import 'package:image_picker/image_picker.dart';
 import 'package:dability/Components/full_screen_image.dart';
 import 'package:dability/Components/text_form.dart';
 import 'dart:io';
-import 'package:dability/Components/tuple_string.dart';
+import 'package:dability/Components/list_step.dart';
+import 'dart:developer';
 
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
   final String titulo;
   final StepsFormType tipo;
+  List<ListStep> steps;
 
   StepsTaskForm({
     Key? key,
     required this.requiredField,
     required this.titulo,
     required this.tipo,
+    required this.steps,
   }) : super(key: key);
 
   @override
-  _StepsTaskFormState createState() => _StepsTaskFormState(requiredField: requiredField, titulo: titulo, tipo: tipo);
+  _StepsTaskFormState createState() => _StepsTaskFormState(requiredField: requiredField, titulo: titulo, tipo: tipo, steps: steps);
 }
 
 class _StepsTaskFormState extends State<StepsTaskForm> {
@@ -30,18 +33,17 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   StepsFormType tipo;
   final bool requiredField;
   // Lista para almacenar los pictogramas con descripcion
-  List<TupleString> pickedFileDescPaths = [
-    TupleString('assets/images/no_image.png', 'Ejemplo descripcion de la imagen 1'),
-    TupleString('assets/images/no_image.png', 'Ejemplo descripcion de la imagen 1')
-  ];
+  List<ListStep> steps;
 
   String selectedImage = "";
   String actualDescription = "";
   List<String> imageDescriptions = ['Ejemplo de descripcion imagen 1','Ejemplo de descripcion imagen 1'];
   final descriptionController = TextEditingController();
+  final TextEditingController _numPaso = TextEditingController();
   TextForm textForm = TextForm(requiredField: false, titulo: "Descripcion del pictograma", tipo: TextFormType.description);
 
-  _StepsTaskFormState({required this.requiredField, required this.titulo, required this.tipo});
+  // Constructor de la clase state
+  _StepsTaskFormState({required this.requiredField, required this.titulo, required this.tipo, required this.steps});
 
   void _getLastDescriptionValue () {
     actualDescription = descriptionController.text;
@@ -63,65 +65,67 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     super.dispose();
   }
 
-  ImageSource _getImageSourceType () {
-    if (tipo == StepsFormType.camera) {
-      return ImageSource.camera;
-    } else {
-      return ImageSource.gallery;
-    }
-  }
+  Widget _getFormType () {
+    if (tipo == StepsFormType.camera || tipo == StepsFormType.gallery) {
+      return GestureDetector(
+        onTap: () async {
+          final picker = ImagePicker();
+          final XFile? pickedFile = await picker.pickImage(source: _getImageSourceType(), imageQuality: 100);
 
-  Widget _getImage(String? urlPath) {
-    if (urlPath == null) {
-      return const Image(image: AssetImage('assets/images/no_image.png'),fit: BoxFit.contain);
-    }
-    else {
-      return Image.file(File(urlPath),fit: BoxFit.cover);
-    }
-  }
-
-  void _addImage(String imagePath, String description) {
-    setState(() {
-      pickedFileDescPaths.add(TupleString(imagePath, ''));
-      imageDescriptions.add(description);
-    });
-  }
-
-  List<Widget> _getCurrentImages () {
-    List<Widget> contenedores = [];
-    for (var i = 0; i < pickedFileDescPaths.length; i++) {
-      contenedores.add(
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FullScreenImage(image: pickedFileDescPaths[i].tuple1, text: imageDescriptions[i]),
-              ));
-            },
-            child: Container (
-              height: 100,
-              padding: const EdgeInsets.all(10),
-              child: Image(image: AssetImage(pickedFileDescPaths[i].tuple1),fit: BoxFit.contain),
+          setState(() {
+            selectedImage = pickedFile!.path;
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.only(top: 20),
+          child: DottedBorder(
+            color: Colors.black,
+            strokeWidth: 1,
+            dashPattern: [10,6],
+            borderType: BorderType.RRect,
+            radius: const Radius.circular(20),
+            child: Container(
+              height: 200,
+              width: 800,
+              decoration: _buildBoxDecoration(),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(45),
+                  child: _getImage(null)
+              ),
             ),
           ),
+        ),
       );
     }
-
-    return contenedores;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              '$titulo${requiredField ? ' *' : ''}',
-            ),
+    else if (tipo == StepsFormType.description) {
+      return Container(
+        padding: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
+        /*child: textForm,*/
+        child: TextFormField(
+          controller: descriptionController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: EdgeInsets.fromLTRB(10,20,0,200),
+            helperText: requiredField ? campoRequerido : null,
+            alignLabelWithHint: true,
           ),
-          GestureDetector(
+          textAlignVertical: TextAlignVertical.top,
+          onSaved: (String? value) {
+            // This optional block of code can be used to run
+            // code when the user saves the form.
+          },
+          validator: (value) {
+            return (value == null || value.isEmpty) ? '' : null;
+          },
+        ),
+      );
+    }
+    else if (tipo == StepsFormType.image_description) {
+      return Column(
+          children: [GestureDetector(
             onTap: () async {
               final picker = ImagePicker();
               final XFile? pickedFile = await picker.pickImage(source: _getImageSourceType(), imageQuality: 100);
@@ -150,50 +154,127 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
               ),
             ),
           ),
-          if (tipo == StepsFormType.camera && pickedFileDescPaths.isNotEmpty)
-            Row(
-              children:
-                _getCurrentImages(),
-          ),
-          if (tipo == StepsFormType.camera)
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
-              child: textForm,
-              /*child: TextFormField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: EdgeInsets.fromLTRB(10,20,0,200),
-                  helperText: requiredField ? campoRequerido : null,
-                  alignLabelWithHint: true,
-                ),
-                textAlignVertical: TextAlignVertical.top,
-                onSaved: (String? value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
-                },
-                validator: (value) {
-                  return (value == null || value.isEmpty) ? '' : null;
-                },
-              ),*/
-
-            ),
-          if (tipo == StepsFormType.camera)
-            ElevatedButton(
-              onPressed: () {
-                // Esta función se ejecutará cuando se presione el botón "Añadir imagen"
-                _addImage(selectedImage, actualDescription);
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            margin: const EdgeInsets.only(left: 10.0, top: 30.0, right: 10.0),
+            /*child: textForm,*/
+            child: TextFormField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.fromLTRB(10,20,0,200),
+                helperText: requiredField ? campoRequerido : null,
+                alignLabelWithHint: true,
+              ),
+              textAlignVertical: TextAlignVertical.top,
+              onSaved: (String? value) {
+              // This optional block of code can be used to run
+              // code when the user saves the form.
               },
-              child: Text('Añadir imagen'),
+              validator: (value) {
+                return (value == null || value.isEmpty) ? '' : null;
+              },
             ),
-          Text(textForm.getText()),
+          )
         ],
+      );
+    }
+    else {
+      return const Text('en desarrollo');
+    }
+  }
+
+  ImageSource _getImageSourceType () {
+    if (tipo == StepsFormType.camera) {
+      return ImageSource.camera;
+    } else {
+      return ImageSource.gallery;
+    }
+  }
+
+  Widget _getImage(String? urlPath) {
+    if (urlPath == null) {
+      return const Image(image: AssetImage('assets/images/no_image.png'),fit: BoxFit.contain);
+    }
+    else {
+      return Image.file(File(urlPath),fit: BoxFit.cover);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(titulo),
+      ),
+      body: SingleChildScrollView (
+        child: Column (
+          children: [
+            Container(
+              child: _getFormType(),
+            ),
+            Column(
+              children: [
+                const Align(
+                  alignment: Alignment.topCenter,
+                  child: const Text(
+                    'Indica con un número a qué paso pertenece',
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _numPaso,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.all(100),
+              child: ElevatedButton(
+                onPressed: () {
+
+                  int numStep = (int.parse(_numPaso.text));
+                  log(numStep.toString());
+                  if (numStep < steps.length) {
+                    var existingStep = steps.firstWhere((step) => step.numStep == numStep);
+                    if (tipo == StepsFormType.camera || tipo == StepsFormType.gallery)
+                      existingStep.image = selectedImage;
+                    if (tipo == StepsFormType.description)
+                      existingStep.description = actualDescription;
+                    if (tipo == StepsFormType.image_description) {
+                      existingStep.description = actualDescription;
+                      existingStep.image = selectedImage;
+                    }
+                    if (tipo == StepsFormType.video)
+                      existingStep.video = selectedImage;
+                  }
+                  else {
+                    if (tipo == StepsFormType.camera || tipo == StepsFormType.gallery)
+                      steps.add(ListStep(numStep, selectedImage, '', ''));
+                    if (tipo == StepsFormType.description)
+                      steps.add(ListStep(numStep, '', actualDescription, ''));
+                    if (tipo == StepsFormType.image_description) {
+                      steps.add(ListStep(numStep, selectedImage, actualDescription, ''));
+                    }
+                    if (tipo == StepsFormType.video)
+                      steps.add(ListStep(numStep, selectedImage, '', ''));
+                  }
+
+                  Navigator.of(context).pop(steps);
+                },
+                child: const Text('Añadir paso'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+
 
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(

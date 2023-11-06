@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:dability/Components/form_type.dart';
+import 'dart:developer';
 
 class TextForm extends StatefulWidget {
   final bool requiredField;
@@ -91,6 +94,9 @@ class _TextFormState extends State<TextForm> {
             },
             validator: (value) {
               return (value == null || value.isEmpty) ? '' : null;
+            },
+            onChanged: (String value) {
+              widget.text = controller.text;
             },
           ),
         ],
