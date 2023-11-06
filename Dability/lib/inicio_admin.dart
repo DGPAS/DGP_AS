@@ -30,6 +30,7 @@ class _InicioAdminState extends State<InicioAdmin> {
           children: [
             Container(
                 //alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: ElevatedButton(
                   style: style,
                   onPressed: () {
@@ -42,6 +43,7 @@ class _InicioAdminState extends State<InicioAdmin> {
             SizedBox(height: 80,),
             Container(
                 //alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: ElevatedButton(
                   style: style,
                   onPressed: () {

@@ -43,6 +43,7 @@ class _GestionTareasState extends State<GestionTareas> {
                   padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
                 ),
                 onPressed: () {
+                  // Irá a la pantalla de añadir tarea
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(builder: (context) => AddTask()),
