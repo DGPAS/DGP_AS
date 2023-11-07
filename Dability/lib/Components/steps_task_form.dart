@@ -41,6 +41,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   final descriptionController = TextEditingController();
   final TextEditingController _numPaso = TextEditingController();
   TextForm textForm = TextForm(requiredField: false, titulo: "Descripcion del pictograma", tipo: TextFormType.description);
+  bool error = false;
 
   // Constructor de la clase state
   _StepsTaskFormState({required this.requiredField, required this.titulo, required this.tipo, required this.steps});
@@ -55,6 +56,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
 
     // Start listening to changes.
     descriptionController.addListener(_getLastDescriptionValue);
+    error = false;
   }
 
   @override
@@ -219,7 +221,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
               children: [
                 const Align(
                   alignment: Alignment.topCenter,
-                  child: const Text(
+                  child: Text(
                     'Indica con un número a qué paso pertenece',
                   ),
                 ),
@@ -228,8 +230,24 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _numPaso,
+                    onChanged: (String value) {
+                      if (int.parse(value) < 1) {
+                        setState(() {
+                          error = true;
+                        });
+                      }
+                      else {
+                        setState(() {
+                          error = false;
+                        });
+                      }
+                    },
                   ),
                 ),
+                if (error == true)
+                  const Text('El número del paso debe ser positivo a partir de 1', style: TextStyle(color: Colors.red)),
+                if (error == false)
+                  const Text(''),
               ],
             ),
             Container(
@@ -238,9 +256,11 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                 onPressed: () {
 
                   int numStep = (int.parse(_numPaso.text));
-                  log(numStep.toString());
-                  if (numStep < steps.length) {
-                    var existingStep = steps.firstWhere((step) => step.numStep == numStep);
+                  // Buscamos el paso según el numStep
+                  var existingStep = steps.firstWhere((step) => step.numStep == numStep, orElse: () => ListStep(numStep, '', 'null', ''));
+                  // Si se ha encontrado:
+                  log(existingStep.description);
+                  if ('null' != existingStep.description) {
                     if (tipo == StepsFormType.camera || tipo == StepsFormType.gallery)
                       existingStep.image = selectedImage;
                     if (tipo == StepsFormType.description)
@@ -249,6 +269,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       existingStep.description = actualDescription;
                       existingStep.image = selectedImage;
                     }
+                    // TODO: Video se ve como descripcion, cambiar
                     if (tipo == StepsFormType.video)
                       existingStep.video = selectedImage;
                   }
@@ -264,7 +285,13 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       steps.add(ListStep(numStep, selectedImage, '', ''));
                   }
 
-                  Navigator.of(context).pop(steps);
+                  if (numStep > 0) {
+                    // Ordenamos la lista
+                    steps.sort((a,b) => a.numStep.compareTo(b.numStep));
+
+                    // Devolvemos la lista a la pagina anterior
+                    Navigator.of(context).pop(steps);
+                  }
                 },
                 child: const Text('Añadir paso'),
               ),
