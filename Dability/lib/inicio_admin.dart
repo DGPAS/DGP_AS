@@ -7,7 +7,7 @@ class InicioAdmin extends StatefulWidget {
 
 class _InicioAdminState extends State<InicioAdmin> {
   final ButtonStyle style = ElevatedButton.styleFrom(
-    minimumSize: Size(double.infinity, 80), // 180, 150
+    minimumSize: Size(double.infinity, 120), // 180, 150
     textStyle: const TextStyle(fontSize: 30,
       color: Colors.black,),
     shape: RoundedRectangleBorder(
@@ -34,7 +34,10 @@ class _InicioAdminState extends State<InicioAdmin> {
                 child: ElevatedButton(
                   style: style,
                   onPressed: () {
-                    // Acción cuando se presiona el primer botón
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => GestionAlumnos()),
+                    // );
                   },
                  child: Text('GESTIONAR ALUMNOS',
                    textAlign: TextAlign.center,),

@@ -5,11 +5,14 @@ class GestionTareas extends StatefulWidget {
 }
 
 class _GestionTareasState extends State<GestionTareas> {
+  TextEditingController _controller = TextEditingController();
+
 
   List<String> tasks = [];  // lista de tareas
   double maxAnchoMaximo = 500;
   // final List<Color> containerColors = [Colors.red, Colors.green, Colors.blue]; // Colores de los contenedores
 
+  List<String> displayedItems = [];
 
   @override
   void initState() {
@@ -21,6 +24,28 @@ class _GestionTareasState extends State<GestionTareas> {
     tasks.add("Tarea 5");
     tasks.add("Tarea 6");
     tasks.add("Tarea 7");
+
+    displayedItems.addAll(tasks);
+
+  }
+
+  void filterSearchResults(String query) {
+    List<String> searchResults = [];
+
+    if (query.isNotEmpty) {
+      tasks.forEach((item) {
+        if (item.toLowerCase().contains(query.toLowerCase())) {
+          searchResults.add(item);
+        }
+      });
+    } else {
+      searchResults.addAll(tasks);
+    }
+
+    setState(() {
+      displayedItems.clear();
+      displayedItems.addAll(searchResults);
+    });
   }
 
 
@@ -32,18 +57,19 @@ class _GestionTareasState extends State<GestionTareas> {
       ),
       body:
       Container(
-          padding: EdgeInsets.only(top: 45.0, bottom: 10.0),
+          padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
           child: Column( // columna con el boton de añadir, y el container de la lista
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container( // tiene el elevated button de añadir tarea
                 // width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                // padding: EdgeInsets.symmetric(horizontal: 14),
+                padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 80), // 180, 150
-                    textStyle: const TextStyle(fontSize: 30,
+                    minimumSize: Size(double.infinity, 70), // 180, 150
+                    textStyle: const TextStyle(fontSize: 25,
                       color: Colors.black,),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30), // Redondear los bordes del botón
@@ -62,7 +88,25 @@ class _GestionTareasState extends State<GestionTareas> {
                     textAlign: TextAlign.center,),
                 ),
               ),
-              SizedBox(height: 60,),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 15.0, left: 14, right: 14),
+                child: TextField(
+                  controller: _controller,
+                  onChanged: (value) {
+                    filterSearchResults(value);
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Buscar',
+                    hintText: 'Ingrese su búsqueda',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                  ),
+                ),
+              ),
+
               Expanded(
                 child:
                   Container(
@@ -77,11 +121,10 @@ class _GestionTareasState extends State<GestionTareas> {
                           children: [
                             SizedBox(height: 30,),
                             ...List.generate(
-                              tasks.length,
+                              displayedItems.length,
                               (index) {
                                 return Column(
                                   children: [
-
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         minimumSize: Size(double.infinity, 80), // 180, 150
@@ -101,7 +144,7 @@ class _GestionTareasState extends State<GestionTareas> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              tasks[index],
+                                              displayedItems[index],
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: Colors.black, // Cambia el color del texto a rojo
@@ -155,7 +198,8 @@ class _GestionTareasState extends State<GestionTareas> {
                                                                 TextButton(
                                                                   onPressed: () {
                                                                     setState(() {
-                                                                      tasks.remove(tasks[index]);
+                                                                      tasks.remove(displayedItems[index]);
+                                                                      displayedItems.remove(displayedItems[index]);
                                                                     });
                                                                     Navigator.of(context).pop(); // Cierra el diálogo
                                                                   },
