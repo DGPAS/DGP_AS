@@ -32,15 +32,14 @@ class _GestionTareasState extends State<GestionTareas> {
       ),
       body:
       Container(
-        child: Container(
-          // padding: EdgeInsets.symmetric(vertical: 40),
           padding: EdgeInsets.only(top: 45.0, bottom: 10.0),
-          child: Column(
+          child: Column( // columna con el boton de añadir, y el container de la lista
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              Container( // tiene el elevated button de añadir tarea
+                // width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
                 alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 14),
+                padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 80), // 180, 150
@@ -53,7 +52,7 @@ class _GestionTareasState extends State<GestionTareas> {
                     padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
                   ),
                   onPressed: () {
-                    // Irá a la pantalla de añadir tarea
+                    // Irá a la pantalla de añadir tarea - descomentar
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => AddTask()),
@@ -197,13 +196,10 @@ class _GestionTareasState extends State<GestionTareas> {
                             )
                         ]
                       ),
-                    //////
                   ),
-                /////
               ),
             ],
           ),
-        ),
       ),
     );
   }
