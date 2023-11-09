@@ -5,18 +5,24 @@ class GestionTareas extends StatefulWidget {
 }
 
 class _GestionTareasState extends State<GestionTareas> {
-  /*
-  final ButtonStyle style = ElevatedButton.styleFrom(
-    minimumSize: Size(MediaQuery.of(context).size.width - 20, 150), // 180, 150
-    textStyle: const TextStyle(fontSize: 20),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30), // Redondear los bordes del botón
-    ),
-    primary: Colors.teal,
-  );
-  */
 
-  final List<Color> containerColors = [Colors.red, Colors.green, Colors.blue]; // Colores de los contenedores
+  List<String> tasks = [];  // lista de tareas
+  double maxAnchoMaximo = 500;
+  // final List<Color> containerColors = [Colors.red, Colors.green, Colors.blue]; // Colores de los contenedores
+
+
+  @override
+  void initState() {
+    super.initState();
+    tasks.add("Tarea 1");
+    tasks.add("Tarea 2");
+    tasks.add("Tarea 3");
+    tasks.add("Tarea 4");
+    tasks.add("Tarea 5");
+    tasks.add("Tarea 6");
+    tasks.add("Tarea 7");
+  }
+
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,13 +72,13 @@ class _GestionTareasState extends State<GestionTareas> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     height: 400,
-                    width: MediaQuery.of(context).size.width - 30,
-                    padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
+                    width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
+                    padding: EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
                       child: ListView(
                           children: [
                             SizedBox(height: 30,),
                             ...List.generate(
-                              7,
+                              tasks.length,
                               (index) {
                                 return Column(
                                   children: [
@@ -93,9 +99,10 @@ class _GestionTareasState extends State<GestionTareas> {
                                       },
                                       child:
                                         Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Tarea ' + index.toString(),
+                                              tasks[index],
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: Colors.black, // Cambia el color del texto a rojo
@@ -112,28 +119,63 @@ class _GestionTareasState extends State<GestionTareas> {
 
                                                     ElevatedButton(
                                                       onPressed: () {
-                                                        // Acción del botón
+                                                        // Irá a la pantalla de añadir tarea
+                                                        // Navigator.push(
+                                                        //   context,
+                                                        //   MaterialPageRoute(builder: (context) => EditTask()),
+                                                        // );
                                                       },
                                                       style: ElevatedButton.styleFrom(
                                                         minimumSize: Size(10, 20),
-                                                        primary: Color(0xFF4A6987)
+                                                        primary: Color(0xFFF5F5F5),
+                                                        elevation: 0,
                                                       ),
-                                                      child: Icon(
-                                                          Icons.edit,
+                                                      child: Image.asset(
+                                                        'images/EditIcon.png',
+                                                        width: 30,
+                                                        height: 35,
                                                       ),
                                                     ),
 
                                                     SizedBox(width: 10,), // cambiar?
                                                     ElevatedButton(
                                                       onPressed: () {
-                                                        // Acción del botón
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) {
+                                                            return AlertDialog(
+                                                              title: Text('Confirmar eliminación'),
+                                                              content: Text('¿Estás seguro de que deseas eliminar esta tarea?'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop(); // Cierra el diálogo
+                                                                  },
+                                                                  child: Text('Cancelar'),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    setState(() {
+                                                                      tasks.remove(tasks[index]);
+                                                                    });
+                                                                    Navigator.of(context).pop(); // Cierra el diálogo
+                                                                  },
+                                                                  child: Text('Eliminar'),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
                                                       },
                                                       style: ElevatedButton.styleFrom(
                                                           minimumSize: Size(10, 20),
-                                                          primary: Color(0xFF4A6987)
+                                                          primary: Color(0xFFF5F5F5),
+                                                          elevation: 0,
                                                       ),
-                                                      child: Icon(
-                                                        Icons.delete,
+                                                      child: Image.asset(
+                                                        'images/DeleteIcon.png',
+                                                        width: 30,
+                                                        height: 35,
                                                       ),
                                                     ),
 
@@ -144,8 +186,6 @@ class _GestionTareasState extends State<GestionTareas> {
                                             /////
                                           ]
                                         ),
-
-
 
                                     ),
 

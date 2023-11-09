@@ -59,7 +59,20 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - images/agendaLogo.png
+    - images/currentPageIcon.png
+    - images/DabilityLogo.png
+    - images/userIcon.png
+    - images/formerPageArrow.png
+    - images/nextPageArrow.png
+    - images/checkIcon.png
+    - images/domesticTask.png
+    - images/microwaveTask.png
+    - images/planTask.png
+    - images/EditIcon.png
+    - images/DeleteIcon.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
