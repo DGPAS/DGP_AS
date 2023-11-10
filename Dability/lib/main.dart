@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dability/add_task.dart';
 import 'package:dability/DataBase/connection.dart';
 import 'package:mysql1/mysql1.dart';
+import 'dart:developer';
 
 void main() {
   runApp(const MyApp());
@@ -55,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         for (var row in res) {
           setState(() {
             mail = row[0];
+            log(mail);
           });
         }
       });
