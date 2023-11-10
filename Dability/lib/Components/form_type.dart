@@ -5,10 +5,5 @@ enum TextFormType {
 
 enum StepsFormType {
   gallery,
-  camera,
-  description,
-  image_description,
-  video,
-  currentImages,
-  addStep
+  camera
 }

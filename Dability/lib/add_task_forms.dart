@@ -214,86 +214,25 @@ class _AddTaskFormsState extends State<AddTaskForms> {
                         ),
                         child: const Column (
                           children: [
-                            Text('Tenga en cuenta que para cada paso, puede añadir distintos formatos. Para ello, elija el formato abajo y una vez seleccionado, introduzca el número de paso deseado.'),
+                            Text('Tenga en cuenta que para cada paso, puede añadir distintos formatos y no es necesario que contenga todos, aunque si recomendable. Para ello, rellene los campos deseados e introduzca el número de paso al que corresponde.'),
                             Text('Luego se le mostrará a cada alumno el formato de pasos más indicado.'),
                             Text('Además, si ya ha creado un paso, puede modificar sus valores o añadir formatos nuevos introduciendo el número de paso dentro.'),
                           ],
                         ),
                       ),
-
                     Container(
                       padding: const EdgeInsets.all(20.0),
                       margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
                       child: ElevatedButton(
                         onPressed: () async {
                           copy = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => StepsTaskForm(requiredField: false, titulo: "Realizar una foto", tipo: StepsFormType.camera, steps: steps),
+                            builder: (context) => StepsTaskForm(requiredField: false, steps: steps),
                           ));
                           setState(() {
                             steps = copy;
                           });
                         },
-                        child: const Text('Añadir una imagen con la cámara'),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          copy = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => StepsTaskForm(requiredField: false, titulo: "Seleccionar una foto de la galeria", tipo: StepsFormType.gallery, steps: steps),
-                          ));
-                          setState(() {
-                            steps = copy;
-                          });
-                        },
-                        child: const Text('Añadir una imagen desde galería'),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          copy = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => StepsTaskForm(requiredField: false, titulo: "Añadir un paso con texto", tipo: StepsFormType.description, steps: steps),
-                          ));
-                          setState(() {
-                            steps = copy;
-                          });
-                        },
-                        child: const Text('Añadir un paso con texto'),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          copy = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => StepsTaskForm(requiredField: false, titulo: "Añadir un paso con imagen y texto", tipo: StepsFormType.image_description, steps: steps),
-                          ));
-                          setState(() {
-                            steps = copy;
-                          });
-                        },
-                        child: const Text('Añadir un paso con imagen y texto'),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(20.0),
-                      margin: const EdgeInsets.only(left: 10.0, top: 10.0, right: 10.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          copy = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => StepsTaskForm(requiredField: false, titulo: "Añadir un vídeo", tipo: StepsFormType.description, steps: steps),
-                          ));
-                          setState(() {
-                            steps = copy;
-                          });
-                        },
-                        child: const Text('Añadir un vídeo'),
+                        child: const Text('Añadir un paso'),
                       ),
                     ),
                   ],
