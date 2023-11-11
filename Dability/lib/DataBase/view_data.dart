@@ -13,14 +13,13 @@ class _view_dataState extends State<view_data> {
   List<dynamic> userdata = [];
 
   Future<void> getrecord() async {
-    String uri = "http://localhost:8888/view_data.php";
+    String uri = "http://10.0.2.2:8888/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
 
       if (response.statusCode == 200) {
         // La solicitud fue exitosa
         userdata = json.decode(response.body);
-        print('Datos recibidos: $userdata');  // Agrega este print para debug
       } else {
         // La solicitud falló, imprime el código de estado
         print('Error en la solicitud: ${response.statusCode}');
@@ -49,8 +48,8 @@ class _view_dataState extends State<view_data> {
           return Card(
             margin: EdgeInsets.all(10),
             child: ListTile(
-              title: Text(userdata[index]['id'].toString()),  // Asegúrate de convertir a String si es necesario
-              subtitle: Text(userdata[index]['email'] ?? ''),  // Asegúrate de manejar el caso en que 'email' sea nulo
+              title: Text(userdata[index]['id']),
+              subtitle: Text(userdata[index]['email']),
             ),
           );
         },
