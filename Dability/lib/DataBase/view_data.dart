@@ -13,7 +13,7 @@ class _view_dataState extends State<view_data> {
   List<dynamic> userdata = [];
 
   Future<void> getrecord() async {
-    String uri = "http://10.0.2.2:8888/view_data.php";
+    String uri = "http://10.0.2.2/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
 

@@ -1,6 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:dability/Components/form_type.dart';
+import 'package:dability/Components/enum_types.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dability/Components/full_screen_image.dart';
 import 'package:dability/Components/text_form.dart';

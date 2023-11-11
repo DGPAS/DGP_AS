@@ -1,20 +1,30 @@
 import 'package:dability/Components/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
-import 'package:dability/Components/form_type.dart';
+import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
-import 'dart:developer';
 
-class AddTaskForms extends StatefulWidget {
-  const AddTaskForms({super.key});
+class AddModTask extends StatefulWidget {
+  AddModTask({
+  Key? key,
+  required this.typeForm,
+  this.steps,
+  this.title,
+  this.description
+  }) : super(key: key);
+
+  AddModType typeForm;
+  List<ListStep>? steps;
+  String? title;
+  String? description;
 
   @override
-  _AddTaskFormsState createState() => _AddTaskFormsState ();
+  _AddModTaskState createState() => _AddModTaskState (typeForm: this.typeForm, stepsInit: steps, title: title, description: description);
 }
 
-class _AddTaskFormsState extends State<AddTaskForms> {
+class _AddModTaskState extends State<AddModTask> {
 
-  _AddTaskFormsState ();
+  _AddModTaskState ({required this.typeForm, this.stepsInit, this.title, this.description});
 
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(requiredField: true, titulo: "Nombre de la tarea", tipo: TextFormType.title);
@@ -22,12 +32,13 @@ class _AddTaskFormsState extends State<AddTaskForms> {
   TextForm descriptionForm = TextForm(requiredField: false, titulo: "Descripción general de la tarea", tipo: TextFormType.description);
 
   // Variables donde se almacenará el valor del titulo y la descripcion
-  String title = "";
-  String description = "";
+  String? title;
+  String? description;
   // isPressed: variable para la ayuda de añadir pasos
   bool isPressed = false;
+  AddModType typeForm;
 
-
+  List<ListStep>? stepsInit;
   List<ListStep> steps = [];
   List<ListStep> copy = [];
   List<ListStep> auxSteps = [];
@@ -35,11 +46,23 @@ class _AddTaskFormsState extends State<AddTaskForms> {
   @override
   void initState() {
     super.initState();
+    // Si title o description es nulo
+    // (es decir, si lo que se quiere es añadir una tarea y no modificarla)
+    // se inicializan segun el valor del controlador
+    title ??= titleForm.getText();
+    description ??= descriptionForm.getText();
 
-    title = titleForm.getText();
-    description = descriptionForm.getText();
+    titleForm.originalText = title;
+    titleForm.text = title!;
+    descriptionForm.originalText = description;
+    descriptionForm.text = description!;
 
-    steps = [];
+    // Si stepsInit es nulo
+    // (es decir, si lo que se quiere es añadir una tarea y no modificarla)
+    // se inicializa a vacío
+    if (stepsInit != null) {
+      steps = stepsInit!;   // La ! es de nullCheck
+    }
 
     isPressed = false;
   }
@@ -124,6 +147,9 @@ class _AddTaskFormsState extends State<AddTaskForms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Crear Tarea'),
+      ),
       body: SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.only(bottom: 30.0, top: 30.0, left: 10.0, right: 10.0),
@@ -277,7 +303,7 @@ class _AddTaskFormsState extends State<AddTaskForms> {
                       child: Column(
                         children: [
                           const Text('Descripción general', style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(description, textAlign: TextAlign.justify),
+                          Text(description ?? '', textAlign: TextAlign.justify),
                         ],
                       ),
                     ),

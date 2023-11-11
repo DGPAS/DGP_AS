@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:dability/Components/form_type.dart';
+import 'package:dability/Components/enum_types.dart';
 import 'dart:developer';
 
 class TextForm extends StatefulWidget {
@@ -9,12 +9,14 @@ class TextForm extends StatefulWidget {
   final String titulo;
   final TextFormType tipo;
   String text = "";
+  String? originalText;
 
   TextForm({
     Key? key,
     required this.requiredField,
     required this.titulo,
     required this.tipo,
+    this.originalText
   }) : super(key: key);
 
   String getText() {
@@ -22,7 +24,7 @@ class TextForm extends StatefulWidget {
   }
 
   @override
-  _TextFormState createState() => _TextFormState(requiredField: requiredField, titulo: titulo, tipo: tipo);
+  _TextFormState createState() => _TextFormState(requiredField: requiredField, titulo: titulo, tipo: tipo, originalText: originalText);
 }
 
 class _TextFormState extends State<TextForm> {
@@ -31,13 +33,19 @@ class _TextFormState extends State<TextForm> {
   String titulo = "";
   TextFormType tipo = TextFormType.title;
   final bool requiredField;
-  final controller = TextEditingController();
+  String? originalText;
 
-  _TextFormState({required this.requiredField, required this.titulo, required this.tipo});
+  _TextFormState({required this.requiredField, required this.titulo, required this.tipo, this.originalText});
+
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    if (originalText != null) {
+      controller.text = originalText!;
+    }
 
     // Start listening to changes.
     controller.addListener(_getLastValue);
