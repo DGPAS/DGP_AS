@@ -63,6 +63,17 @@ flutter:
     - images/Logo.png
     - images/EditIcon.png
     - images/DeleteIcon.png
+    - images/agendaLogo.png
+    - images/currentPageIcon.png
+    - images/DabilityLogo.png
+    - images/userIcon.png
+    - images/formerPageArrow.png
+    - images/nextPageArrow.png
+    - images/checkIcon.png
+    - images/domesticTask.png
+    - images/microwaveTask.png
+    - images/planTask.png
+    - images/greyIcon.jpg
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

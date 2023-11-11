@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
-class GestionTareas extends StatefulWidget {
-  const GestionTareas({super.key});
+class TaskManagement extends StatefulWidget {
+  const TaskManagement({super.key});
 
   @override
-  State<GestionTareas> createState() => _GestionTareasState();
+  State<TaskManagement> createState() => _TaskManagementState();
 }
 
-class _GestionTareasState extends State<GestionTareas> {
+class _TaskManagementState extends State<TaskManagement> {
   TextEditingController _controller = TextEditingController();
 
-  List<String> tasks = []; // lista de tareas
-  double maxAnchoMaximo = 500;
-  // final List<Color> containerColors = [Colors.red, Colors.green, Colors.blue]; // Colores de los contenedores
+  List<String> tasks = [];
+  double maxWidt = 500;
 
   List<String> displayedItems = [];
 
@@ -34,7 +33,6 @@ class _GestionTareasState extends State<GestionTareas> {
     List<String> searchResults = [];
 
     if (query.isNotEmpty) {
-      //tasks.forEach((item) {
       for (var i = 0; i < tasks.length; i++) {
         if (tasks[i].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(tasks[i]);
@@ -77,8 +75,7 @@ class _GestionTareasState extends State<GestionTareas> {
                     color: Colors.black,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        30), // Redondear los bordes del botón
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   backgroundColor: Color(0xFF4A6987),
                   padding:
@@ -123,7 +120,7 @@ class _GestionTareasState extends State<GestionTareas> {
                 ),
                 height: 400,
                 width: (MediaQuery.of(context).size.width - 30)
-                    .clamp(0.0, maxAnchoMaximo.toDouble()),
+                    .clamp(0.0, maxWidt.toDouble()),
                 padding:
                     EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
                 child: ListView(children: [

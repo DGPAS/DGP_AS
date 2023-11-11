@@ -1,5 +1,6 @@
-import 'package:dability/inicio_admin.dart';
 import 'package:flutter/material.dart';
+import 'package:dability/admin_home.dart';
+import 'student_home.dart';
 
 void main() {
   runApp(const DAbility());
@@ -12,7 +13,7 @@ class DAbility extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //Material es una app que sigue el patron material de google
+      //MaterialApp means the app follows material pattern by google
       title: 'D-Ability',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => InicioAdmin()),
+                        MaterialPageRoute(builder: (context) => AdminHome()),
                       );
                     },
                     child: const Text(
@@ -104,7 +105,12 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         )),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => StudentHome()),
+                      );
+                    },
                     child: const Text(
                       'Acceder como Alumno',
                       textAlign: TextAlign.center,

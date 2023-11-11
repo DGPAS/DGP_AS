@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'gestion_tareas.dart';
+import 'task_management.dart';
 
-class InicioAdmin extends StatefulWidget {
-  const InicioAdmin({super.key});
+class AdminHome extends StatefulWidget {
+  const AdminHome({super.key});
 
   @override
-  State<InicioAdmin> createState() => _InicioAdminState();
+  State<AdminHome> createState() => _AdminHomeState();
 }
 
-class _InicioAdminState extends State<InicioAdmin> {
+class _AdminHomeState extends State<AdminHome> {
   final ButtonStyle style = ElevatedButton.styleFrom(
-    minimumSize: Size(400, 120), // 180, 150
+    minimumSize: Size(400, 120),
     textStyle: const TextStyle(
       fontSize: 30,
       color: Colors.black,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30), // Redondear los bordes del botón
+      borderRadius: BorderRadius.circular(30),
     ),
     backgroundColor: Color(0xFF4A6987),
-    padding: EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
+    padding: EdgeInsets.symmetric(horizontal: 40),
   );
 
   @override
@@ -57,7 +57,7 @@ class _InicioAdminState extends State<InicioAdmin> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GestionTareas()),
+                  MaterialPageRoute(builder: (context) => TaskManagement()),
                 );
               },
               child: Text(
