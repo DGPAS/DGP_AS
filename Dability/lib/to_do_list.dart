@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'student_task.dart';
 
 class Task {
   String name;
@@ -128,7 +129,11 @@ class _ToDoListState extends State<ToDoList> {
                                     backgroundColor: Color(0xFF4A6987),
                                   ),
                                   onPressed: () {
-                                    // Acción cuando se presiona el botón de la tarea
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => StudentTask()),
+                                    );
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'add_mod_task.dart';
-import 'Components/enum_types.dart';
+import 'package:dability/Components/text_form.dart';
+//import 'package:dability/Components/steps_task_form.dart';
+import 'package:dability/Components/enum_types.dart';
+//import 'package:dability/Components/list_step.dart';
 
-class TaskManagement extends StatefulWidget {
-  const TaskManagement({super.key});
+class AddModStudent extends StatefulWidget {
+  const AddModStudent({super.key});
 
   @override
-  State<TaskManagement> createState() => _TaskManagementState();
+  State<AddModStudent> createState() => _AddModStudentState();
 }
 
-class _TaskManagementState extends State<TaskManagement> {
+class _AddModStudentState extends State<AddModStudent> {
   TextEditingController _controller = TextEditingController();
+  List<String> displayedItems = [];
 
   List<String> tasks = [];
-  double maxWidt = 500;
-
-  List<String> displayedItems = [];
 
   @override
   void initState() {
@@ -54,56 +54,66 @@ class _TaskManagementState extends State<TaskManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestión tareas'),
+        title: Row(
+          children: [
+            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            const Expanded(
+              child: Text(
+                'Gestionar Alumnos',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A6987),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'images/userIcon.png',
+                    width: 48,
+                    height: 48,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
-        padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
-        child: Column(
-          // columna con el boton de añadir, y el container de la lista
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
+          child: Column(children: [
             Container(
-              // tiene el elevated button de añadir tarea
-              // width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
-              alignment: Alignment.center,
-              // padding: EdgeInsets.symmetric(horizontal: 14),
-              padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity,
-                      MediaQuery.of(context).size.height * 0.1), // inf, 70
-                  textStyle: const TextStyle(
-                    fontSize: 25,
-                    color: Colors.black,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  backgroundColor: Color(0xFF4A6987),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
-                ),
-                onPressed: () {
-                  // Irá a la pantalla de añadir tarea - descomentar
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AddModTask(typeForm: AddModType.add)),
-                  );
-                },
-                child: Text(
-                  'Añadir tarea',
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              padding: EdgeInsets.all(20),
+              child: TextForm(
+                  requiredField: true,
+                  titulo: "Nombre del Alumno",
+                  tipo: TextFormType.title),
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: TextForm(
+                  requiredField: true,
+                  titulo: "Contraseña del Alumno",
+                  tipo: TextFormType.title),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.152,
               child: Padding(
                 padding: const EdgeInsets.only(
-                    top: 8.0, bottom: 15.0, left: 14, right: 14),
+                    top: 8.0, bottom: 5.0, left: 14, right: 14),
                 child: TextField(
                   controller: _controller,
                   onChanged: (value) {
@@ -132,8 +142,7 @@ class _TaskManagementState extends State<TaskManagement> {
                   ),
                 ),
                 height: 400,
-                width: (MediaQuery.of(context).size.width - 30)
-                    .clamp(0.0, maxWidt.toDouble()),
+                width: (MediaQuery.of(context).size.width - 30).clamp(0.0, 500),
                 padding:
                     EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
                 child: ListView(children: [
@@ -181,28 +190,6 @@ class _TaskManagementState extends State<TaskManagement> {
                                   alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddModTask(
-                                                        typeForm:
-                                                            AddModType.mod)),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: Size(10, 20),
-                                          backgroundColor: Color(0xFFF5F5F5),
-                                          elevation: 0,
-                                        ),
-                                        child: Image.asset(
-                                          'images/EditIcon.png',
-                                          width: 30,
-                                          height: 35,
-                                        ),
-                                      ),
                                       ElevatedButton(
                                         onPressed: () {
                                           showDialog(
@@ -265,9 +252,7 @@ class _TaskManagementState extends State<TaskManagement> {
                 ]),
               ),
             ),
-          ],
-        ),
-      ),
+          ])),
     );
   }
 }

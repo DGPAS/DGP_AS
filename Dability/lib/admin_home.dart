@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'task_management.dart';
+import 'student_management.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -38,10 +39,10 @@ class _AdminHomeState extends State<AdminHome> {
             child: ElevatedButton(
               style: style,
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => GestionAlumnos()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StudentManagement()),
+                );
               },
               child: Text(
                 'GESTIONAR ALUMNOS',

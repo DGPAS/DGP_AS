@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  file_picker: ^6.0.0
+  image_picker:
+  dotted_border:
+  http: ^0.13.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,20 +64,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/Logo.png
-    - images/EditIcon.png
-    - images/DeleteIcon.png
-    - images/agendaLogo.png
-    - images/currentPageIcon.png
-    - images/DabilityLogo.png
-    - images/userIcon.png
-    - images/formerPageArrow.png
-    - images/nextPageArrow.png
-    - images/checkIcon.png
-    - images/domesticTask.png
-    - images/microwaveTask.png
-    - images/planTask.png
-    - images/greyIcon.jpg
+    - images/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

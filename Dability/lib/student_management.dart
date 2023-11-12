@@ -1,47 +1,48 @@
 import 'package:flutter/material.dart';
-import 'add_mod_task.dart';
-import 'Components/enum_types.dart';
+import 'add_mod_student.dart';
 
-class TaskManagement extends StatefulWidget {
-  const TaskManagement({super.key});
+class StudentManagement extends StatefulWidget {
+  const StudentManagement({super.key});
 
   @override
-  State<TaskManagement> createState() => _TaskManagementState();
+  State<StudentManagement> createState() => _StudentManagementState();
+
+// _StudentManagementState createState() => _StudentManagementState();
 }
 
-class _TaskManagementState extends State<TaskManagement> {
+class _StudentManagementState extends State<StudentManagement> {
   TextEditingController _controller = TextEditingController();
 
-  List<String> tasks = [];
-  double maxWidt = 500;
+  List<String> students = []; // lista de tareas
+  double widthMax = 500;
 
   List<String> displayedItems = [];
 
   @override
   void initState() {
     super.initState();
-    tasks.add("Tarea 1");
-    tasks.add("Tarea 2");
-    tasks.add("Tarea 3");
-    tasks.add("Tarea 4");
-    tasks.add("Tarea 5");
-    tasks.add("Tarea 6");
-    tasks.add("Tarea 7");
+    students.add("Alumno 1");
+    students.add("Alumno 2");
+    students.add("Alumno 3");
+    students.add("Alumno 4");
+    students.add("Alumno 5");
+    students.add("Alumno 6");
+    students.add("Alumno 7");
 
-    displayedItems.addAll(tasks);
+    displayedItems.addAll(students);
   }
 
   void filterSearchResults(String query) {
     List<String> searchResults = [];
 
     if (query.isNotEmpty) {
-      for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].toLowerCase().contains(query.toLowerCase())) {
-          searchResults.add(tasks[i]);
+      for (var i = 0; i < students.length; i++) {
+        if (students[i].toLowerCase().contains(query.toLowerCase())) {
+          searchResults.add(students[i]);
         }
       }
     } else {
-      searchResults.addAll(tasks);
+      searchResults.addAll(students);
     }
 
     setState(() {
@@ -54,20 +55,18 @@ class _TaskManagementState extends State<TaskManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestión tareas'),
+        title: Text('Gestión alumnos'),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
         padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
         child: Column(
           // columna con el boton de añadir, y el container de la lista
-          //mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              // tiene el elevated button de añadir tarea
-              // width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
+              // AÑADIR TAREA
               alignment: Alignment.center,
-              // padding: EdgeInsets.symmetric(horizontal: 14),
               padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -81,25 +80,22 @@ class _TaskManagementState extends State<TaskManagement> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   backgroundColor: Color(0xFF4A6987),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
+                  padding: EdgeInsets.symmetric(horizontal: 40),
                 ),
                 onPressed: () {
-                  // Irá a la pantalla de añadir tarea - descomentar
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AddModTask(typeForm: AddModType.add)),
+                    MaterialPageRoute(builder: (context) => AddModStudent()),
                   );
                 },
-                child: Text(
-                  'Añadir tarea',
+                child: const Text(
+                  'Añadir alumno',
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
             SizedBox(
+              // BUSCADOR
               height: MediaQuery.of(context).size.height * 0.152,
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -121,9 +117,9 @@ class _TaskManagementState extends State<TaskManagement> {
               ),
             ),
             Expanded(
+              // BLOQUE TAREAS
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFF4A6987),
                   borderRadius: BorderRadius.circular(30),
                   gradient: LinearGradient(
                     colors: [Color(0xFF4A6987), Colors.white],
@@ -133,9 +129,8 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
                 height: 400,
                 width: (MediaQuery.of(context).size.width - 30)
-                    .clamp(0.0, maxWidt.toDouble()),
-                padding:
-                    EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
+                    .clamp(0.0, widthMax.toDouble()),
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: ListView(children: [
                   SizedBox(
                     height: 30,
@@ -154,29 +149,23 @@ class _TaskManagementState extends State<TaskManagement> {
                               color: Colors.black,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  30), // Redondear los bordes del botón
+                              borderRadius: BorderRadius.circular(30),
                             ),
                             backgroundColor: Color(0xFFF5F5F5),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20), // Margen horizontal del texto
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                           ),
                           onPressed: () {
-                            // acción
+                            // acción del botón
                           },
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   displayedItems[index],
-                                  //textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors
-                                        .black, // Cambia el color del texto a rojo
+                                  style: const TextStyle(
+                                    color: Colors.black,
                                   ),
                                 ),
-
-                                /////
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Row(
@@ -187,9 +176,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModTask(
-                                                        typeForm:
-                                                            AddModType.mod)),
+                                                    AddModStudent()),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -209,9 +196,9 @@ class _TaskManagementState extends State<TaskManagement> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: Text(
+                                                title: const Text(
                                                     'Confirmar eliminación'),
-                                                content: Text(
+                                                content: const Text(
                                                     '¿Estás seguro de que deseas eliminar esta tarea?'),
                                                 actions: [
                                                   TextButton(
@@ -219,12 +206,13 @@ class _TaskManagementState extends State<TaskManagement> {
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
-                                                    child: Text('Cancelar'),
+                                                    child:
+                                                        const Text('Cancelar'),
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
                                                       setState(() {
-                                                        tasks.remove(
+                                                        students.remove(
                                                             displayedItems[
                                                                 index]);
                                                         displayedItems.remove(
@@ -255,10 +243,9 @@ class _TaskManagementState extends State<TaskManagement> {
                                     ],
                                   ),
                                 ),
-                                /////
                               ]),
                         ),
-                        SizedBox(height: 30), //espacio entre tareas
+                        SizedBox(height: 30), // Espacio entre las tareas
                       ],
                     );
                   })
