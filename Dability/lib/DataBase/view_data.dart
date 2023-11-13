@@ -2,27 +2,44 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class view_data extends StatefulWidget {
-  const view_data({Key? key}) : super(key: key);
+class ViewData extends StatefulWidget {
+  const ViewData({Key? key}) : super(key: key);
 
   @override
-  State<view_data> createState() => _view_dataState();
+  State<ViewData> createState() => _ViewDataState();
 }
 
-class _view_dataState extends State<view_data> {
+class _ViewDataState extends State<ViewData> {
   List<dynamic> userdata = [];
 
-  Future<void> getrecord() async {
-    String uri = "http://10.0.2.2/view_data.php";
+  Future<void> delRecord(String idTareas) async {
+    String uri = "http://10.0.2.2:80/delete_data.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        print("Record deleted");
+      } else {
+        print("Some issue");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getRecord() async {
+    String uri = "http://10.0.2.2:80/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
 
       if (response.statusCode == 200) {
-        // La solicitud fue exitosa
-        userdata = json.decode(response.body);
+        // The request was successful
+        setState(() {
+          userdata = json.decode(response.body);
+        });
       } else {
-        // La solicitud falló, imprime el código de estado
-        print('Error en la solicitud: ${response.statusCode}');
+        // The request failed, print the status code
+        print('Error in the request: ${response.statusCode}');
       }
     } catch (e) {
       print(e);
@@ -32,7 +49,7 @@ class _view_dataState extends State<view_data> {
   @override
   void initState() {
     super.initState();
-    getrecord();
+    getRecord();
   }
 
   @override
@@ -48,8 +65,12 @@ class _view_dataState extends State<view_data> {
           return Card(
             margin: EdgeInsets.all(10),
             child: ListTile(
-              title: Text(userdata[index]['id']),
+              title: Text(userdata[index]['id'].toString()),
               subtitle: Text(userdata[index]['email']),
+              onTap: () {
+                // Call the delRecord function when a ListTile is tapped
+                delRecord(userdata[index]['id'].toString());
+              },
             ),
           );
         },
