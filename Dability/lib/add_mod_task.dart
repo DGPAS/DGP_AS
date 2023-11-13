@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:dability/Components/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
+import 'package:http/http.dart' as http;
+
 
 class AddModTask extends StatefulWidget {
   AddModTask(
@@ -25,6 +29,9 @@ class AddModTask extends StatefulWidget {
       title: title,
       description: description);
 }
+
+
+
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
@@ -75,6 +82,42 @@ class _AddModTaskState extends State<AddModTask> {
     }
 
     isPressed = false;
+  }
+
+  // TODO: Añadir al formulario la opcion de insertar una miniatura
+
+  Future<void> insertData() async {
+    try {
+        String uri = "http://10.0.2.2:80/insert_data.php";
+
+        print("Datos a enviar: ${title}, 0, ${description}, null, null, null, null");
+
+        var res = await http.post(Uri.parse(uri), body: {
+          "nombre": title?.trim(),
+          "realizada": "0",
+          "descripcion": description?.trim(),
+        });
+
+        var response = jsonDecode(res.body);
+        if (response["success"] == "true") {
+          print("Datos insertados");
+        } else {
+          print("Datos no insertados");
+        }
+      } catch (e) {
+        print(e);
+      }
+  }
+
+
+
+  // Función para cambiar el titulo de la barra segun sea crear o modificar
+  String getTitle () {
+    if (typeForm == AddModType.add) {
+      return 'Crear Tarea';
+    } else {
+      return 'Modificar tarea: $title';
+    }
   }
 
   // Función que devuelve en columna todos los pasos añadidos
@@ -164,7 +207,7 @@ class _AddModTaskState extends State<AddModTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crear Tarea'),
+        title: Text(getTitle()),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -350,7 +393,7 @@ class _AddModTaskState extends State<AddModTask> {
         height: 50,
         child: Container(
           margin: const EdgeInsets.all(10),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               ElevatedButton(
@@ -359,7 +402,7 @@ class _AddModTaskState extends State<AddModTask> {
                       MaterialStatePropertyAll<Color>(Colors.white),
                 ),
                 onPressed:
-                    null, // TO DO: Implementar funcionalidad al presionar botón Cancelar
+                    null, // TODO: Implementar funcionalidad al presionar botón Cancelar
                 child: Row(
                   children: <Widget>[
                     Text('Cancelar ', style: TextStyle(color: Colors.black)),
@@ -371,9 +414,16 @@ class _AddModTaskState extends State<AddModTask> {
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStatePropertyAll<Color>(Colors.white)),
-                onPressed:
-                    null, // TO DO: Implementar funcionalidad al presionar botón Crear
-                child: Row(
+                onPressed: () {
+                  if ((title == '' || title == null) ||
+                  (description == '' || description == null)) {
+                  print("Los campos titulo y descripción son obligatorios");
+                  } else {
+                    insertData();
+                    Navigator.of(context).pop();
+                  }
+                },
+                    child: Row(
                   children: <Widget>[
                     Text('Crear ', style: TextStyle(color: Colors.black)),
                     Icon(Icons.add, color: Colors.lightGreenAccent),

@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'add_mod_task.dart';
 import 'Components/enum_types.dart';
+import 'package:http/http.dart' as http;
 
 class TaskManagement extends StatefulWidget {
   const TaskManagement({super.key});
@@ -12,6 +16,45 @@ class TaskManagement extends StatefulWidget {
 class _TaskManagementState extends State<TaskManagement> {
   TextEditingController _controller = TextEditingController();
 
+  List<dynamic> userdata = [];
+
+  // Funcion que devuelve las tareas de la base de datos
+  Future<void> getrecord() async {
+    String uri = "http://10.0.2.2:80/view_data.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          userdata = json.decode(response.body);
+        });
+        print('Datos recibidos: $userdata');
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Funcion que borra una tarea concreta de la base de datos
+  Future<void> deleteTask(String idTareas) async {
+    String uri = "http://10.0.2.2:80/delete_data.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        print("Task deleted");
+        // Refresh the task list after deletion
+        getrecord();
+      } else {
+        print("Task not deleted. Server response: ${response['error']}");
+      }
+    } catch (e) {
+      print("Error during task deletion: $e");
+    }
+  }
+
   List<String> tasks = [];
   double maxWidt = 500;
 
@@ -20,13 +63,8 @@ class _TaskManagementState extends State<TaskManagement> {
   @override
   void initState() {
     super.initState();
-    tasks.add("Tarea 1");
-    tasks.add("Tarea 2");
-    tasks.add("Tarea 3");
-    tasks.add("Tarea 4");
-    tasks.add("Tarea 5");
-    tasks.add("Tarea 6");
-    tasks.add("Tarea 7");
+
+    getrecord();
 
     displayedItems.addAll(tasks);
   }
@@ -140,7 +178,7 @@ class _TaskManagementState extends State<TaskManagement> {
                   SizedBox(
                     height: 30,
                   ),
-                  ...List.generate(displayedItems.length, (index) {
+                  ...List.generate(userdata.length, (index) {
                     return Column(
                       children: [
                         ElevatedButton(
@@ -168,7 +206,7 @@ class _TaskManagementState extends State<TaskManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index],
+                                  userdata[index]['nombre'],
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -189,7 +227,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod)),
+                                                            AddModType.mod, title: userdata[index]['nombre'], description: userdata[index]['descripcion'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -223,14 +261,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() {
-                                                        tasks.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                        displayedItems.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                      });
+                                                      deleteTask(userdata[index]['idTareas']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
