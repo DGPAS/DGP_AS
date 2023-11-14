@@ -14,20 +14,24 @@ class AddModTask extends StatefulWidget {
       required this.typeForm,
       this.steps,
       this.title,
-      this.description})
+      this.description,
+      this.idTareas})
       : super(key: key);
 
   AddModType typeForm;
   List<ListStep>? steps;
   String? title;
   String? description;
+  String? idTareas;
 
   @override
   State<AddModTask> createState() => _AddModTaskState(
       typeForm: typeForm,
       stepsInit: steps,
       title: title,
-      description: description);
+      description: description,
+      idTareas: idTareas,
+  );
 }
 
 
@@ -35,7 +39,7 @@ class AddModTask extends StatefulWidget {
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
-      {required this.typeForm, this.stepsInit, this.title, this.description});
+      {required this.typeForm, this.stepsInit, this.title, this.description, this.idTareas});
 
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(
@@ -51,6 +55,7 @@ class _AddModTaskState extends State<AddModTask> {
   // Variables donde se almacenará el valor del titulo y la descripcion
   String? title;
   String? description;
+  String? idTareas;
   // isPressed: variable para la ayuda de añadir pasos
   bool isPressed = false;
   AddModType typeForm;
@@ -86,6 +91,14 @@ class _AddModTaskState extends State<AddModTask> {
 
   // TODO: Añadir al formulario la opcion de insertar una miniatura
 
+  void submitForm (String? idTareas) {
+    if (typeForm == AddModType.add) {
+      insertData();
+    } else {
+      updateData(idTareas);
+    }
+  }
+
   Future<void> insertData() async {
     try {
         String uri = "http://10.0.2.2:80/insert_data.php";
@@ -109,6 +122,31 @@ class _AddModTaskState extends State<AddModTask> {
       }
   }
 
+  Future<void> updateData (String? idTareas) async {
+    String uri = "http://10.0.2.2/update_data.php";
+
+    try {
+      print("Datos a modificar: ${title}, ${description}");
+
+      var res=await http.post(Uri.parse(uri),body: {
+        "idTareas": idTareas,
+        "nombre": title?.trim(),
+        "descripcion": description?.trim(),
+      });
+
+      var response=jsonDecode(res.body);
+
+      if(response["success"]=="true"){
+        print("Datos actualizados");
+      }else{
+        print("Some issue");
+
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
 
 
   // Función para cambiar el titulo de la barra segun sea crear o modificar
@@ -117,6 +155,14 @@ class _AddModTaskState extends State<AddModTask> {
       return 'Crear Tarea';
     } else {
       return 'Modificar tarea: $title';
+    }
+  }
+
+  String getSubmitButton () {
+    if (typeForm == AddModType.add) {
+      return 'Crear';
+    } else {
+      return 'Modificar';
     }
   }
 
@@ -419,13 +465,13 @@ class _AddModTaskState extends State<AddModTask> {
                   (description == '' || description == null)) {
                   print("Los campos titulo y descripción son obligatorios");
                   } else {
-                    insertData();
+                    submitForm(idTareas);
                     Navigator.of(context).pop();
                   }
                 },
                     child: Row(
                   children: <Widget>[
-                    Text('Crear ', style: TextStyle(color: Colors.black)),
+                    Text(getSubmitButton(), style: TextStyle(color: Colors.black)),
                     Icon(Icons.add, color: Colors.lightGreenAccent),
                   ],
                 ),

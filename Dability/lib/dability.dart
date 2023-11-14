@@ -6,6 +6,18 @@ void main() {
   runApp(const DAbility());
 }
 
+// TODOLIST
+// TODO: AGREGAR TABLAS TAREASASIGNADAS
+//    Contiene idAgenda, idTarea, realizada, fechaIni, fechaFin
+// TODO: REALIZAR INSERCION DE TAREAS EN AGENDAS
+// TODO: VISUALIZAR AGENDAS CON TAREAS
+// TODO: CREAR ALUMNOS
+// TODO: INSERTAR ALUMNOS
+// TODO: MODIFICAR ALUMNOS Y LISTA DE TAREAS DE ALUMNOS
+// TODO: ELIMINAR ALUMNOS
+
+
+
 class DAbility extends StatelessWidget {
   const DAbility({super.key});
 
