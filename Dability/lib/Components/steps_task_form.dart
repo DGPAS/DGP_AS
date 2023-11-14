@@ -129,7 +129,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                         });
                       },
                       child: Container(
-                        child: Icon(Icons.photo_camera),
+                        child: Icon(Icons.photo_camera, size: 50,),
                       ),
                     ),
                   ),
@@ -175,7 +175,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   Widget _getImage(String? urlPath) {
     if (urlPath == null) {
       return const Image(
-          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
     } else {
       return Image.file(File(urlPath), fit: BoxFit.cover);
     }
@@ -186,6 +186,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Añadir un paso a la tarea"),
+        backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -235,6 +236,9 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
             Container(
               padding: EdgeInsets.all(100),
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF4A6987),
+                ),
                 onPressed: () {
                   int numStep = (int.parse(_numPaso.text));
                   // Buscamos el paso según el numStep

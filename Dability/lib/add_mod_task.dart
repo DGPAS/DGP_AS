@@ -101,7 +101,7 @@ class _AddModTaskState extends State<AddModTask> {
 
   Future<void> insertData() async {
     try {
-        String uri = "http://10.0.2.2:80/insert_data.php";
+        String uri = "http://192.168.1.136:80/insert_data.php";
 
         print("Datos a enviar: ${title}, 0, ${description}, null, null, null, null");
 
@@ -123,7 +123,7 @@ class _AddModTaskState extends State<AddModTask> {
   }
 
   Future<void> updateData (String? idTareas) async {
-    String uri = "http://10.0.2.2/update_data.php";
+    String uri = "http://192.168.1.136/update_data.php";
 
     try {
       print("Datos a modificar: ${title}, ${description}");
@@ -254,6 +254,7 @@ class _AddModTaskState extends State<AddModTask> {
     return Scaffold(
       appBar: AppBar(
         title: Text(getTitle()),
+        backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -357,6 +358,9 @@ class _AddModTaskState extends State<AddModTask> {
                         margin: const EdgeInsets.only(
                             left: 10.0, top: 10.0, right: 10.0),
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF4A6987),
+                          ),
                           onPressed: () async {
                             copy = await Navigator.push(
                                 context,
@@ -395,6 +399,9 @@ class _AddModTaskState extends State<AddModTask> {
                     Container(
                       alignment: Alignment.topRight,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF4A6987),
+                        ),
                         child: const Text('Refrescar'),
                         onPressed: () {
                           setState(() {
@@ -435,7 +442,7 @@ class _AddModTaskState extends State<AddModTask> {
 
       // Botones "Cancelar y Crear"
       bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
+        color: Color(0xFF4A6987),
         height: 50,
         child: Container(
           margin: const EdgeInsets.all(10),
@@ -447,8 +454,9 @@ class _AddModTaskState extends State<AddModTask> {
                   backgroundColor:
                       MaterialStatePropertyAll<Color>(Colors.white),
                 ),
-                onPressed:
-                    null, // TODO: Implementar funcionalidad al presionar botón Cancelar
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 child: Row(
                   children: <Widget>[
                     Text('Cancelar ', style: TextStyle(color: Colors.black)),

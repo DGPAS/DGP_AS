@@ -27,6 +27,8 @@ class DAbility extends StatelessWidget {
     return MaterialApp(
       //MaterialApp means the app follows material pattern by google
       title: 'D-Ability',
+      // Elimina la etiqueta de debug
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
