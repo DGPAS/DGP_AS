@@ -6,7 +6,6 @@ import 'package:dability/Components/full_screen_image.dart';
 import 'package:dability/Components/text_form.dart';
 import 'dart:io';
 import 'package:dability/Components/list_step.dart';
-import 'dart:developer';
 
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
@@ -24,7 +23,6 @@ class StepsTaskForm extends StatefulWidget {
 }
 
 class _StepsTaskFormState extends State<StepsTaskForm> {
-  final _formKey = GlobalKey<FormState>();
   String campoRequerido = "* Campo requerido";
   final bool requiredField;
   // Lista para almacenar los pictogramas con descripcion
@@ -117,20 +115,18 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       ),
                     ),
                   ),
-                  Container(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final picker = ImagePicker();
-                        final XFile? pickedFile = await picker.pickImage(
-                            source: ImageSource.camera, imageQuality: 100);
+                  GestureDetector(
+                    onTap: () async {
+                      final picker = ImagePicker();
+                      final XFile? pickedFile = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 100);
 
-                        setState(() {
-                          selectedImage = pickedFile!.path;
-                        });
-                      },
-                      child: Container(
-                        child: Icon(Icons.photo_camera, size: 50,),
-                      ),
+                      setState(() {
+                        selectedImage = pickedFile!.path;
+                      });
+                    },
+                    child: Container(
+                      child: Icon(Icons.photo_camera, size: 50,),
                     ),
                   ),
                 ],

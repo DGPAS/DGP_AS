@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'add_mod_task.dart';
@@ -19,7 +18,7 @@ class _TaskManagementState extends State<TaskManagement> {
   List<dynamic> userdata = [];
 
   // Funcion que devuelve las tareas de la base de datos
-  Future<void> getrecord() async {
+  Future<void> getTasks() async {
     // La direccion ip debe ser la de red del portatil para conectar con
     // la tablet ó 10.0.2.2 para conectar con emuladores
     String uri = "http://192.168.1.136:80/view_data.php";
@@ -48,7 +47,7 @@ class _TaskManagementState extends State<TaskManagement> {
       if (response["success"] == true) {
         print("Task deleted");
         // Refresh the task list after deletion
-        getrecord();
+        getTasks();
       } else {
         print("Task not deleted. Server response: ${response['error']}");
       }
@@ -66,7 +65,7 @@ class _TaskManagementState extends State<TaskManagement> {
   void initState() {
     super.initState();
 
-    getrecord();
+    getTasks();
 
     displayedItems.addAll(tasks);
   }
