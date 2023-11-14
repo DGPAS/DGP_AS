@@ -78,10 +78,9 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
             children: [
               const Text("Añade una imagen"),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 700,
-                    padding: EdgeInsets.all(30),
+                  Expanded(
                     child: GestureDetector(
                       onTap: () async {
                         final picker = ImagePicker();
@@ -97,7 +96,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0),
                         ),
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.all(20),
                         child: DottedBorder(
                           color: Colors.black,
                           strokeWidth: 1,
@@ -126,6 +125,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       });
                     },
                     child: Container(
+                      margin: const EdgeInsets.all(20),
                       child: Icon(Icons.photo_camera, size: 50,),
                     ),
                   ),
