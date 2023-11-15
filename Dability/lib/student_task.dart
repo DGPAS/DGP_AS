@@ -67,11 +67,10 @@ class _StudentTaskState extends State<StudentTask> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                      padding: const EdgeInsets.all(40.0),
-                      clipBehavior: Clip.antiAlias,
+                      padding: const EdgeInsets.all(20.0),
                       decoration: ShapeDecoration(
                         color: Color(0xFF4A6987),
                         shape: RoundedRectangleBorder(
@@ -87,12 +86,11 @@ class _StudentTaskState extends State<StudentTask> {
                         ],
                       ),
                       child: Text(
-                        "Poner el Microondas",
+                        "Poner el \n Microondas",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize:
-                              40.0, //MediaQuery.of(context).size.height * 0.03,
+                          fontSize: 30,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,
                           height: 0,
@@ -136,7 +134,6 @@ class _StudentTaskState extends State<StudentTask> {
                             child: done
                                 ? Image.asset(
                                     'images/checkIcon.png',
-                                    height: 100,
                                     width: 100,
                                   )
                                 : null,
@@ -165,7 +162,7 @@ class _StudentTaskState extends State<StudentTask> {
                           textAlign: TextAlign.left,
                         ),
                         Text(
-                          'Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes congue rhoncus Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes congue rhoncus orci et nam, molestie enim habitasse mus in ornare. Nascetur hendrerit interdum natoque venenatis iaculis quis praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales nullam metus himenaeos vestibulum. Laoreet dictum mauris nulla platea fringilla molestie himenaeos quisque quis, porttitor purus venenatis cubilia facilisi est eros hac tellus aliquet, interdum curabitur sapien netus magna senectus mollis proin.orci et nam, molestie enim habitasse mus in ornare. Nascetur hendrerit interdum natoque venenatis iaculis quis praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales nullam metus himenaeos vestibulum. Laoreet dictum mauris nulla platea fringilla molestie himenaeos quisque quis, porttitor purus venenatis cubilia facilisi est eros hac tellus aliquet, interdum curabitur sapien netus magna senectus mollis proin.',
+                          'Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes congue rhoncus Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes congue rhoncus orci et nam, molestie enim habitasse mus in ornare. Nascetur hendrerit interdum natoque venenatis iaculis quis praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales nullam metus himenaeos vestibulum.',
                           style: TextStyle(
                             fontSize: 20,
                           ),

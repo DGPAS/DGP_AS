@@ -152,7 +152,7 @@ class _ToDoListState extends State<ToDoList> {
                                         currentTasks[i].imagePath,
                                         width:
                                             MediaQuery.of(context).size.height *
-                                                0.20,
+                                                0.10,
                                       ),
                                     ],
                                   ),
