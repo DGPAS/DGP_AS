@@ -21,7 +21,7 @@ class _TaskManagementState extends State<TaskManagement> {
   Future<void> getTasks() async {
     // La direccion ip debe ser la de red del portatil para conectar con
     // la tablet ó 10.0.2.2 para conectar con emuladores
-    String uri = "http://192.168.1.136:80/view_data.php";
+    String uri = "http://192.168.125.238:80/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
 
@@ -40,7 +40,7 @@ class _TaskManagementState extends State<TaskManagement> {
 
   // Funcion que borra una tarea concreta de la base de datos
   Future<void> deleteTask(String idTareas) async {
-    String uri = "http://192.168.1.136:80/delete_data.php";
+    String uri = "http://192.168.125.238:80/delete_data.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
       var response = jsonDecode(res.body);

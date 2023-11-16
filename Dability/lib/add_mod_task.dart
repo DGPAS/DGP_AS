@@ -64,6 +64,7 @@ class _AddModTaskState extends State<AddModTask> {
   List<ListStep> steps = [];
   List<ListStep> copy = [];
   List<ListStep> auxSteps = [];
+  String actualTaskId = '';
 
   @override
   void initState() {
@@ -93,15 +94,15 @@ class _AddModTaskState extends State<AddModTask> {
 
   void submitForm (String? idTareas) {
     if (typeForm == AddModType.add) {
-      insertData();
+      insertTaskData();
     } else {
       updateData(idTareas);
     }
   }
 
-  Future<void> insertData() async {
+  Future<void> insertTaskData() async {
     try {
-        String uri = "http://192.168.1.136:80/insert_data.php";
+        String uri = "http://192.168.125.238:80/insert_task.php";
 
         print("Datos a enviar: ${title}, 0, ${description}, null, null, null, null");
 
@@ -122,8 +123,53 @@ class _AddModTaskState extends State<AddModTask> {
       }
   }
 
+  // Obtenemos la tarea que acabamos de añadir para poder asignarle los pasos
+  // que se han creado para dicha tarea
+  Future<void> getNewTask() async {
+    // La direccion ip debe ser la de red del portatil para conectar con
+    // la tablet ó 10.0.2.2 para conectar con emuladores
+    String uri = "http://192.168.125.238:80/view_task_by_name.php";
+    try {
+      var response = await http.post(Uri.parse(uri), body: {
+        "nombre": title?.trim(),
+      });
+
+      if (response.statusCode == 200) {
+        setState(() {
+          actualTaskId = json.decode(response.body);
+        });
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> insertStepsData(ListStep step) async {
+    try {
+      String uri = "http://192.168.125.238:80/insert_steps.php";
+
+      var res = await http.post(Uri.parse(uri), body: {
+        "idTarea": int.parse(actualTaskId),
+        "descripcion": step.description,
+        "imagen": step.image,
+        "video": step.video,
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["success"] == "true") {
+        print("Datos insertados");
+      } else {
+        print("Datos no insertados");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> updateData (String? idTareas) async {
-    String uri = "http://192.168.1.136/update_data.php";
+    String uri = "http://192.168.125.238/update_data.php";
 
     try {
       print("Datos a modificar: ${title}, ${description}");
