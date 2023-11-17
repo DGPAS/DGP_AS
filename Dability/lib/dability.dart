@@ -11,10 +11,10 @@ void main() {
 //    Contiene idAgenda, idTarea, realizada, fechaIni, fechaFin
 // TODO: REALIZAR INSERCION DE TAREAS EN AGENDAS
 // TODO: VISUALIZAR AGENDAS CON TAREAS
-// TODO: CREAR ALUMNOS
-// TODO: INSERTAR ALUMNOS
-// TODO: MODIFICAR ALUMNOS Y LISTA DE TAREAS DE ALUMNOS
-// TODO: ELIMINAR ALUMNOS
+// TODO: CREAR ESTUDIANTES
+// TODO: INSERTAR ESTUDIANTES
+// TODO: MODIFICAR ESTUDIANTES Y LISTA DE TAREAS DE ESTUDIANTES
+// TODO: ELIMINAR ESTUDIANTES
 
 class DAbility extends StatelessWidget {
   const DAbility({super.key});
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     child: const Text(
-                      'Acceder como Alumno',
+                      'Acceder como Estudiante',
                       textAlign: TextAlign.center,
                     ),
                   ),

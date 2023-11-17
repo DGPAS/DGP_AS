@@ -45,7 +45,7 @@ class _AdminHomeState extends State<AdminHome> {
                 );
               },
               child: Text(
-                'GESTIONAR ALUMNOS',
+                'GESTIONAR ESTUDIANTES',
                 textAlign: TextAlign.center,
               ),
             ),
