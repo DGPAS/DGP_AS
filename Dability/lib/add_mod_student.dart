@@ -99,14 +99,14 @@ class _AddModStudentState extends State<AddModStudent> {
               padding: EdgeInsets.all(20),
               child: TextForm(
                   requiredField: true,
-                  titulo: "Nombre del Alumno",
+                  titulo: "Nombre del estudiante",
                   tipo: TextFormType.title),
             ),
             Container(
               padding: EdgeInsets.all(20),
               child: TextForm(
                   requiredField: true,
-                  titulo: "Contraseña del Alumno",
+                  titulo: "Contraseña del estudiante",
                   tipo: TextFormType.title),
             ),
             SizedBox(

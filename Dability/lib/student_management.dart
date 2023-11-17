@@ -21,13 +21,13 @@ class _StudentManagementState extends State<StudentManagement> {
   @override
   void initState() {
     super.initState();
-    students.add("Alumno 1");
-    students.add("Alumno 2");
-    students.add("Alumno 3");
-    students.add("Alumno 4");
-    students.add("Alumno 5");
-    students.add("Alumno 6");
-    students.add("Alumno 7");
+    students.add("Estudiante 1");
+    students.add("Estudiante 2");
+    students.add("Estudiante 3");
+    students.add("Estudiante 4");
+    students.add("Estudiante 5");
+    students.add("Estudiante 6");
+    students.add("Estudiante 7");
 
     displayedItems.addAll(students);
   }

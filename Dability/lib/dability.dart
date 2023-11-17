@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     child: const Text(
-                      'Acceder como Alumno',
+                      'Acceder como estudiante',
                       textAlign: TextAlign.center,
                     ),
                   ),
