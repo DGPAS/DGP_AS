@@ -59,7 +59,7 @@ class _AddModStudentState extends State<AddModStudent> {
             Image.asset('images/DabilityLogo.png', width: 48, height: 48),
             const Expanded(
               child: Text(
-                'Gestionar Alumnos',
+                'Gestionar Estudiantes',
                 textAlign: TextAlign.center,
               ),
             ),

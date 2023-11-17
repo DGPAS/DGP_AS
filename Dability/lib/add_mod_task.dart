@@ -393,7 +393,7 @@ class _AddModTaskState extends State<AddModTask> {
                               Text(
                                   'Tenga en cuenta que para cada paso, puede añadir distintos formatos y no es necesario que contenga todos, aunque si recomendable. Para ello, rellene los campos deseados e introduzca el número de paso al que corresponde.'),
                               Text(
-                                  'Luego se le mostrará a cada alumno el formato de pasos más indicado.'),
+                                  'Luego se le mostrará a cada estudiante el formato de pasos más indicado.'),
                               Text(
                                   'Además, si ya ha creado un paso, puede modificar sus valores o añadir formatos nuevos introduciendo el número de paso dentro.'),
                             ],
