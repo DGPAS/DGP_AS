@@ -95,6 +95,11 @@ class _AddModTaskState extends State<AddModTask> {
   void submitForm (String? idTareas) {
     if (typeForm == AddModType.add) {
       insertTaskData();
+      getNewTask();
+      print ("Id obtenido: $actualTaskId");
+      for (int i = 0; i < steps.length; i++) {
+        insertStepsData(steps[i]);
+      }
     } else {
       updateData(idTareas);
     }
@@ -130,14 +135,26 @@ class _AddModTaskState extends State<AddModTask> {
     // la tablet ó 10.0.2.2 para conectar con emuladores
     String uri = "http://192.168.125.238:80/view_task_by_name.php";
     try {
-      var response = await http.post(Uri.parse(uri), body: {
-        "nombre": title?.trim(),
-      });
+      var response = await http.post(
+        Uri.parse(uri),
+        body: {
+        "nombre": "Tarea1", //title?.trim(),
+        },
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      );
 
       if (response.statusCode == 200) {
-        setState(() {
-          actualTaskId = json.decode(response.body);
-        });
+        Map<String, dynamic> data = json.decode(response.body);
+
+        print("ID OSNFAOFASOFHAFS: ${data["idTareas"]}");
+
+        if (data["success"] == "true") {
+          setState(() {
+            actualTaskId = data["idTareas"];
+          });
+        } else {
+          print('Error en la consulta PHP: ${data["error"]}');
+        }
       } else {
         print('Error en la solicitud: ${response.statusCode}');
       }
@@ -151,7 +168,7 @@ class _AddModTaskState extends State<AddModTask> {
       String uri = "http://192.168.125.238:80/insert_steps.php";
 
       var res = await http.post(Uri.parse(uri), body: {
-        "idTarea": int.parse(actualTaskId),
+        "idTarea": actualTaskId,
         "descripcion": step.description,
         "imagen": step.image,
         "video": step.video,
