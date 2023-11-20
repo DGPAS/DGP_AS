@@ -6,6 +6,10 @@ class ToDoList extends StatefulWidget {
 
   @override
   State<ToDoList> createState() => _ToDoListState();
+  int counter = 0;
+  ToDoList(int value){
+    counter = value;
+  }
 }
 
 class _ToDoListState extends State<ToDoList> {
@@ -17,7 +21,12 @@ class _ToDoListState extends State<ToDoList> {
     double horizontalPadding = MediaQuery.of(context).size.width * 0.05;
     double gridElementSize;
     int maximumTasks = 8;
-    List<int> elements = [1, 2, 3, 4, 5, 6, 7];
+    List<int> elements = [1, 2, 3, 4, 5, 6, 7, 8];
+    int numPages = (elements.length ~/ maximumTasks) + 1;
+    int currentDisplay = elements.length;
+    if (currentDisplay > maximumTasks){
+      currentDisplay -= maximumTasks;
+    }
 
     if (MediaQuery.of(context).orientation == Orientation.landscape){
       columnSpace = MediaQuery.of(context).size.width * 0.1;
@@ -108,7 +117,7 @@ class _ToDoListState extends State<ToDoList> {
               },
             ),
           ),
-
+/*
           if (elements.length > maximumTasks)
             Positioned(
               bottom: 0,
@@ -121,7 +130,7 @@ class _ToDoListState extends State<ToDoList> {
                   children: [
                     ElevatedButton(
                       onPressed:
-                      /*widget.counter > 1 ? () {
+                      widget.counter > 1 ? () {
                         setState(() {
                           widget.counter -= 1;
                         });
@@ -130,7 +139,7 @@ class _ToDoListState extends State<ToDoList> {
                         //MaterialPageRoute(builder: (context) => personalAgenda(widget.counter - 1)),
                         //);
                       }
-                          : */null,
+                          : null,
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
                         shape:
@@ -154,15 +163,14 @@ class _ToDoListState extends State<ToDoList> {
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.05),
                     Text(
-                      'prueba',
-                      //'${widget.counter} / ${widget.numPages}',
+                      '${widget.counter} / ${numPages}',
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.04,
                       ),
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.05),
                     ElevatedButton(
-                      onPressed: /*widget.counter < widget.numPages
+                      onPressed: widget.counter < numPages
                           ? () {
                         setState(() {
                           widget.counter += 1;
@@ -172,7 +180,7 @@ class _ToDoListState extends State<ToDoList> {
                           MaterialPageRoute(builder: (context) => personalAgenda(widget.counter + 1)),
                         );*/
                       }
-                          :*/ null,
+                          : null,
                       style: ButtonStyle(
                         elevation: MaterialStateProperty.all(0),
                         shape:
@@ -197,7 +205,7 @@ class _ToDoListState extends State<ToDoList> {
                   ],
                 ),
               ),
-            ),
+            ),*/
         ],
       ),
     );

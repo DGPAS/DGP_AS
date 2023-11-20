@@ -58,6 +58,9 @@ class _TaskStepsState extends State<TaskSteps> {
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
+      body: Column(
+        
+      ),
     );
   }
 }
