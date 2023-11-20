@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'task_steps.dart';
 class StudentTask extends StatefulWidget {
   const StudentTask({super.key});
 
@@ -169,6 +169,51 @@ class _StudentTaskState extends State<StudentTask> {
                           textAlign: TextAlign.justify,
                         )
                       ])),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly, //MainAxisAlignment.spaceBetween
+              children: [
+                Image.asset(
+                  'images/tutorialVideo.png',
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(20),
+                      //fixedSize: Size(250, 100),
+                      //minimumSize: Size(250, 50),
+                      //maximumSize: Size(250, 100),
+                      //textStyle: const TextStyle(fontSize: 25),
+                      backgroundColor: Color(0xFF4A6987),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      )),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TaskSteps()),
+                    );
+                  },
+                  child:
+                    Column(
+                      children: [
+                        Text(
+                          'VER\nPASOS',
+                          textAlign: TextAlign.center,
+                          style:
+                            TextStyle(
+                              fontSize: MediaQuery.of(context).size.height * 0.025,
+                              fontWeight: FontWeight.bold,
+                            ),
+                        ),
+
+                        Image.asset(
+                          'images/taskImage.png',
+                        ),
+                      ],
+                    )
+
+                ),
+              ],
             )
           ]),
         ));
