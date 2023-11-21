@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'add_mod_task.dart';
 import 'Components/enum_types.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TaskManagement extends StatefulWidget {
   const TaskManagement({super.key});
@@ -21,7 +22,7 @@ class _TaskManagementState extends State<TaskManagement> {
   Future<void> getTasks() async {
     // La direccion ip debe ser la de red del portatil para conectar con
     // la tablet ó 10.0.2.2 para conectar con emuladores
-    String uri = "http://192.168.1.136/view_data.php";
+    String uri = "${dotenv.env['API_URL']}/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
 
@@ -40,7 +41,7 @@ class _TaskManagementState extends State<TaskManagement> {
 
   // Funcion que borra una tarea concreta de la base de datos
   Future<void> deleteTask(String idTareas) async {
-    String uri = "http://192.168.125.238:80/delete_data.php";
+    String uri = "${dotenv.env['API_URL']}/delete_data.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
       var response = jsonDecode(res.body);

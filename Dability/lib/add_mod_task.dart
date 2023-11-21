@@ -6,6 +6,8 @@ import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 
 class AddModTask extends StatefulWidget {
@@ -95,7 +97,6 @@ class _AddModTaskState extends State<AddModTask> {
   void submitForm (String? idTareas) {
     if (typeForm == AddModType.add) {
       insertTaskData();
-      getNewTask();
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
         insertStepsData(steps[i]);
@@ -107,7 +108,7 @@ class _AddModTaskState extends State<AddModTask> {
 
   Future<void> insertTaskData() async {
     try {
-        String uri = "http://192.168.125.238:80/insert_task.php";
+        String uri = "${dotenv.env['API_URL']}/insert_task.php";
 
         print("Datos a enviar: ${title}, 0, ${description}, null, null, null, null");
 
@@ -120,6 +121,12 @@ class _AddModTaskState extends State<AddModTask> {
         var response = jsonDecode(res.body);
         if (response["success"] == "true") {
           print("Datos insertados");
+
+          int newTaskId = response["idTareas"];
+          print("Nuevo idTareas: $newTaskId");
+          setState(() {
+            actualTaskId = newTaskId.toString();
+          });
         } else {
           print("Datos no insertados");
         }
@@ -130,10 +137,11 @@ class _AddModTaskState extends State<AddModTask> {
 
   // Obtenemos la tarea que acabamos de añadir para poder asignarle los pasos
   // que se han creado para dicha tarea
+  /*
   Future<void> getNewTask() async {
     // La direccion ip debe ser la de red del portatil para conectar con
     // la tablet ó 10.0.2.2 para conectar con emuladores (192.168.125.238)
-    String uri = "http://192.168.125.238:80/view_task_by_name.php";
+    String uri = "${dotenv.env['API_URL']}/view_task_by_name.php";
     try {
       var response = await http.post(
         Uri.parse(uri),
@@ -162,10 +170,11 @@ class _AddModTaskState extends State<AddModTask> {
       print(e);
     }
   }
+   */
 
   Future<void> insertStepsData(ListStep step) async {
     try {
-      String uri = "http://192.168.1.136:80/insert_steps.php";
+      String uri = "${dotenv.env['API_URL']}/insert_steps.php";
 
       var res = await http.post(Uri.parse(uri), body: {
         "idTarea": actualTaskId,
@@ -186,7 +195,7 @@ class _AddModTaskState extends State<AddModTask> {
   }
 
   Future<void> updateData (String? idTareas) async {
-    String uri = "http://192.168.125.238/update_data.php";
+    String uri = "${dotenv.env['API_URL']}/update_data.php";
 
     try {
       print("Datos a modificar: ${title}, ${description}");
