@@ -132,7 +132,7 @@ class _AddModTaskState extends State<AddModTask> {
   // que se han creado para dicha tarea
   Future<void> getNewTask() async {
     // La direccion ip debe ser la de red del portatil para conectar con
-    // la tablet ó 10.0.2.2 para conectar con emuladores
+    // la tablet ó 10.0.2.2 para conectar con emuladores (192.168.125.238)
     String uri = "http://192.168.125.238:80/view_task_by_name.php";
     try {
       var response = await http.post(
@@ -165,7 +165,7 @@ class _AddModTaskState extends State<AddModTask> {
 
   Future<void> insertStepsData(ListStep step) async {
     try {
-      String uri = "http://192.168.125.238:80/insert_steps.php";
+      String uri = "http://192.168.1.136:80/insert_steps.php";
 
       var res = await http.post(Uri.parse(uri), body: {
         "idTarea": actualTaskId,
