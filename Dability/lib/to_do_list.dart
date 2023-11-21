@@ -20,12 +20,12 @@ class _ToDoListState extends State<ToDoList> {
     double verticalPadding =  MediaQuery.of(context).size.height * 0.05;
     double horizontalPadding = MediaQuery.of(context).size.width * 0.05;
     double gridElementSize;
-    int maximumTasks = 8;
+    int taskQuantity = 8;       //Cambiar por el número de tareas que se tengan
     List<int> elements = [1, 2, 3, 4, 5, 6, 7, 8];
-    int numPages = (elements.length ~/ maximumTasks) + 1;
+    int numPages = (elements.length ~/ taskQuantity) + 1;
     int currentDisplay = elements.length;
-    if (currentDisplay > maximumTasks){
-      currentDisplay -= maximumTasks;
+    if (currentDisplay > taskQuantity){
+      currentDisplay -= taskQuantity;
     }
 
     if (MediaQuery.of(context).orientation == Orientation.landscape){
@@ -88,7 +88,7 @@ class _ToDoListState extends State<ToDoList> {
         children: [
           Expanded(
             child: GridView.builder(
-              itemCount: maximumTasks,
+              itemCount: taskQuantity,
               padding: EdgeInsets.only(top: verticalPadding, left: horizontalPadding, right: horizontalPadding),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: gridElementSize, // Tamaño máximo deseado para cada elemento
