@@ -240,18 +240,16 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                   // Buscamos el paso según el numStep
                   var existingStep = steps.firstWhere(
                       (step) => step.numStep == numStep,
-                      orElse: () => ListStep(numStep, '', 'null', ''));
+                      orElse: () => ListStep(numStep, '', 'null'));
                   // Si se ha encontrado:
                   if ('null' != existingStep.description) {
                     if (selectedImage != '') existingStep.image = selectedImage;
                     if (actualDescription != '') {
                       existingStep.description = actualDescription;
                     }
-                    // TO DO: Video se ve como descripcion, cambiar
-                    if (selectedVideo != '') existingStep.video = selectedVideo;
                   } else {
                     steps.add(ListStep(numStep, selectedImage,
-                        actualDescription, selectedVideo));
+                        actualDescription));
                   }
 
                   if (numStep > 0) {

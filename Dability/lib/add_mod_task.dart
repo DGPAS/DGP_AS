@@ -86,7 +86,10 @@ class _AddModTaskState extends State<AddModTask> {
     // (es decir, si lo que se quiere es añadir una tarea y no modificarla)
     // se inicializa a vacío
     if (stepsInit != null) {
-      steps = stepsInit!; // La ! es de nullCheck
+      setState(() {
+        print("Step 1 ${stepsInit![0]}");
+        steps = stepsInit!; // La ! es de nullCheck
+      });
     }
 
     isPressed = false;
@@ -94,12 +97,12 @@ class _AddModTaskState extends State<AddModTask> {
 
   // TODO: Añadir al formulario la opcion de insertar una miniatura
 
-  void submitForm (String? idTareas) {
+  Future<void> submitForm (String? idTareas) async {
     if (typeForm == AddModType.add) {
-      insertTaskData();
+      await insertTaskData();
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
-        insertStepsData(steps[i]);
+        await insertStepsData(steps[i]);
       }
     } else {
       updateData(idTareas);
@@ -110,12 +113,11 @@ class _AddModTaskState extends State<AddModTask> {
     try {
         String uri = "${dotenv.env['API_URL']}/insert_task.php";
 
-        print("Datos a enviar: ${title}, 0, ${description}, null, null, null, null");
-
         var res = await http.post(Uri.parse(uri), body: {
           "nombre": title?.trim(),
-          "realizada": "0",
           "descripcion": description?.trim(),
+          "miniatura": '',
+          "video": '',
         });
 
         var response = jsonDecode(res.body);
@@ -176,11 +178,13 @@ class _AddModTaskState extends State<AddModTask> {
     try {
       String uri = "${dotenv.env['API_URL']}/insert_steps.php";
 
+      print('Datos a enviar: numPaso: ${step.numStep}, idTarea: $actualTaskId, description: ${step.description}, imagen: ${step.image}');
+
       var res = await http.post(Uri.parse(uri), body: {
+        "numPaso": step.numStep.toString(),
         "idTarea": actualTaskId,
         "descripcion": step.description,
-        "imagen": step.image,
-        "video": step.video,
+        "imagen": step.image
       });
 
       var response = jsonDecode(res.body);
@@ -300,20 +304,6 @@ class _AddModTaskState extends State<AddModTask> {
                     textAlign: TextAlign.justify,
                   ),
                 ),
-              ],
-            ),
-          if (step.video != '')
-            Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.only(top: 20, left: 20),
-                  alignment: Alignment.topLeft,
-                  child: const Text('Descripción'),
-                ),
-                Image(
-                    image: AssetImage(step.image),
-                    fit: BoxFit
-                        .contain), // TO DO: Manejar los ficheros de tipo vídeo
               ],
             ),
         ],

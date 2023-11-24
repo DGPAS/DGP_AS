@@ -17,6 +17,7 @@ class _TaskManagementState extends State<TaskManagement> {
   TextEditingController _controller = TextEditingController();
 
   List<dynamic> userdata = [];
+  List<dynamic> steps = [];
 
   // Funcion que devuelve las tareas de la base de datos
   Future<void> getTasks() async {
@@ -30,12 +31,39 @@ class _TaskManagementState extends State<TaskManagement> {
         setState(() {
           userdata = json.decode(response.body);
         });
-        print('Datos recibidos: $userdata');
       } else {
         print('Error en la solicitud: ${response.statusCode}');
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> getSteps() async {
+    // La direccion ip debe ser la de red del portatil para conectar con
+    // la tablet ó 10.0.2.2 para conectar con emuladores
+    String uri = "${dotenv.env['API_URL']}/getSteps.php";
+
+    for (int i = 0; i < userdata.length; i++) {
+      try {
+        var response = await http.post(
+          Uri.parse(uri),
+          body: {
+            "idTarea": userdata[i]['idTarea'],
+          },
+          headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        );
+
+        if (response.statusCode == 200) {
+          setState(() {
+            steps = json.decode(response.body);
+          });
+        } else {
+          print('Error en la solicitud: ${response.statusCode}');
+        }
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
@@ -62,11 +90,16 @@ class _TaskManagementState extends State<TaskManagement> {
 
   List<String> displayedItems = [];
 
+  Future<void> getData () async {
+    await getTasks();
+    await getSteps();
+  }
+
   @override
   void initState() {
     super.initState();
 
-    getTasks();
+    getData();
 
     displayedItems.addAll(tasks);
   }
@@ -229,7 +262,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod, title: userdata[index]['nombre'], description: userdata[index]['descripcion'], idTareas: userdata[index]['idTareas'],)),
+                                                            AddModType.mod, title: userdata[index]['nombre'], description: userdata[index]['descripcion'], idTareas: userdata[index]['idTareas'], steps: steps[index],)),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
