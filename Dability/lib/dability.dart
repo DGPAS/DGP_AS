@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dability/admin_home.dart';
 import 'student_home.dart';
+import 'admin_login.dart';
+import 'student_login.dart';
 
 void main() {
   runApp(const DAbility());
@@ -85,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdminHome()),
+                        MaterialPageRoute(builder: (context) => AdminLogin()),
                       );
                     },
                     child: const Text(
@@ -108,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => StudentHome()),
+                        MaterialPageRoute(builder: (context) => StudentLogin()),
                       );
                     },
                     child: const Text(
