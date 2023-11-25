@@ -42,7 +42,7 @@ class _TaskManagementState extends State<TaskManagement> {
   Future<void> getSteps() async {
     // La direccion ip debe ser la de red del portatil para conectar con
     // la tablet ó 10.0.2.2 para conectar con emuladores
-    String uri = "${dotenv.env['API_URL']}/getSteps.php";
+    String uri = "${dotenv.env['API_URL']}/view_steps.php";
 
     for (int i = 0; i < userdata.length; i++) {
       try {
