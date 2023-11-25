@@ -16,8 +16,7 @@ class TaskManagement extends StatefulWidget {
 class _TaskManagementState extends State<TaskManagement> {
   TextEditingController _controller = TextEditingController();
 
-  List<dynamic> userdata = [];
-  List<dynamic> steps = [];
+  List<dynamic> tasks = [];
 
   // Funcion que devuelve las tareas de la base de datos
   Future<void> getTasks() async {
@@ -29,41 +28,13 @@ class _TaskManagementState extends State<TaskManagement> {
 
       if (response.statusCode == 200) {
         setState(() {
-          userdata = json.decode(response.body);
+          tasks = json.decode(response.body);
         });
       } else {
         print('Error en la solicitud: ${response.statusCode}');
       }
     } catch (e) {
       print(e);
-    }
-  }
-
-  Future<void> getSteps() async {
-    // La direccion ip debe ser la de red del portatil para conectar con
-    // la tablet ó 10.0.2.2 para conectar con emuladores
-    String uri = "${dotenv.env['API_URL']}/view_steps.php";
-
-    for (int i = 0; i < userdata.length; i++) {
-      try {
-        var response = await http.post(
-          Uri.parse(uri),
-          body: {
-            "idTarea": userdata[i]['idTarea'],
-          },
-          headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        );
-
-        if (response.statusCode == 200) {
-          setState(() {
-            steps = json.decode(response.body);
-          });
-        } else {
-          print('Error en la solicitud: ${response.statusCode}');
-        }
-      } catch (e) {
-        print(e);
-      }
     }
   }
 
@@ -85,14 +56,13 @@ class _TaskManagementState extends State<TaskManagement> {
     }
   }
 
-  List<String> tasks = [];
   double maxWidt = 500;
 
-  List<String> displayedItems = [];
+  List<dynamic> displayedItems = [];
 
   Future<void> getData () async {
     await getTasks();
-    await getSteps();
+    displayedItems.addAll(tasks);
   }
 
   @override
@@ -100,16 +70,14 @@ class _TaskManagementState extends State<TaskManagement> {
     super.initState();
 
     getData();
-
-    displayedItems.addAll(tasks);
   }
 
   void filterSearchResults(String query) {
-    List<String> searchResults = [];
+    List<dynamic> searchResults = [];
 
     if (query.isNotEmpty) {
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].toLowerCase().contains(query.toLowerCase())) {
+        if (tasks[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(tasks[i]);
         }
       }
@@ -213,7 +181,7 @@ class _TaskManagementState extends State<TaskManagement> {
                   SizedBox(
                     height: 30,
                   ),
-                  ...List.generate(userdata.length, (index) {
+                  ...List.generate(displayedItems.length, (index) {
                     return Column(
                       children: [
                         ElevatedButton(
@@ -241,7 +209,7 @@ class _TaskManagementState extends State<TaskManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  userdata[index]['nombre'],
+                                  displayedItems[index]['nombre'],
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -262,7 +230,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod, title: userdata[index]['nombre'], description: userdata[index]['descripcion'], idTareas: userdata[index]['idTareas'], steps: steps[index],)),
+                                                            AddModType.mod, title: displayedItems[index]['nombre'], description: displayedItems[index]['descripcion'], idTareas: displayedItems[index]['idTareas'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -296,7 +264,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      deleteTask(userdata[index]['idTareas']);
+                                                      deleteTask(displayedItems[index]['idTareas']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },

@@ -14,14 +14,12 @@ class AddModTask extends StatefulWidget {
   AddModTask(
       {Key? key,
       required this.typeForm,
-      this.steps,
       this.title,
       this.description,
       this.idTareas})
       : super(key: key);
 
   AddModType typeForm;
-  List<ListStep>? steps;
   String? title;
   String? description;
   String? idTareas;
@@ -29,7 +27,6 @@ class AddModTask extends StatefulWidget {
   @override
   State<AddModTask> createState() => _AddModTaskState(
       typeForm: typeForm,
-      stepsInit: steps,
       title: title,
       description: description,
       idTareas: idTareas,
@@ -41,7 +38,7 @@ class AddModTask extends StatefulWidget {
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
-      {required this.typeForm, this.stepsInit, this.title, this.description, this.idTareas});
+      {required this.typeForm, this.title, this.description, this.idTareas});
 
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(
@@ -62,7 +59,6 @@ class _AddModTaskState extends State<AddModTask> {
   bool isPressed = false;
   AddModType typeForm;
 
-  List<ListStep>? stepsInit;
   List<ListStep> steps = [];
   List<ListStep> copy = [];
   List<ListStep> auxSteps = [];
@@ -82,17 +78,50 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.originalText = description;
     descriptionForm.text = description!;
 
-    // Si stepsInit es nulo
-    // (es decir, si lo que se quiere es añadir una tarea y no modificarla)
-    // se inicializa a vacío
-    if (stepsInit != null) {
-      setState(() {
-        print("Step 1 ${stepsInit![0]}");
-        steps = stepsInit!; // La ! es de nullCheck
-      });
+    if (idTareas != null) {
+      getInitialSteps();
     }
 
     isPressed = false;
+  }
+
+
+  // Funcion que devuelve los pasos la tarea, si existe, guardados en la base de datos
+  Future<void> getInitialSteps() async {
+    // La direccion ip debe ser la de red del portatil para conectar con
+    // la tablet ó 10.0.2.2 para conectar con emuladores
+    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTareas";
+    try {
+      print(idTareas!);
+      var response = await http.get(
+        Uri.parse(uri),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> responseData = json.decode(response.body);
+        List<ListStep> loadedSteps = [];
+
+        // Convertir cada elemento en responseData a ListStep y agregarlo a loadedSteps
+        for (var stepData in responseData) {
+          loadedSteps.add(ListStep(
+            stepData['numPaso'],
+            stepData['imagen'],
+            stepData['descripcion'],
+          ));
+        }
+
+        setState(() {
+          steps = loadedSteps;
+        });
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   // TODO: Añadir al formulario la opcion de insertar una miniatura
@@ -105,7 +134,8 @@ class _AddModTaskState extends State<AddModTask> {
         await insertStepsData(steps[i]);
       }
     } else {
-      updateData(idTareas);
+      await updateData(idTareas);
+      await updateSteps();
     }
   }
 
@@ -136,43 +166,6 @@ class _AddModTaskState extends State<AddModTask> {
         print(e);
       }
   }
-
-  // Obtenemos la tarea que acabamos de añadir para poder asignarle los pasos
-  // que se han creado para dicha tarea
-  /*
-  Future<void> getNewTask() async {
-    // La direccion ip debe ser la de red del portatil para conectar con
-    // la tablet ó 10.0.2.2 para conectar con emuladores (192.168.125.238)
-    String uri = "${dotenv.env['API_URL']}/view_task_by_name.php";
-    try {
-      var response = await http.post(
-        Uri.parse(uri),
-        body: {
-        "nombre": "Tarea1", //title?.trim(),
-        },
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = json.decode(response.body);
-
-        print("ID OSNFAOFASOFHAFS: ${data["idTareas"]}");
-
-        if (data["success"] == "true") {
-          setState(() {
-            actualTaskId = data["idTareas"];
-          });
-        } else {
-          print('Error en la consulta PHP: ${data["error"]}');
-        }
-      } else {
-        print('Error en la solicitud: ${response.statusCode}');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-   */
 
   Future<void> insertStepsData(ListStep step) async {
     try {
@@ -214,6 +207,28 @@ class _AddModTaskState extends State<AddModTask> {
 
       if(response["success"]=="true"){
         print("Datos actualizados");
+      }else{
+        print("Some issue");
+
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> updateSteps () async {
+    String uri = "${dotenv.env['API_URL']}/update_steps.php";
+
+    try {
+      var res=await http.post(Uri.parse(uri),body: {
+        "steps": jsonEncode(steps.map((step) => step.toJson()).toList()),
+        "idTarea": idTareas,
+      });
+
+      var response=jsonDecode(res.body);
+
+      if(response["success"]=="true"){
+        print("Steps actualizados");
       }else{
         print("Some issue");
 
@@ -277,7 +292,7 @@ class _AddModTaskState extends State<AddModTask> {
               ],
             ),
           ),
-          if (step.image != '')
+          if (step.image != '' && step.image != null)
             Column(
               children: [
                 Container(
