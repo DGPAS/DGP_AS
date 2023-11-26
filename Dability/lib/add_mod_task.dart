@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:dability/Components/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
@@ -7,6 +8,8 @@ import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 
 
@@ -63,6 +66,9 @@ class _AddModTaskState extends State<AddModTask> {
   List<ListStep> copy = [];
   List<ListStep> auxSteps = [];
   String actualTaskId = '';
+  File? _image;
+  String selectedImage = "";
+
 
   @override
   void initState() {
@@ -124,17 +130,17 @@ class _AddModTaskState extends State<AddModTask> {
     }
   }
 
-  // TODO: Añadir al formulario la opcion de insertar una miniatura
-
   Future<void> submitForm (String? idTareas) async {
     if (typeForm == AddModType.add) {
       await insertTaskData();
+      await uploadImage();
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
         await insertStepsData(steps[i]);
       }
     } else {
       await updateData(idTareas);
+      await uploadImage();
       await updateSteps();
     }
   }
@@ -238,6 +244,29 @@ class _AddModTaskState extends State<AddModTask> {
     }
   }
 
+  Future<void> uploadImage() async {
+    String uri = "${dotenv.env['API_URL']}/upload_image.php";
+
+    try {
+
+      var request = http.MultipartRequest('POST', Uri.parse(uri));
+      request.fields['idTareas'] = actualTaskId;
+      var picture = await http.MultipartFile.fromPath("image", selectedImage);
+      request.files.add(picture);
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print ("Image Uploaded");
+      }
+      else {
+        print("Error en la subida");
+      }
+
+    } catch (e) {
+      print(e);
+    }
+  }
+
 
 
   // Función para cambiar el titulo de la barra segun sea crear o modificar
@@ -254,6 +283,15 @@ class _AddModTaskState extends State<AddModTask> {
       return 'Crear';
     } else {
       return 'Modificar';
+    }
+  }
+
+  Widget _getImage(String? urlPath) {
+    if (urlPath == null || urlPath == '') {
+      return const Image(
+          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+    } else {
+      return Image.file(File(urlPath), fit: BoxFit.cover);
     }
   }
 
@@ -366,8 +404,74 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
-              // Contenedor con diferentes botones para introducir formatos diversos a cada paso de la tarea
-              // TO DO: Cambiar IU para que se muestren los botones en un Grid
+              // Contenedor para añadir una miniatura a la tarea
+              Container(
+                decoration: _buildBoxDecoration(),
+                padding: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
+                child: Column(
+                  children: [
+                    const Text("Añade una miniatura para la tarea"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              final picker = ImagePicker();
+                              final XFile? pickedFile = await picker.pickImage(
+                                  source: ImageSource.gallery, imageQuality: 100);
+
+                              setState(() {
+                                selectedImage = pickedFile!.path;
+                                _image = File(selectedImage);
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              margin: const EdgeInsets.all(20),
+                              child: DottedBorder(
+                                color: Colors.black,
+                                strokeWidth: 1,
+                                dashPattern: [10, 6],
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(20),
+                                child: Container(
+                                  height: 200,
+                                  width: 800,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(45),
+                                      child: _getImage(selectedImage)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            final picker = ImagePicker();
+                            final XFile? pickedFile = await picker.pickImage(
+                                source: ImageSource.camera, imageQuality: 100);
+
+                            setState(() {
+                              selectedImage = pickedFile!.path;
+                              _image = File(selectedImage);
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(20),
+                            child: Icon(Icons.photo_camera, size: 50,),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Contenedor con para añadir los pasos
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
@@ -566,5 +670,15 @@ class _AddModTaskState extends State<AddModTask> {
         ),
       ),
     );
+  }
+
+  BoxDecoration _buildBoxDecoration() {
+    return BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1,
+        ));
   }
 }
