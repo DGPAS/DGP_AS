@@ -190,7 +190,7 @@ class _StudentTaskState extends State<StudentTask> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TaskSteps(0, 3)),
+                      MaterialPageRoute(builder: (context) => TaskSteps(0, 3, List.generate(3, (index) => false))),
                     );
                   },
                   child:

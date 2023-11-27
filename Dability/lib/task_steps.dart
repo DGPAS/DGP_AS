@@ -6,9 +6,11 @@ class TaskSteps extends StatefulWidget {
   @override
   State<TaskSteps> createState() => _TaskStepsState();
   int index = 0, numberOfSteps = 0;
-  TaskSteps(int initialPage, int stepsQuantity){
+  List<bool> checkedStep = List.generate(0, (index) => false);
+  TaskSteps(int initialPage, int stepsQuantity, List<bool> checks){
     index = initialPage;
     numberOfSteps = stepsQuantity;
+    checkedStep = checks;
   }
 }
 
@@ -90,6 +92,54 @@ class _TaskStepsState extends State<TaskSteps> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              widget.checkedStep[widget.index] = !widget.checkedStep[widget.index];
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(20),
+                              //fixedSize: Size(250, 100),
+                              //minimumSize: Size(250, 50),
+                              //maximumSize: Size(250, 100),
+                              //textStyle: const TextStyle(fontSize: 25),
+                              backgroundColor: Color(0xFF4A6987),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )
+                          ),
+                          child: Row(
+                            children: [
+                              Text('Paso completado'),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.025,
+                              ),
+                              widget.checkedStep[widget.index] ?
+                                Image.asset('images/checkIcon.png',
+                                    height: MediaQuery.of(context).size.height * 0.125,
+                                ):
+                                Image.asset('images/greyIcon.jpg',
+                                  height: MediaQuery.of(context).size.height * 0.125,
+                                ) ,
+                            ],
+                          ),
+
+                        //  child: widget.checkedStep[widget.index] ?
+                          //Image.asset('images/checkIcon.png'):
+                          //Image.asset('images/greyIcon.jpg') ,
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+
                   Row(
                     mainAxisAlignment: widget.index == 0
                         ? MainAxisAlignment.end
