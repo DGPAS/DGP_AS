@@ -31,7 +31,7 @@ class _AddModStudentState extends State<AddModStudent> {
   String? nameAlumno = '';
   bool? readCheck = false;
   bool? videoCheck = false;
-  bool? imageCheck = false;
+  bool? soundCheck = false;
 
   // Formulario para el nombre del alumno
   TextForm titleForm = TextForm(
@@ -306,11 +306,11 @@ class _AddModStudentState extends State<AddModStudent> {
               Container(
                 width: 200,
                 child: CheckboxListTile(
-                    title: const Text('Imágenes'),
-                    value: imageCheck,
+                    title: const Text('Audio'),
+                    value: soundCheck,
                     onChanged: (newValue) {
                       setState(() {
-                        imageCheck = newValue;
+                        soundCheck = newValue;
                       });
                     }),
               ),

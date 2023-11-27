@@ -1,6 +1,11 @@
 import 'package:dability/Components/enum_types.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'add_mod_student.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+
 
 class StudentManagement extends StatefulWidget {
   const StudentManagement({super.key});
@@ -14,31 +19,49 @@ class StudentManagement extends StatefulWidget {
 class _StudentManagementState extends State<StudentManagement> {
   TextEditingController _controller = TextEditingController();
 
-  List<String> students = []; // lista de tareas
+  List<dynamic> students = []; // lista de alumnos
   double widthMax = 500;
 
-  List<String> displayedItems = [];
+  List<dynamic> displayedItems = [];
 
   @override
   void initState() {
     super.initState();
-    students.add("Estudiante 1");
-    students.add("Estudiante 2");
-    students.add("Estudiante 3");
-    students.add("Estudiante 4");
-    students.add("Estudiante 5");
-    students.add("Estudiante 6");
-    students.add("Estudiante 7");
 
+    getData();
+  }
+
+  Future<void> getData () async {
+    await getStudents();
     displayedItems.addAll(students);
   }
 
+  // Funcion que devuelve los alumnos de la base de datos
+  Future<void> getStudents() async {
+    // La direccion ip debe ser la de red del portatil para conectar con
+    // la tablet ó 10.0.2.2 para conectar con emuladores
+    String uri = "${dotenv.env['API_URL']}/view_students.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          students = json.decode(response.body);
+        });
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void filterSearchResults(String query) {
-    List<String> searchResults = [];
+    List<dynamic> searchResults = [];
 
     if (query.isNotEmpty) {
       for (var i = 0; i < students.length; i++) {
-        if (students[i].toLowerCase().contains(query.toLowerCase())) {
+        if (students[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(students[i]);
         }
       }
@@ -118,7 +141,7 @@ class _StudentManagementState extends State<StudentManagement> {
               ),
             ),
             Expanded(
-              // BLOQUE TAREAS
+              // BLOQUE ALUMNOS
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
@@ -162,7 +185,7 @@ class _StudentManagementState extends State<StudentManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index],
+                                  displayedItems[index]['nombre'],
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
