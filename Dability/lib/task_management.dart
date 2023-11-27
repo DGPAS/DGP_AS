@@ -230,7 +230,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod, title: displayedItems[index]['nombre'], description: displayedItems[index]['descripcion'], idTareas: displayedItems[index]['idTareas'])),
+                                                            AddModType.mod, title: displayedItems[index]['nombre'], description: displayedItems[index]['descripcion'], idTareas: displayedItems[index]['idTareas'], miniatura: displayedItems[index]['miniatura'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(

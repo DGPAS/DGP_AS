@@ -19,13 +19,15 @@ class AddModTask extends StatefulWidget {
       required this.typeForm,
       this.title,
       this.description,
-      this.idTareas})
+      this.idTareas,
+      this.miniatura})
       : super(key: key);
 
   AddModType typeForm;
   String? title;
   String? description;
   String? idTareas;
+  String? miniatura;
 
   @override
   State<AddModTask> createState() => _AddModTaskState(
@@ -33,6 +35,7 @@ class AddModTask extends StatefulWidget {
       title: title,
       description: description,
       idTareas: idTareas,
+      miniatura: miniatura,
   );
 }
 
@@ -41,7 +44,7 @@ class AddModTask extends StatefulWidget {
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
-      {required this.typeForm, this.title, this.description, this.idTareas});
+      {required this.typeForm, this.title, this.description, this.idTareas, this.miniatura});
 
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(
@@ -58,6 +61,8 @@ class _AddModTaskState extends State<AddModTask> {
   String? title;
   String? description;
   String? idTareas;
+  String? miniatura;
+  Image? miniaturaImage;
   // isPressed: variable para la ayuda de añadir pasos
   bool isPressed = false;
   AddModType typeForm;
@@ -87,7 +92,7 @@ class _AddModTaskState extends State<AddModTask> {
     if (idTareas != null) {
       getInitialSteps();
     }
-
+    getMiniature();
     isPressed = false;
   }
 
@@ -142,6 +147,7 @@ class _AddModTaskState extends State<AddModTask> {
       await updateData(idTareas);
       await uploadImage();
       await updateSteps();
+
     }
   }
 
@@ -267,7 +273,11 @@ class _AddModTaskState extends State<AddModTask> {
     }
   }
 
-
+void getMiniature() {
+    setState(() {
+      miniaturaImage = Image.network("${dotenv.env['API_URL']}/images/$miniatura");
+    });
+  }
 
   // Función para cambiar el titulo de la barra segun sea crear o modificar
   String getTitle () {
@@ -405,6 +415,7 @@ class _AddModTaskState extends State<AddModTask> {
                 child: descriptionForm,
               ),
               // Contenedor para añadir una miniatura a la tarea
+             if(typeForm == AddModType.add) 
               Container(
                 decoration: _buildBoxDecoration(),
                 padding: const EdgeInsets.all(20.0),
@@ -470,6 +481,17 @@ class _AddModTaskState extends State<AddModTask> {
                     ),
                   ],
                 ),
+              ),
+               if(typeForm == AddModType.mod)
+              Container(
+                decoration: _buildBoxDecoration(),
+                padding: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
+                width:  300,
+                height: 300,
+                child: miniaturaImage,
+
+                
               ),
               // Contenedor con para añadir los pasos
               Container(
