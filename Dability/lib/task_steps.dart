@@ -84,7 +84,7 @@ class _TaskStepsState extends State<TaskSteps> {
                         child: SizedBox(
                           width: 80,
                           height: 160,
-                          child: Image.asset('images/1.png'),
+                          child: Image.asset("images/${widget.index + 1}.png"),
                         ),
                       ),
                     ],
@@ -93,6 +93,33 @@ class _TaskStepsState extends State<TaskSteps> {
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('images/planTask.png'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      Text(
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat in nunc id pharetra. '
+                          'Phasellus et gravida risus, vel pulvinar tortor. Proin dictum, dolor vel volutpat lacinia, '
+                          'velit turpis cursus orci, et dictum erat est et quam. Sed sed arcu ut libero vulputate '
+                          'suscipit quis ultricies magna. In ut vestibulum turpis'.toUpperCase(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
