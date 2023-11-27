@@ -1,3 +1,4 @@
+import 'package:dability/Components/enum_types.dart';
 import 'package:flutter/material.dart';
 import 'add_mod_student.dart';
 
@@ -65,7 +66,7 @@ class _StudentManagementState extends State<StudentManagement> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              // AÑADIR TAREA
+              // AÑADIR ESTUDIANTE
               alignment: Alignment.center,
               padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
               child: ElevatedButton(
@@ -85,7 +86,7 @@ class _StudentManagementState extends State<StudentManagement> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddModStudent()),
+                    MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add,)),
                   );
                 },
                 child: const Text(
@@ -176,7 +177,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent()),
+                                                    AddModStudent(typeForm: AddModType.mod,)),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(

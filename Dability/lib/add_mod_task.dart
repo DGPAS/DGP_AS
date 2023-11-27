@@ -53,7 +53,7 @@ class _AddModTaskState extends State<AddModTask> {
       tipo: TextFormType.title);
   // Formulario para la descripción de la tarea
   TextForm descriptionForm = TextForm(
-      requiredField: false,
+      requiredField: true,
       titulo: "Descripción general de la tarea",
       tipo: TextFormType.description);
 
@@ -417,7 +417,7 @@ void getMiniature() {
               // Contenedor para añadir una miniatura a la tarea
              if(typeForm == AddModType.add) 
               Container(
-                decoration: _buildBoxDecoration(),
+                //decoration: _buildBoxDecoration(),
                 padding: const EdgeInsets.all(20.0),
                 margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
                 child: Column(
