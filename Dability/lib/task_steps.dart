@@ -82,25 +82,27 @@ class _TaskStepsState extends State<TaskSteps> {
                       Container(
                         color: Color(0xFFD9D9D9),
                         child: SizedBox(
-                          width: 80,
-                          height: 160,
+                          width: MediaQuery.of(context).size.height * 0.0375,
+                          height: MediaQuery.of(context).size.height * 0.075,
                           child: Image.asset("images/${widget.index + 1}.png"),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
+                    height: MediaQuery.of(context).size.height * 0.01,
                   ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('images/planTask.png'),
+                      Image.asset('images/pruebaPaso.png',
+                        height: MediaQuery.of(context).size.height * 0.25,
+                      ),
                     ],
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
+                    height: MediaQuery.of(context).size.height * 0.025,
                   ),
 
                   Wrap(
@@ -113,12 +115,13 @@ class _TaskStepsState extends State<TaskSteps> {
                           'suscipit quis ultricies magna. In ut vestibulum turpis'.toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.height * 0.03,
                           ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
+                    height: MediaQuery.of(context).size.height * 0.025,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
