@@ -52,10 +52,8 @@ class _AddModStudentState extends State<AddModStudent> {
   bool? videoCheck = false;
   bool? soundCheck = false;
 
-  File? _passwd1;
   List<String> selectedPasswd = ['','','',''];
-  File? _passwd2;
-  File? _passwd3;
+  List<String> selectedDBPasswd = ['','','',''];
 
   // Formulario para el nombre del alumno
   TextForm nameForm = TextForm(
@@ -116,6 +114,10 @@ class _AddModStudentState extends State<AddModStudent> {
       selectedPhoto = widget.photo!;
     }
 
+    if (typeForm == AddModType.mod) {
+      getStudentPassword();
+    }
+
     nameAlumno ??= nameForm.getText();
     surnameAlumno ??= surnameForm.getText();
 
@@ -128,6 +130,28 @@ class _AddModStudentState extends State<AddModStudent> {
     getTitle();
 
     displayedItems.addAll(tasks);
+  }
+
+  Future<void> getStudentPassword() async {
+    String uri = "${dotenv.env['API_URL']}/view_student_password.php?idStudent=$actualStudentId";
+    try {
+      var res = await http.get(Uri.parse(uri));
+
+      var response = jsonDecode(res.body);
+      if (response["success"] == "true") {
+        print("Contraseña obtenida");
+
+        setState(() {
+          selectedDBPasswd[1] = response["data"]["pictograma1"].toString() ?? '';
+          selectedDBPasswd[2] = response["data"]["pictograma2"].toString() ?? '';
+          selectedDBPasswd[3] = response["data"]["pictograma3"].toString() ?? '';
+        });
+      } else {
+        print("Error en response getStudentPassword");
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> insertStudent() async {
@@ -184,13 +208,18 @@ class _AddModStudentState extends State<AddModStudent> {
 
   Future<void> uploadPassword() async {
     String uri = "${dotenv.env['API_URL']}/upload_password.php";
-    for (int index = 1; index <= 3; index++) {
       try {
         var request = http.MultipartRequest('POST', Uri.parse(uri));
         request.fields['idStudent'] = actualStudentId;
-        var picture = await http.MultipartFile.fromPath(
-            "image", selectedPasswd[index]);
-        request.files.add(picture);
+        var pictograma1 = await http.MultipartFile.fromPath(
+            "pictograma1", selectedPasswd[1]);
+        request.files.add(pictograma1);
+        var pictograma2 = await http.MultipartFile.fromPath(
+            "pictograma2", selectedPasswd[2]);
+        request.files.add(pictograma2);
+        var pictograma3 = await http.MultipartFile.fromPath(
+            "pictograma3", selectedPasswd[3]);
+        request.files.add(pictograma3);
         var response = await request.send();
 
         if (response.statusCode == 200) {
@@ -202,6 +231,32 @@ class _AddModStudentState extends State<AddModStudent> {
       } catch (e) {
         print(e);
       }
+  }
+
+  Future<void> updatePassword() async {
+    String uri = "${dotenv.env['API_URL']}/update_password.php";
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(uri));
+      request.fields['idStudent'] = actualStudentId;
+      var pictograma1 = await http.MultipartFile.fromPath(
+          "pictograma1", selectedPasswd[1]);
+      request.files.add(pictograma1);
+      var pictograma2 = await http.MultipartFile.fromPath(
+          "pictograma2", selectedPasswd[2]);
+      request.files.add(pictograma2);
+      var pictograma3 = await http.MultipartFile.fromPath(
+          "pictograma3", selectedPasswd[3]);
+      request.files.add(pictograma3);
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print("Password Updated");
+      }
+      else {
+        print("Error en la subida");
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -276,8 +331,8 @@ class _AddModStudentState extends State<AddModStudent> {
       await uploadPassword();
     } else {
       await updateStudent(idStudent);
-      // await uploadPhoto();
-      // await uploadPassword();
+      await uploadPhoto();
+      await updatePassword();
     }
   }
 
@@ -291,6 +346,20 @@ class _AddModStudentState extends State<AddModStudent> {
       }
       else {
         return Image.network("${dotenv.env['API_URL']}/images/$urlPath");
+      }
+    }
+  }
+
+  Widget _getPasswd(String? urlPath) {
+    if (urlPath == null || urlPath == '') {
+      return const Image(
+          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+    } else {
+      if (typeForm == AddModType.add || (typeForm == AddModType.mod && (urlPath != selectedDBPasswd[1] && urlPath != selectedDBPasswd[2] && urlPath != selectedDBPasswd[3]))) {
+        return Image.file(File(urlPath), fit: BoxFit.cover);
+      }
+      else {
+        return Image.network("${dotenv.env['API_URL']}/images/passwords/$urlPath");
       }
     }
   }
@@ -409,7 +478,6 @@ class _AddModStudentState extends State<AddModStudent> {
 
                         setState(() {
                           selectedPasswd[1] = pickedFile!.path;
-                          _passwd1 = File(selectedPasswd[1]);
                         });
                       },
                       child: Container(
@@ -429,7 +497,7 @@ class _AddModStudentState extends State<AddModStudent> {
                             width: 200,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: _getImage(selectedPasswd[1])),
+                                child: _getPasswd(selectedPasswd[1])),
                           ),
                         ),
                       ),
@@ -444,7 +512,6 @@ class _AddModStudentState extends State<AddModStudent> {
 
                         setState(() {
                           selectedPasswd[2] = pickedFile!.path;
-                          _passwd2 = File(selectedPasswd[2]);
                         });
                       },
                       child: Container(
@@ -464,7 +531,7 @@ class _AddModStudentState extends State<AddModStudent> {
                             width: 200,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: _getImage(selectedPasswd[2])),
+                                child: _getPasswd(selectedPasswd[2])),
                           ),
                         ),
                       ),
@@ -479,7 +546,6 @@ class _AddModStudentState extends State<AddModStudent> {
 
                         setState(() {
                           selectedPasswd[3] = pickedFile!.path;
-                          _passwd3 = File(selectedPasswd[3]);
                         });
                       },
                       child: Container(
@@ -499,7 +565,7 @@ class _AddModStudentState extends State<AddModStudent> {
                             width: 200,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: _getImage(selectedPasswd[3])),
+                                child: _getPasswd(selectedPasswd[3])),
                           ),
                         ),
                       ),
@@ -724,8 +790,9 @@ class _AddModStudentState extends State<AddModStudent> {
                   nameAlumno = nameForm.getText();
                   surnameAlumno = surnameForm.getText();
                   if ((nameAlumno == '' || nameAlumno == null) ||
-                      (surnameAlumno == '' || surnameAlumno == null)) {
-                    print("Los campos nombre y apellido son obligatorios");
+                      (surnameAlumno == '' || surnameAlumno == null) ||
+                      (selectedPasswd[1] == '' || selectedPasswd[2] == '' || selectedPasswd[3] == '')) {
+                    print("Los campos nombre, apellido, y los 3 pictogramas de la contraseña son obligatorios");
                   } else {
                     submitForm(actualStudentId);
                     Navigator.of(context).pop();
