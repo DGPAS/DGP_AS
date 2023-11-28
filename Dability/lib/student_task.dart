@@ -67,7 +67,8 @@ class _StudentTaskState extends State<StudentTask> {
           padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width * 0.05,
               right: MediaQuery.of(context).size.width * 0.05,
-              top: 25),
+              top: MediaQuery.of(context).size.height * 0.025,
+          ),
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -76,8 +77,9 @@ class _StudentTaskState extends State<StudentTask> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                      
-                      padding: const EdgeInsets.all(20.0),
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      height: MediaQuery.of(context).size.height * 0.125,
+                      padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.125 * 0.1,),
                       decoration: ShapeDecoration(
                         color: Color(0xFF4A6987),
                         shape: RoundedRectangleBorder(
@@ -97,12 +99,13 @@ class _StudentTaskState extends State<StudentTask> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 30,
+                          fontSize: MediaQuery.of(context).size.height * 0.04,
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w700,
                           height: 0,
                         ),
-                      )),
+                      )
+                  ),
                   /*Container(
                     padding: const EdgeInsets.all(10.0),
                     clipBehavior: Clip.antiAlias,
@@ -163,7 +166,7 @@ class _StudentTaskState extends State<StudentTask> {
                         Text(
                           'DESCRIPCIÓN',
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: MediaQuery.of(context).size.height * 0.04,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.left,
@@ -176,7 +179,7 @@ class _StudentTaskState extends State<StudentTask> {
                           'praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales '
                           'nullam metus himenaeos vestibulum.'.toUpperCase(),
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: MediaQuery.of(context).size.height * 0.025,
                           ),
                           textAlign: TextAlign.justify,
                         )
@@ -192,7 +195,7 @@ class _StudentTaskState extends State<StudentTask> {
                         'TUTORIAL',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.height * 0.03,
                         ),
                       ),
                       //Aquí iría el vídeo
@@ -200,11 +203,17 @@ class _StudentTaskState extends State<StudentTask> {
                   ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.30 * 0.05,
+                        bottom: MediaQuery.of(context).size.height * 0.30 * 0.05,
+                        left: MediaQuery.of(context).size.width * 0.25 * 0.05,
+                        right: MediaQuery.of(context).size.width * 0.25 * 0.05,
+                      ),
                       //fixedSize: Size(250, 100),
                       //minimumSize: Size(250, 50),
                       //maximumSize: Size(250, 100),
                       //textStyle: const TextStyle(fontSize: 25),
+                      maximumSize: Size(MediaQuery.of(context).size.width * 0.25, MediaQuery.of(context).size.height * 0.30),
                       backgroundColor: Color(0xFF4A6987),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -230,6 +239,8 @@ class _StudentTaskState extends State<StudentTask> {
 
                         Image.asset(
                           'images/taskImage.png',
+                          height: MediaQuery.of(context).size.height * 0.20,
+                          width: MediaQuery.of(context).size.width * 0.20,
                         ),
                       ],
                     )
