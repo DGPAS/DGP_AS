@@ -19,7 +19,6 @@ class FullScreenImage extends StatelessWidget {
             Navigator.of(context).pop();
           },
           child: Hero(
-<<<<<<< HEAD
             tag:
                 'mi-imagen-hero', // Utiliza el mismo tag que en la página inicial
             child: Column(
@@ -27,14 +26,6 @@ class FullScreenImage extends StatelessWidget {
                 Container(
                   height: 400,
                   child: Image(image: AssetImage(image), fit: BoxFit.contain),
-=======
-            tag: 'mi-imagen-hero', // Utiliza el mismo tag que en la página inicial
-            child: Column (
-              children: [
-                Container(
-                  height: 400,
-                    child: Image(image: AssetImage(image),fit: BoxFit.contain),
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
                 ),
                 Container(
                   child: Text(text),
@@ -46,8 +37,4 @@ class FullScreenImage extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1

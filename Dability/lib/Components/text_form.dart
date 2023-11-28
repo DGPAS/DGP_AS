@@ -1,16 +1,7 @@
-<<<<<<< HEAD
 //import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:dability/Components/enum_types.dart';
 //import 'dart:developer';
-=======
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:dability/Components/enum_types.dart';
-import 'dart:developer';
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
 
 class TextForm extends StatefulWidget {
   final bool requiredField;
@@ -19,7 +10,6 @@ class TextForm extends StatefulWidget {
   String text = "";
   String? originalText;
 
-<<<<<<< HEAD
   TextForm(
       {Key? key,
       required this.requiredField,
@@ -27,30 +17,17 @@ class TextForm extends StatefulWidget {
       required this.tipo,
       this.originalText})
       : super(key: key);
-=======
-  TextForm({
-    Key? key,
-    required this.requiredField,
-    required this.titulo,
-    required this.tipo,
-    this.originalText
-  }) : super(key: key);
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
 
   String getText() {
     return text;
   }
 
   @override
-<<<<<<< HEAD
   State<TextForm> createState() => _TextFormState(
       requiredField: requiredField,
       titulo: titulo,
       tipo: tipo,
       originalText: originalText);
-=======
-  _TextFormState createState() => _TextFormState(requiredField: requiredField, titulo: titulo, tipo: tipo, originalText: originalText);
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
 }
 
 class _TextFormState extends State<TextForm> {
@@ -61,15 +38,11 @@ class _TextFormState extends State<TextForm> {
   final bool requiredField;
   String? originalText;
 
-<<<<<<< HEAD
   _TextFormState(
       {required this.requiredField,
       required this.titulo,
       required this.tipo,
       this.originalText});
-=======
-  _TextFormState({required this.requiredField, required this.titulo, required this.tipo, this.originalText});
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
 
   TextEditingController controller = TextEditingController();
 
@@ -93,19 +66,12 @@ class _TextFormState extends State<TextForm> {
     super.dispose();
   }
 
-<<<<<<< HEAD
   void _getLastValue() {
     widget.text = controller.text;
   }
 
   double getContentPadding() {
-=======
-  void _getLastValue () {
-    widget.text = controller.text;
-  }
 
-  double getContentPadding () {
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
     if (tipo == TextFormType.title) {
       return 12.0;
     } else if (tipo == TextFormType.description) {
@@ -133,12 +99,9 @@ class _TextFormState extends State<TextForm> {
               border: const OutlineInputBorder(),
               filled: true,
               fillColor: Colors.white,
-<<<<<<< HEAD
               contentPadding:
                   EdgeInsets.fromLTRB(10, 20, 0, getContentPadding()),
-=======
-            contentPadding: EdgeInsets.fromLTRB(10,20,0,getContentPadding()),
->>>>>>> 1a82e2991b5eccdffe318c9409f2e30b499964d1
+
               helperText: requiredField ? campoRequerido : null,
               alignLabelWithHint: true,
             ),
