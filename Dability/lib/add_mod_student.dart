@@ -1,21 +1,35 @@
+import 'dart:convert';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
-//import 'package:dability/Components/steps_task_form.dart';
 import 'package:dability/Components/enum_types.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
-//import 'package:dability/Components/list_step.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class AddModStudent extends StatefulWidget {
   AddModStudent({
     Key? key,
     required this.typeForm,
-    this.name})
+    this.idStudent,
+    this.name,
+    this.surname,
+    this.readCheck,
+    this.videoCheck,
+    this.soundCheck,
+    this.photo})
     : super(key:key);
 
   AddModType typeForm;
+  String? idStudent;
   String? name;
+  String? surname;
+  String? readCheck;
+  String? videoCheck;
+  String? soundCheck;
+  String? photo;
 
   @override
   State<AddModStudent> createState() => _AddModStudentState();
@@ -27,16 +41,30 @@ class _AddModStudentState extends State<AddModStudent> {
 
   List<String> tasks = [];
   AddModType typeForm = AddModType.add;
+  String? id;
+  String actualStudentId = '';
   String title = "Añadir Estudiante";
-  String? nameAlumno = '';
+  String? nameAlumno;
+  String? surnameAlumno;
+  File? _photo;
+  String selectedPhoto = "";
   bool? readCheck = false;
   bool? videoCheck = false;
   bool? soundCheck = false;
 
+  File? _passwd1;
+  List<String> selectedPasswd = ['','','',''];
+  File? _passwd2;
+  File? _passwd3;
+
   // Formulario para el nombre del alumno
-  TextForm titleForm = TextForm(
+  TextForm nameForm = TextForm(
       requiredField: true,
       titulo: "Nombre del Alumno",
+      tipo: TextFormType.title);
+  TextForm surnameForm = TextForm(
+      requiredField: true,
+      titulo: "Apellido del Alumno",
       tipo: TextFormType.title);
 
   @override
@@ -51,11 +79,156 @@ class _AddModStudentState extends State<AddModStudent> {
     tasks.add("Tarea 7");
 
     typeForm = widget.typeForm;
+
+    id = widget.idStudent;
+    if (id != null) {
+      actualStudentId = id!;
+    }
+
     nameAlumno = widget.name;
+    surnameAlumno = widget.surname;
+
+    if (widget.readCheck != null) {
+      if (widget.readCheck == '0') {
+        readCheck = false;
+      } else {
+        readCheck = true;
+      }
+    }
+
+    if (widget.videoCheck != null) {
+      if (widget.videoCheck == '0') {
+        videoCheck = false;
+      } else {
+        videoCheck = true;
+      }
+    }
+
+    if (widget.soundCheck != null) {
+      if (widget.soundCheck == '0') {
+        soundCheck = false;
+      } else {
+        soundCheck = true;
+      }
+    }
+
+    if (widget.photo != null) {
+      selectedPhoto = widget.photo!;
+    }
+
+    nameAlumno ??= nameForm.getText();
+    surnameAlumno ??= surnameForm.getText();
+
+    nameForm.originalText = nameAlumno;
+    surnameForm.originalText = surnameAlumno;
+    nameForm.text = nameAlumno!;
+    surnameForm.text = surnameAlumno!;
+
 
     getTitle();
 
     displayedItems.addAll(tasks);
+  }
+
+  Future<void> insertStudent() async {
+    try {
+      String uri = "${dotenv.env['API_URL']}/insert_student.php";
+
+      var res = await http.post(Uri.parse(uri), body: {
+        "nombre": nameAlumno,
+        "Apellido": surnameAlumno,
+        "foto": '',
+        "texto": readCheck.toString() == 'true' ? '1' : '0',
+        "audio": soundCheck.toString() == 'true' ? '1' : '0',
+        "video": videoCheck.toString() == 'true' ? '1' : '0',
+      });
+
+      var response = jsonDecode(res.body);
+      if (response["success"] == "true") {
+        print("Datos insertados");
+        int newStudentId = response["idStudent"];
+        setState(() {
+          actualStudentId = newStudentId.toString();
+          print("Nuevo idStudent: $actualStudentId");
+        });
+      } else {
+        print("Datos no insertados");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadPhoto() async {
+    String uri = "${dotenv.env['API_URL']}/upload_student_photo.php";
+
+    try {
+
+      var request = http.MultipartRequest('POST', Uri.parse(uri));
+      request.fields['idStudent'] = actualStudentId;
+      var picture = await http.MultipartFile.fromPath("image", _photo!.path);
+      request.files.add(picture);
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print ("Image Uploaded");
+      }
+      else {
+        print("Error en la subida");
+      }
+
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadPassword() async {
+    String uri = "${dotenv.env['API_URL']}/upload_password.php";
+    for (int index = 1; index <= 3; index++) {
+      try {
+        var request = http.MultipartRequest('POST', Uri.parse(uri));
+        request.fields['idStudent'] = actualStudentId;
+        var picture = await http.MultipartFile.fromPath(
+            "image", selectedPasswd[index]);
+        request.files.add(picture);
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          print("Image Uploaded");
+        }
+        else {
+          print("Error en la subida");
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> updateStudent (String? idStudent) async {
+    String uri = "${dotenv.env['API_URL']}/update_student.php";
+
+    try {
+      var res=await http.post(Uri.parse(uri),body: {
+        "idStudent": idStudent,
+        "nombre": nameAlumno,
+        "Apellido": surnameAlumno,
+        "texto": readCheck.toString() == 'true' ? '1' : '0',
+        "audio": soundCheck.toString() == 'true' ? '1' : '0',
+        "video": videoCheck.toString() == 'true' ? '1' : '0',
+      });
+
+      var response=jsonDecode(res.body);
+
+      if(response["success"]=="true"){
+        print("Datos actualizados");
+      }else{
+        print("Some issue");
+
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void filterSearchResults(String query) {
@@ -94,12 +267,31 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  Future<void> submitForm (String idStudent) async {
+    if (typeForm == AddModType.add) {
+      await insertStudent();
+      if (_photo != null) {
+        await uploadPhoto();
+      }
+      await uploadPassword();
+    } else {
+      await updateStudent(idStudent);
+      // await uploadPhoto();
+      // await uploadPassword();
+    }
+  }
+
   Widget _getImage(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
           image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
     } else {
-      return Image.file(File(urlPath), fit: BoxFit.cover);
+      if (typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.photo)) {
+        return Image.file(File(urlPath), fit: BoxFit.cover);
+      }
+      else {
+        return Image.network("${dotenv.env['API_URL']}/images/$urlPath");
+      }
     }
   }
 
@@ -149,9 +341,55 @@ class _AddModStudentState extends State<AddModStudent> {
         child: Container(
             padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
             child: Column(children: [
-              Container(
-                padding: EdgeInsets.all(20),
-                child: titleForm,
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: nameForm
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: surnameForm,
+                    ),
+                  ),
+                ],
+              ),
+              const Text('Fotografía del Alumno'),
+              GestureDetector(
+                onTap: () async {
+                  final picker = ImagePicker();
+                  final XFile? pickedFile = await picker.pickImage(
+                      source: ImageSource.gallery, imageQuality: 100);
+
+                      setState(() {
+                        selectedPhoto = pickedFile!.path;
+                        _photo = File(pickedFile!.path);
+                      });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  margin: const EdgeInsets.all(20),
+                  child: DottedBorder(
+                    color: Colors.black,
+                    strokeWidth: 1,
+                    dashPattern: [10, 6],
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(20),
+                    child: SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(45),
+                          child: _getImage(selectedPhoto)),
+                    ),
+                  ),
+                ),
               ),
               Container(
                 padding: EdgeInsets.all(20),
@@ -163,114 +401,105 @@ class _AddModStudentState extends State<AddModStudent> {
                   children: [
 
                     // Imagen pictograma 1
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          final picker = ImagePicker();
-                          final XFile? pickedFile = await picker.pickImage(
-                              source: ImageSource.gallery, imageQuality: 100);
+                    GestureDetector(
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final XFile? pickedFile = await picker.pickImage(
+                            source: ImageSource.gallery, imageQuality: 100);
 
-                          /*
-                          setState(() {
-                            selectedImage = pickedFile!.path;
-                            _image = File(selectedImage);
-                          });*/
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          margin: const EdgeInsets.all(20),
-                          child: DottedBorder(
-                            color: Colors.black,
-                            strokeWidth: 1,
-                            dashPattern: [10, 6],
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(20),
-                            child: Container(
-                              height: 200,
-                              width: 800,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(45),
-                                  child: _getImage(""/*selectedImage*/)),
-                            ),
+                        setState(() {
+                          selectedPasswd[1] = pickedFile!.path;
+                          _passwd1 = File(selectedPasswd[1]);
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        margin: const EdgeInsets.all(20),
+                        child: DottedBorder(
+                          color: Colors.black,
+                          strokeWidth: 1,
+                          dashPattern: [10, 6],
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(20),
+                          child: SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(45),
+                                child: _getImage(selectedPasswd[1])),
                           ),
                         ),
                       ),
                     ),
 
                     // Imagen pictograma 2
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          final picker = ImagePicker();
-                          final XFile? pickedFile = await picker.pickImage(
-                              source: ImageSource.gallery, imageQuality: 100);
+                    GestureDetector(
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final XFile? pickedFile = await picker.pickImage(
+                            source: ImageSource.gallery, imageQuality: 100);
 
-                          /*
-                          setState(() {
-                            selectedImage = pickedFile!.path;
-                            _image = File(selectedImage);
-                          });*/
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          margin: const EdgeInsets.all(20),
-                          child: DottedBorder(
-                            color: Colors.black,
-                            strokeWidth: 1,
-                            dashPattern: [10, 6],
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(20),
-                            child: Container(
-                              height: 200,
-                              width: 800,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(45),
-                                  child: _getImage(""/*selectedImage*/)),
-                            ),
+                        setState(() {
+                          selectedPasswd[2] = pickedFile!.path;
+                          _passwd2 = File(selectedPasswd[2]);
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        margin: const EdgeInsets.all(20),
+                        child: DottedBorder(
+                          color: Colors.black,
+                          strokeWidth: 1,
+                          dashPattern: [10, 6],
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(20),
+                          child: SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(45),
+                                child: _getImage(selectedPasswd[2])),
                           ),
                         ),
                       ),
                     ),
 
                     // Imagen pictograma 3
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          final picker = ImagePicker();
-                          final XFile? pickedFile = await picker.pickImage(
-                              source: ImageSource.gallery, imageQuality: 100);
+                    GestureDetector(
+                      onTap: () async {
+                        final picker = ImagePicker();
+                        final XFile? pickedFile = await picker.pickImage(
+                            source: ImageSource.gallery, imageQuality: 100);
 
-                          /*
-                          setState(() {
-                            selectedImage = pickedFile!.path;
-                            _image = File(selectedImage);
-                          });*/
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          margin: const EdgeInsets.all(20),
-                          child: DottedBorder(
-                            color: Colors.black,
-                            strokeWidth: 1,
-                            dashPattern: [10, 6],
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(20),
-                            child: Container(
-                              height: 200,
-                              width: 800,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(45),
-                                  child: _getImage(""/*selectedImage*/)),
-                            ),
+                        setState(() {
+                          selectedPasswd[3] = pickedFile!.path;
+                          _passwd3 = File(selectedPasswd[3]);
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        margin: const EdgeInsets.all(20),
+                        child: DottedBorder(
+                          color: Colors.black,
+                          strokeWidth: 1,
+                          dashPattern: [10, 6],
+                          borderType: BorderType.RRect,
+                          radius: const Radius.circular(20),
+                          child: SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(45),
+                                child: _getImage(selectedPasswd[3])),
                           ),
                         ),
                       ),
@@ -281,10 +510,10 @@ class _AddModStudentState extends State<AddModStudent> {
                 ),
               ),
               const Text('Formatos aptos para el alumno'),
-              Container(
+              SizedBox(
                 width: 200,
                 child: CheckboxListTile(
-                  title: const Text('Lectura'),
+                  title: const Text('Texto'),
                   value: readCheck,
                   onChanged: (newValue) {
                     setState(() {
@@ -292,18 +521,7 @@ class _AddModStudentState extends State<AddModStudent> {
                     });
                   }),
               ),
-              Container(
-                width: 200,
-                child: CheckboxListTile(
-                    title: const Text('Video'),
-                    value: videoCheck,
-                    onChanged: (newValue) {
-                      setState(() {
-                        videoCheck = newValue;
-                      });
-                    }),
-              ),
-              Container(
+              SizedBox(
                 width: 200,
                 child: CheckboxListTile(
                     title: const Text('Audio'),
@@ -311,6 +529,17 @@ class _AddModStudentState extends State<AddModStudent> {
                     onChanged: (newValue) {
                       setState(() {
                         soundCheck = newValue;
+                      });
+                    }),
+              ),
+              SizedBox(
+                width: 200,
+                child: CheckboxListTile(
+                    title: const Text('Video'),
+                    value: videoCheck,
+                    onChanged: (newValue) {
+                      setState(() {
+                        videoCheck = newValue;
                       });
                     }),
               ),
@@ -492,15 +721,15 @@ class _AddModStudentState extends State<AddModStudent> {
                     backgroundColor:
                     MaterialStatePropertyAll<Color>(Colors.white)),
                 onPressed: () {
-                  /*
-                  if ((title == '' || title == null) ||
-                      (description == '' || description == null)) {
-                    print("Los campos titulo y descripción son obligatorios");
+                  nameAlumno = nameForm.getText();
+                  surnameAlumno = surnameForm.getText();
+                  if ((nameAlumno == '' || nameAlumno == null) ||
+                      (surnameAlumno == '' || surnameAlumno == null)) {
+                    print("Los campos nombre y apellido son obligatorios");
                   } else {
-                    submitForm(idTareas);
+                    submitForm(actualStudentId);
                     Navigator.of(context).pop();
                   }
-                   */
                 },
                 child: Row(
                   children: <Widget>[

@@ -56,6 +56,24 @@ class _StudentManagementState extends State<StudentManagement> {
     }
   }
 
+  // Funcion que borra una tarea concreta de la base de datos
+  Future<void> deleteStudent(String idStudent) async {
+    String uri = "${dotenv.env['API_URL']}/delete_student.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {"idStudent": idStudent});
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        print("Student deleted");
+        // Refresh the task list after deletion
+        await getStudents();
+      } else {
+        print("Task not deleted. Server response: ${response['error']}");
+      }
+    } catch (e) {
+      print("Error during task deletion: $e");
+    }
+  }
+
   void filterSearchResults(String query) {
     List<dynamic> searchResults = [];
 
@@ -109,7 +127,7 @@ class _StudentManagementState extends State<StudentManagement> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add,)),
+                    MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add)),
                   );
                 },
                 child: const Text(
@@ -185,7 +203,7 @@ class _StudentManagementState extends State<StudentManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index]['nombre'],
+                                  '${displayedItems[index]['nombre']} ${displayedItems[index]['Apellido']}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -200,7 +218,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent(typeForm: AddModType.mod,)),
+                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['nombre'], surname: displayedItems[index]['Apellido'], readCheck: displayedItems[index]['texto'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['foto'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -235,14 +253,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() {
-                                                        students.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                        displayedItems.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                      });
+                                                      deleteStudent(displayedItems[index]['id']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
