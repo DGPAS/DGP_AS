@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class StudentPictoLogin extends StatefulWidget {
-
   final int id_alumno;
 
-  const StudentPictoLogin({Key? key, required this.id_alumno}) : super(key: key);
-
+  const StudentPictoLogin({Key? key, required this.id_alumno})
+      : super(key: key);
 
   @override
-  State<StudentPictoLogin> createState() => _StudentPictoLoginState(id_alumno: this.id_alumno);
+  State<StudentPictoLogin> createState() =>
+      _StudentPictoLoginState(id_alumno: this.id_alumno);
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {
@@ -16,17 +16,13 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
 
   _StudentPictoLoginState({required this.id_alumno});
 
-  List<String> elementos = []; // lista de tareas
-
-  // Aquí se obtendría con id_alumno los datos del alumno
-  String student = "JUAN"; // ejemplo
+  List<String> elementos = [];
+  String student = "JUAN";
   List<String> students = [];
-
-
-
   List<String> displayedItems = [];
-
   List<String> password = [];
+
+  bool showError = false;
 
   @override
   void initState() {
@@ -56,7 +52,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PictoLogin '+ student),
+        title: Text('PictoLogin ' + student),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Padding(
@@ -66,13 +62,12 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Número de columnas
-                  crossAxisSpacing: 8.0, // Espaciado horizontal entre los elementos del grid
-                  mainAxisSpacing: 8.0, // Espaciado vertical entre los elementos del grid
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
                 ),
-                itemCount: 6, // Número total de elementos en el grid (3 filas x 2 columnas = 6 elementos)
+                itemCount: 6,
                 itemBuilder: (context, int index) {
-
                   String imagePath = "";
 
                   if (index == 0) {
@@ -92,25 +87,31 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                   return Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: Color(0xFF4A6987)
-                    ),
+                        color: Color(0xFF4A6987)),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF4A6987),
-                          elevation: 0
-                      ),
+                          primary: Color(0xFF4A6987), elevation: 0),
                       onPressed: () {
                         setState(() {
-                          if(displayedItems.length < 3) {
+                          if (displayedItems.length < 3) {
                             displayedItems.add(elementos[index]);
                           }
                         });
                         // si displayedItems no es igual a password
-                        for(int i = 0; i < displayedItems.length; i++){
-                          if(displayedItems[i] != password[i]){ // si deja de coincidir
+                        for (int i = 0; i < displayedItems.length; i++) {
+                          if (displayedItems[i] != password[i]) {
+                            // si deja de coincidir
                             setState(() {
                               displayedItems.clear();
+                              showError = true;
                             });
+                            // Después de 1 segundo, ocultar la X
+                            Future.delayed(Duration(seconds: 1), () {
+                              setState(() {
+                                showError = false;
+                              });
+                            });
+
                             break;
                           }
                         }
@@ -125,18 +126,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 },
               ),
             ),
-
-            ElevatedButton(
-              onPressed: (){
-                setState(() {
-                  displayedItems.clear();
-                });
-              },
-              child: Text('Limpiar')
-            ),
-
-            SizedBox(height: 40,),
-
+            // Container para mostrar las imágenes correspondientes a displayedItems
             Container(
               height: 200,
               width: MediaQuery.sizeOf(context).width,
@@ -144,11 +134,10 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 color: Colors.grey,
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ...List.generate(displayedItems.length, (index) {
-
                     String currentElement = displayedItems[index];
-                    // bool isElementInList = elementos.contains(currentElement);
 
                     // Selecciona la imagen en función de la comprobación
                     String imagePath = "";
@@ -175,21 +164,45 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                           child: Image.asset(
                             imagePath,
                             width: MediaQuery.sizeOf(context).width * 0.3,
-                            height: MediaQuery.sizeOf(context).height* 0.2,
-                          )
+                            height: MediaQuery.sizeOf(context).height * 0.2,
+                          ),
                         ),
                       ],
                     );
-
-                  })
+                  }),
+                  // Container para mostrar la X en caso de error
+                  Visibility(
+                    visible: showError,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'X',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 60,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ]
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  displayedItems.clear();
+                });
+              },
+              child: Text('Limpiar'),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
 
