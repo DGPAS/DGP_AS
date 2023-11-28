@@ -166,7 +166,7 @@ class _StudentTaskState extends State<StudentTask> {
                         Text(
                           'DESCRIPCIÓN',
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.04,
+                            fontSize: MediaQuery.of(context).size.height * 0.03,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.left,
@@ -179,7 +179,7 @@ class _StudentTaskState extends State<StudentTask> {
                           'praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales '
                           'nullam metus himenaeos vestibulum.'.toUpperCase(),
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.025,
+                            fontSize: MediaQuery.of(context).size.height * 0.02,
                           ),
                           textAlign: TextAlign.justify,
                         )
@@ -240,7 +240,7 @@ class _StudentTaskState extends State<StudentTask> {
                         Image.asset(
                           'images/taskImage.png',
                           height: MediaQuery.of(context).size.height * 0.20,
-                          width: MediaQuery.of(context).size.width * 0.20,
+                          width: MediaQuery.of(context).size.height * 0.20,
                         ),
                       ],
                     )

@@ -76,19 +76,6 @@ class _TaskStepsState extends State<TaskSteps> {
               ),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        color: Color(0xFFD9D9D9),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.height * 0.0375,
-                          height: MediaQuery.of(context).size.height * 0.075,
-                          child: Image.asset("images/${widget.index + 1}.png"),
-                        ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
@@ -98,6 +85,7 @@ class _TaskStepsState extends State<TaskSteps> {
                     children: [
                       Image.asset('images/pruebaPaso.png',
                         height: MediaQuery.of(context).size.height * 0.25,
+                        width: MediaQuery.of(context).size.width * 0.75,
                       ),
                     ],
                   ),
@@ -115,7 +103,7 @@ class _TaskStepsState extends State<TaskSteps> {
                           'suscipit quis ultricies magna. In ut vestibulum turpis'.toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: MediaQuery.of(context).size.height * 0.03,
+                            fontSize: MediaQuery.of(context).size.height * 0.025,
                           ),
                       ),
                     ],
@@ -145,16 +133,21 @@ class _TaskStepsState extends State<TaskSteps> {
                           ),
                           child: Row(
                             children: [
-                              Text('Paso completado'),
+                              Text(
+                                'Paso completado',
+                                style: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.height * 0.030
+                                ),
+                              ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.025,
                               ),
                               widget.checkedStep[widget.index] ?
                                 Image.asset('images/checkIcon.png',
-                                    height: MediaQuery.of(context).size.height * 0.125,
+                                    height: MediaQuery.of(context).size.height * 0.075,
                                 ):
                                 Image.asset('images/greyIcon.jpg',
-                                  height: MediaQuery.of(context).size.height * 0.125,
+                                  height: MediaQuery.of(context).size.height * 0.075,
                                 ) ,
                             ],
                           ),
@@ -189,7 +182,10 @@ class _TaskStepsState extends State<TaskSteps> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: Image.asset('images/formerPageArrow.png'),
+                          child: Image.asset(
+                              'images/formerPageArrow.png',
+                              width: MediaQuery.of(context).size.height * 0.1,
+                          ),
                         ),
                       if (widget.index < widget.numberOfSteps - 1)
                         ElevatedButton(
@@ -205,7 +201,10 @@ class _TaskStepsState extends State<TaskSteps> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: Image.asset('images/nextPageArrow.png'),
+                          child: Image.asset(
+                              'images/nextPageArrow.png',
+                              width: MediaQuery.of(context).size.height * 0.1,
+                          ),
                         ),
                     ],
                   ),
