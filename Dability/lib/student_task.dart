@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'task_steps.dart';
 class StudentTask extends StatefulWidget {
-  const StudentTask({super.key});
+  //const StudentTask({super.key});
 
   @override
   State<StudentTask> createState() => _StudentTaskState();
+  String URLVideo = "a";       //Get de la BD
+  int taskID = 0;
+  StudentTask(int id){
+    taskID = id;
+    //Get de la BD de la URL
+  }
 }
 
 class _StudentTaskState extends State<StudentTask> {
@@ -70,6 +76,7 @@ class _StudentTaskState extends State<StudentTask> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
+                      
                       padding: const EdgeInsets.all(20.0),
                       decoration: ShapeDecoration(
                         color: Color(0xFF4A6987),
@@ -86,7 +93,7 @@ class _StudentTaskState extends State<StudentTask> {
                         ],
                       ),
                       child: Text(
-                        "Poner el \n Microondas",
+                        "Poner el \n Microondas".toUpperCase(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -96,7 +103,7 @@ class _StudentTaskState extends State<StudentTask> {
                           height: 0,
                         ),
                       )),
-                  Container(
+                  /*Container(
                     padding: const EdgeInsets.all(10.0),
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(color: Color(0xFFD9D9D9)),
@@ -141,7 +148,7 @@ class _StudentTaskState extends State<StudentTask> {
                         ),
                       ],
                     ),
-                  )
+                  ),*/
                 ],
               ),
             ),
@@ -154,7 +161,7 @@ class _StudentTaskState extends State<StudentTask> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Descripción',
+                          'DESCRIPCIÓN',
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -162,7 +169,12 @@ class _StudentTaskState extends State<StudentTask> {
                           textAlign: TextAlign.left,
                         ),
                         Text(
-                          'Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes congue rhoncus Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes congue rhoncus orci et nam, molestie enim habitasse mus in ornare. Nascetur hendrerit interdum natoque venenatis iaculis quis praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales nullam metus himenaeos vestibulum.',
+                          'Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes '
+                          'congue rhoncus Lorem ipsum dolor sit amet consectetur adipiscing elit, '
+                          'tristique non montes congue rhoncus orci et nam, molestie enim habitasse '
+                          'mus in ornare. Nascetur hendrerit interdum natoque venenatis iaculis quis '
+                          'praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales '
+                          'nullam metus himenaeos vestibulum.'.toUpperCase(),
                           style: TextStyle(
                             fontSize: 20,
                           ),
@@ -173,9 +185,19 @@ class _StudentTaskState extends State<StudentTask> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, //MainAxisAlignment.spaceBetween
               children: [
-                Image.asset(
-                  'images/tutorialVideo.png',
-                ),
+                if (widget.URLVideo != "")
+                  Column(
+                    children: [
+                      Text(
+                        'TUTORIAL',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      //Aquí iría el vídeo
+                    ],
+                  ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(20),
