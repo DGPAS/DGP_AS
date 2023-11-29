@@ -142,9 +142,12 @@ class _AddModStudentState extends State<AddModStudent> {
         print("Contraseña obtenida");
 
         setState(() {
-          selectedDBPasswd[1] = response["data"]["pictograma1"].toString() ?? '';
-          selectedDBPasswd[2] = response["data"]["pictograma2"].toString() ?? '';
-          selectedDBPasswd[3] = response["data"]["pictograma3"].toString() ?? '';
+          selectedPasswd[1] = response["data"]["pictograma1"].toString() ?? '';
+          selectedPasswd[2] = response["data"]["pictograma2"].toString() ?? '';
+          selectedPasswd[3] = response["data"]["pictograma3"].toString() ?? '';
+          selectedDBPasswd[1] = selectedPasswd[1];
+          selectedDBPasswd[2] = selectedPasswd[2];
+          selectedDBPasswd[3] = selectedPasswd[3];
         });
       } else {
         print("Error en response getStudentPassword");
@@ -345,7 +348,7 @@ class _AddModStudentState extends State<AddModStudent> {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       }
       else {
-        return Image.network("${dotenv.env['API_URL']}/images/$urlPath");
+        return Image.network("${dotenv.env['API_URL']}/images/students/$urlPath");
       }
     }
   }
@@ -359,7 +362,7 @@ class _AddModStudentState extends State<AddModStudent> {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       }
       else {
-        return Image.network("${dotenv.env['API_URL']}/images/passwords/$urlPath");
+        return Image.network("${dotenv.env['API_URL']}/images/students/passwords/$urlPath");
       }
     }
   }
