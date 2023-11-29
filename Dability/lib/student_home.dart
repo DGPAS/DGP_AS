@@ -119,7 +119,7 @@ class _StudentHomeState extends State<StudentHome> {
                     Text(
                       'AGENDA PERSONAL',
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontSize: 20,
                       ), // Aplica el estilo del botón al texto
                       textAlign: TextAlign.center,
                     ),
@@ -127,7 +127,7 @@ class _StudentHomeState extends State<StudentHome> {
                         height: MediaQuery.of(context).size.height * 0.025),
                     Image.asset(
                       'images/agendaLogo.png',
-                      width: MediaQuery.of(context).size.width * 0.2,
+                      width: MediaQuery.of(context).size.width * 0.1,
                     ),
                   ],
                 ),

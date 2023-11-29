@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'add_mod_task.dart';
 import 'Components/enum_types.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class TaskManagement extends StatefulWidget {
   const TaskManagement({super.key});
@@ -12,31 +16,68 @@ class TaskManagement extends StatefulWidget {
 class _TaskManagementState extends State<TaskManagement> {
   TextEditingController _controller = TextEditingController();
 
-  List<String> tasks = [];
+  List<dynamic> tasks = [];
+
+  // Funcion que devuelve las tareas de la base de datos
+  Future<void> getTasks() async {
+    // La direccion ip debe ser la de red del portatil para conectar con
+    // la tablet ó 10.0.2.2 para conectar con emuladores
+    String uri = "${dotenv.env['API_URL']}/view_data.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          tasks = json.decode(response.body);
+        });
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Funcion que borra una tarea concreta de la base de datos
+  Future<void> deleteTask(String idTareas) async {
+    String uri = "${dotenv.env['API_URL']}/delete_data.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        print("Task deleted");
+        // Refresh the task list after deletion
+        getTasks();
+      } else {
+        print("Task not deleted. Server response: ${response['error']}");
+      }
+    } catch (e) {
+      print("Error during task deletion: $e");
+    }
+  }
+
   double maxWidt = 500;
 
-  List<String> displayedItems = [];
+  List<dynamic> displayedItems = [];
+
+  Future<void> getData () async {
+    await getTasks();
+    displayedItems.addAll(tasks);
+  }
 
   @override
   void initState() {
     super.initState();
-    tasks.add("Tarea 1");
-    tasks.add("Tarea 2");
-    tasks.add("Tarea 3");
-    tasks.add("Tarea 4");
-    tasks.add("Tarea 5");
-    tasks.add("Tarea 6");
-    tasks.add("Tarea 7");
 
-    displayedItems.addAll(tasks);
+    getData();
   }
 
   void filterSearchResults(String query) {
-    List<String> searchResults = [];
+    List<dynamic> searchResults = [];
 
     if (query.isNotEmpty) {
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].toLowerCase().contains(query.toLowerCase())) {
+        if (tasks[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(tasks[i]);
         }
       }
@@ -168,7 +209,7 @@ class _TaskManagementState extends State<TaskManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index],
+                                  displayedItems[index]['nombre'],
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -189,7 +230,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod)),
+                                                            AddModType.mod, title: displayedItems[index]['nombre'], description: displayedItems[index]['descripcion'], idTareas: displayedItems[index]['idTareas'], miniatura: displayedItems[index]['miniatura'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -223,14 +264,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() {
-                                                        tasks.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                        displayedItems.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                      });
+                                                      deleteTask(displayedItems[index]['idTareas']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },

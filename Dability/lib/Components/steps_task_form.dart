@@ -6,7 +6,6 @@ import 'package:dability/Components/full_screen_image.dart';
 import 'package:dability/Components/text_form.dart';
 import 'dart:io';
 import 'package:dability/Components/list_step.dart';
-import 'dart:developer';
 
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
@@ -24,7 +23,6 @@ class StepsTaskForm extends StatefulWidget {
 }
 
 class _StepsTaskFormState extends State<StepsTaskForm> {
-  final _formKey = GlobalKey<FormState>();
   String campoRequerido = "* Campo requerido";
   final bool requiredField;
   // Lista para almacenar los pictogramas con descripcion
@@ -80,10 +78,9 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
             children: [
               const Text("Añade una imagen"),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 700,
-                    padding: EdgeInsets.all(30),
+                  Expanded(
                     child: GestureDetector(
                       onTap: () async {
                         final picker = ImagePicker();
@@ -99,7 +96,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20.0),
                         ),
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.all(20),
                         child: DottedBorder(
                           color: Colors.black,
                           strokeWidth: 1,
@@ -117,20 +114,19 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       ),
                     ),
                   ),
-                  Container(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final picker = ImagePicker();
-                        final XFile? pickedFile = await picker.pickImage(
-                            source: ImageSource.camera, imageQuality: 100);
+                  GestureDetector(
+                    onTap: () async {
+                      final picker = ImagePicker();
+                      final XFile? pickedFile = await picker.pickImage(
+                          source: ImageSource.camera, imageQuality: 100);
 
-                        setState(() {
-                          selectedImage = pickedFile!.path;
-                        });
-                      },
-                      child: Container(
-                        child: Icon(Icons.photo_camera),
-                      ),
+                      setState(() {
+                        selectedImage = pickedFile!.path;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(20),
+                      child: Icon(Icons.photo_camera, size: 50,),
                     ),
                   ),
                 ],
@@ -175,7 +171,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   Widget _getImage(String? urlPath) {
     if (urlPath == null) {
       return const Image(
-          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
     } else {
       return Image.file(File(urlPath), fit: BoxFit.cover);
     }
@@ -186,6 +182,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Añadir un paso a la tarea"),
+        backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -235,23 +232,24 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
             Container(
               padding: EdgeInsets.all(100),
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF4A6987),
+                ),
                 onPressed: () {
                   int numStep = (int.parse(_numPaso.text));
                   // Buscamos el paso según el numStep
                   var existingStep = steps.firstWhere(
                       (step) => step.numStep == numStep,
-                      orElse: () => ListStep(numStep, '', 'null', ''));
+                      orElse: () => ListStep(numStep, '', 'null'));
                   // Si se ha encontrado:
                   if ('null' != existingStep.description) {
                     if (selectedImage != '') existingStep.image = selectedImage;
                     if (actualDescription != '') {
                       existingStep.description = actualDescription;
                     }
-                    // TO DO: Video se ve como descripcion, cambiar
-                    if (selectedVideo != '') existingStep.video = selectedVideo;
                   } else {
                     steps.add(ListStep(numStep, selectedImage,
-                        actualDescription, selectedVideo));
+                        actualDescription));
                   }
 
                   if (numStep > 0) {

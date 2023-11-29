@@ -1,5 +1,4 @@
 //import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:dability/Components/enum_types.dart';
 //import 'dart:developer';
@@ -72,6 +71,7 @@ class _TextFormState extends State<TextForm> {
   }
 
   double getContentPadding() {
+
     if (tipo == TextFormType.title) {
       return 12.0;
     } else if (tipo == TextFormType.description) {
@@ -101,6 +101,7 @@ class _TextFormState extends State<TextForm> {
               fillColor: Colors.white,
               contentPadding:
                   EdgeInsets.fromLTRB(10, 20, 0, getContentPadding()),
+
               helperText: requiredField ? campoRequerido : null,
               alignLabelWithHint: true,
             ),

@@ -1,5 +1,11 @@
+import 'package:dability/Components/enum_types.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'add_mod_student.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+
 
 class StudentManagement extends StatefulWidget {
   const StudentManagement({super.key});
@@ -13,31 +19,66 @@ class StudentManagement extends StatefulWidget {
 class _StudentManagementState extends State<StudentManagement> {
   TextEditingController _controller = TextEditingController();
 
-  List<String> students = []; // lista de tareas
+  List<dynamic> students = []; // lista de alumnos
   double widthMax = 500;
 
-  List<String> displayedItems = [];
+  List<dynamic> displayedItems = [];
 
   @override
   void initState() {
     super.initState();
-    students.add("Estudiante 1");
-    students.add("Estudiante 2");
-    students.add("Estudiante 3");
-    students.add("Estudiante 4");
-    students.add("Estudiante 5");
-    students.add("Estudiante 6");
-    students.add("Estudiante 7");
+    getData();
+  }
 
+  Future<void> getData () async {
+    await getStudents();
     displayedItems.addAll(students);
   }
 
+  // Funcion que devuelve los alumnos de la base de datos
+  Future<void> getStudents() async {
+    // La direccion ip debe ser la de red del portatil para conectar con
+    // la tablet ó 10.0.2.2 para conectar con emuladores
+    String uri = "${dotenv.env['API_URL']}/view_students.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          students = json.decode(response.body);
+        });
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Funcion que borra una tarea concreta de la base de datos
+  Future<void> deleteStudent(String idStudent) async {
+    String uri = "${dotenv.env['API_URL']}/delete_student.php";
+    try {
+      var res = await http.post(Uri.parse(uri), body: {"idStudent": idStudent});
+      var response = jsonDecode(res.body);
+      if (response["success"] == true) {
+        print("Student deleted");
+        // Refresh the task list after deletion
+        await getStudents();
+      } else {
+        print("Task not deleted. Server response: ${response['error']}");
+      }
+    } catch (e) {
+      print("Error during task deletion: $e");
+    }
+  }
+
   void filterSearchResults(String query) {
-    List<String> searchResults = [];
+    List<dynamic> searchResults = [];
 
     if (query.isNotEmpty) {
       for (var i = 0; i < students.length; i++) {
-        if (students[i].toLowerCase().contains(query.toLowerCase())) {
+        if (students[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(students[i]);
         }
       }
@@ -55,7 +96,7 @@ class _StudentManagementState extends State<StudentManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestión alumnos'),
+        title: Text('Gestión estudiantes'),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
@@ -65,7 +106,7 @@ class _StudentManagementState extends State<StudentManagement> {
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              // AÑADIR TAREA
+              // AÑADIR ESTUDIANTE
               alignment: Alignment.center,
               padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
               child: ElevatedButton(
@@ -85,11 +126,11 @@ class _StudentManagementState extends State<StudentManagement> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddModStudent()),
+                    MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add)),
                   );
                 },
                 child: const Text(
-                  'Añadir alumno',
+                  'Añadir estudiante',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -117,7 +158,7 @@ class _StudentManagementState extends State<StudentManagement> {
               ),
             ),
             Expanded(
-              // BLOQUE TAREAS
+              // BLOQUE ALUMNOS
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
@@ -161,7 +202,7 @@ class _StudentManagementState extends State<StudentManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index],
+                                  '${displayedItems[index]['nombre']} ${displayedItems[index]['Apellido']}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -176,7 +217,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent()),
+                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['nombre'], surname: displayedItems[index]['Apellido'], readCheck: displayedItems[index]['texto'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['foto'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -211,14 +252,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() {
-                                                        students.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                        displayedItems.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                      });
+                                                      deleteStudent(displayedItems[index]['id']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
