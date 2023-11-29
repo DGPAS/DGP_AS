@@ -345,7 +345,7 @@ class _AddModStudentState extends State<AddModStudent> {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       }
       else {
-        return Image.network("${dotenv.env['API_URL']}/images/$urlPath");
+        return Image.network("${dotenv.env['API_URL']}/images/students/$urlPath");
       }
     }
   }

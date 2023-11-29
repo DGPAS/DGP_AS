@@ -5,7 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:dability/Components/full_screen_image.dart';
 import 'package:dability/Components/text_form.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:dability/Components/list_step.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
@@ -42,6 +45,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
       titulo: "Descripcion del pictograma",
       tipo: TextFormType.description);
   bool error = false;
+  
 
   // Constructor de la clase state
   _StepsTaskFormState({required this.requiredField, required this.steps});
@@ -66,6 +70,8 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     descriptionController.dispose();
     super.dispose();
   }
+
+
 
   Widget _getForm() {
     return Column(

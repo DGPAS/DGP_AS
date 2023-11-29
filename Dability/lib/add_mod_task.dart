@@ -156,6 +156,9 @@ class _AddModTaskState extends State<AddModTask> {
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
         await insertStepsData(steps[i]);
+        if (steps[i].image != '') {
+          await uploadImageSteps(steps[i].image);
+        }
       }
     } else {
       await updateData(idTareas);
@@ -164,6 +167,28 @@ class _AddModTaskState extends State<AddModTask> {
 
       
 
+    }
+  }
+
+Future<void> uploadImageSteps(String imagePath) async {
+    String uri = "${dotenv.env['API_URL']}/upload_image_step.php";
+    try {
+
+      var request = http.MultipartRequest('POST', Uri.parse(uri));
+      request.fields['id'] = actualTaskId;
+      var picture = await http.MultipartFile.fromPath("image", imagePath);
+      request.files.add(picture);
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print ("Image Uploaded");
+      }
+      else {
+        print("Error en la subida");
+      }
+
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -205,7 +230,7 @@ class _AddModTaskState extends State<AddModTask> {
         "numPaso": step.numStep.toString(),
         "idTarea": actualTaskId,
         "descripcion": step.description,
-        "imagen": step.image
+        "imagen": ""
       });
 
       var response = jsonDecode(res.body);
@@ -590,26 +615,7 @@ void getMiniature() {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                // Aquí puedes agregar la lógica para grabar un video
-                // Puedes usar el paquete camera o el que prefieras
-                // En este ejemplo, estoy utilizando el paquete image_picker
-                final picker = ImagePicker();
-                final XFile? pickedFile = await picker.pickVideo(
-                  source: ImageSource.camera,
-                );
-
-                if (pickedFile != null) {
-                  // Puedes manejar el archivo de video grabado aquí
-                  print(pickedFile.path);
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.all(20),
-                child: Icon(Icons.videocam, size: 50),
-              ),
-            ),
+            
           ],
         ),
       ],
