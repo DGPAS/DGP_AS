@@ -1,14 +1,44 @@
+import 'package:dability/dability.dart';
 import 'package:flutter/material.dart';
 import 'to_do_list.dart';
 
 class StudentHome extends StatefulWidget {
-  const StudentHome({super.key});
+  final int id_alumno;
+
+  const StudentHome({Key? key, required this.id_alumno}); // deberia recibir el id del alumno
 
   @override
-  State<StudentHome> createState() => _StudentHomeState();
+  State<StudentHome> createState() =>
+      _StudentHomeState(id_alumno: this.id_alumno);
 }
 
 class _StudentHomeState extends State<StudentHome> {
+  final int id_alumno;
+
+  _StudentHomeState({required this.id_alumno});
+
+
+  //// esto es de prueba hasta que se tenga la bd
+  String student = "JUAN";
+  List<String> students = [];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      students.add("JOAQUIN");
+      students.add("MANUEL");
+      students.add("SARA");
+      students.add("RUBEN");
+      students.add("JUAN");
+      students.add("ALICIA");
+
+      student = students[id_alumno];
+    });
+  }
+
+  ////
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +48,7 @@ class _StudentHomeState extends State<StudentHome> {
             Image.asset('images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'INICIO',
+                'INICIO ' + student,
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),
@@ -47,6 +77,17 @@ class _StudentHomeState extends State<StudentHome> {
           ],
         ),
         backgroundColor: Color(0xFF4A6987),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Utiliza la función personalizada para manejar la navegación hacia atrás
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  DAbility()),
+            );
+          },
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

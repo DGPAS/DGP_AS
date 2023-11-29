@@ -27,7 +27,6 @@ class _StudentManagementState extends State<StudentManagement> {
   @override
   void initState() {
     super.initState();
-
     getData();
   }
 
