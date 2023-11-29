@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dability/Components/steps_task_form.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
@@ -13,6 +14,8 @@ import 'dart:io';
 
 
 
+
+
 class AddModTask extends StatefulWidget {
   AddModTask(
       {Key? key,
@@ -20,7 +23,8 @@ class AddModTask extends StatefulWidget {
       this.title,
       this.description,
       this.idTareas,
-      this.miniatura})
+      this.miniatura,
+      this.videoUrl})
       : super(key: key);
 
   AddModType typeForm;
@@ -28,6 +32,7 @@ class AddModTask extends StatefulWidget {
   String? description;
   String? idTareas;
   String? miniatura;
+  String? videoUrl;
 
   @override
   State<AddModTask> createState() => _AddModTaskState(
@@ -36,6 +41,7 @@ class AddModTask extends StatefulWidget {
       description: description,
       idTareas: idTareas,
       miniatura: miniatura,
+      videoUrl: videoUrl,
   );
 }
 
@@ -44,7 +50,7 @@ class AddModTask extends StatefulWidget {
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
-      {required this.typeForm, this.title, this.description, this.idTareas, this.miniatura});
+      {required this.typeForm, this.title, this.description, this.idTareas, this.miniatura, this.videoUrl});
 
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(
@@ -53,7 +59,7 @@ class _AddModTaskState extends State<AddModTask> {
       tipo: TextFormType.title);
   // Formulario para la descripción de la tarea
   TextForm descriptionForm = TextForm(
-      requiredField: true,
+      requiredField: false,
       titulo: "Descripción general de la tarea",
       tipo: TextFormType.description);
 
@@ -63,6 +69,7 @@ class _AddModTaskState extends State<AddModTask> {
   String? idTareas;
   String? miniatura;
   Image? miniaturaImage;
+  String? videoUrl;
   // isPressed: variable para la ayuda de añadir pasos
   bool isPressed = false;
   AddModType typeForm;
@@ -72,9 +79,10 @@ class _AddModTaskState extends State<AddModTask> {
   List<ListStep> auxSteps = [];
   String actualTaskId = '';
   File? _image;
+  File? _video;
   String selectedImage = "";
-
-
+  String selectedVideo = "";
+  
   @override
   void initState() {
     super.initState();
@@ -91,6 +99,11 @@ class _AddModTaskState extends State<AddModTask> {
 
     if (idTareas != null) {
       getInitialSteps();
+      actualTaskId = idTareas!;
+    }
+
+    if(widget.miniatura != null) {
+     selectedImage = widget.miniatura!;
     }
     getMiniature();
     isPressed = false;
@@ -139,6 +152,7 @@ class _AddModTaskState extends State<AddModTask> {
     if (typeForm == AddModType.add) {
       await insertTaskData();
       await uploadImage();
+      await saveVideo();
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
         await insertStepsData(steps[i]);
@@ -147,6 +161,8 @@ class _AddModTaskState extends State<AddModTask> {
       await updateData(idTareas);
       await uploadImage();
       await updateSteps();
+
+      
 
     }
   }
@@ -273,6 +289,40 @@ class _AddModTaskState extends State<AddModTask> {
     }
   }
 
+ Future<void> saveVideo() async {
+  if (selectedVideo == "") {
+    print("No se ha seleccionado ningún video");
+    return;
+  }
+
+  String uri = "${dotenv.env['API_URL']}/saveVideo.php";
+
+  try {
+    var request = http.MultipartRequest('POST', Uri.parse(uri));
+
+    // Puedes agregar la lógica para seleccionar un video específico en el emulador
+    // Esto puede variar según el emulador que estés utilizando
+
+    // Simplemente usa el path del video seleccionado
+    request.fields['idTareas'] = actualTaskId;
+    var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
+    request.files.add(videoFile);
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("Video Uploaded");
+      print("Response Body: ${await response.stream.bytesToString()}");
+    } else {
+      print("Error in uploading video. Status Code: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("Exception during video upload: $e");
+  }
+}
+
+
+
 void getMiniature() {
     setState(() {
       miniaturaImage = Image.network("${dotenv.env['API_URL']}/images/$miniatura");
@@ -301,7 +351,11 @@ void getMiniature() {
       return const Image(
           image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
     } else {
-      return Image.file(File(urlPath), fit: BoxFit.cover);
+      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.miniatura)) {
+        return Image.file(File(urlPath), fit: BoxFit.cover);
+      } else {
+        return Image.network("${dotenv.env['API_URL']}/images/$urlPath", fit: BoxFit.cover);
+      }
     }
   }
 
@@ -415,9 +469,8 @@ void getMiniature() {
                 child: descriptionForm,
               ),
               // Contenedor para añadir una miniatura a la tarea
-             if(typeForm == AddModType.add) 
               Container(
-                //decoration: _buildBoxDecoration(),
+                decoration: _buildBoxDecoration(),
                 padding: const EdgeInsets.all(20.0),
                 margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
                 child: Column(
@@ -482,17 +535,87 @@ void getMiniature() {
                   ],
                 ),
               ),
-               if(typeForm == AddModType.mod)
+              
+              //Contenedor para añadir videos
+              if(typeForm == AddModType.add) 
               Container(
-                decoration: _buildBoxDecoration(),
-                padding: const EdgeInsets.all(20.0),
-                margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
-                width:  300,
-                height: 300,
-                child: miniaturaImage,
+    decoration: _buildBoxDecoration(),
+    padding: const EdgeInsets.all(20.0),
+    margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
+    child: Column(
+      children: [
+        const Text("Añade un video para la tarea"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () async {
+                  // Aquí puedes agregar la lógica para grabar un video
+                  // Puedes usar el paquete camera o el que prefieras
+                  // En este ejemplo, estoy utilizando el paquete image_picker
+                  final picker = ImagePicker();
+                  final XFile? pickedFile = await picker.pickVideo(
+                    source: ImageSource.gallery,
+                  );
+                setState(() {
+                  selectedVideo = pickedFile!.path;
+                  _video = File(selectedVideo);
 
-                
+                });
+                  if (pickedFile != null) {
+                    // Puedes manejar el archivo de video grabado aquí
+                    print(pickedFile.path);
+                  }
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  margin: const EdgeInsets.all(20),
+                  child: DottedBorder(
+                    color: Colors.black,
+                    strokeWidth: 1,
+                    dashPattern: [10, 6],
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(20),
+                    child: Container(
+                      height: 200,
+                      width: 800,
+                      // Puedes personalizar este widget según tu necesidad
+                      child: const Icon(Icons.video_library, size: 50),
+                    ),
+                  ),
+                ),
               ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                // Aquí puedes agregar la lógica para grabar un video
+                // Puedes usar el paquete camera o el que prefieras
+                // En este ejemplo, estoy utilizando el paquete image_picker
+                final picker = ImagePicker();
+                final XFile? pickedFile = await picker.pickVideo(
+                  source: ImageSource.camera,
+                );
+
+                if (pickedFile != null) {
+                  // Puedes manejar el archivo de video grabado aquí
+                  print(pickedFile.path);
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                child: Icon(Icons.videocam, size: 50),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ),
+              
               // Contenedor con para añadir los pasos
               Container(
                 decoration: BoxDecoration(
@@ -672,6 +795,8 @@ void getMiniature() {
                     backgroundColor:
                         MaterialStatePropertyAll<Color>(Colors.white)),
                 onPressed: () {
+                  title = titleForm.getText();
+                  description = descriptionForm.getText();
                   if ((title == '' || title == null) ||
                   (description == '' || description == null)) {
                   print("Los campos titulo y descripción son obligatorios");
