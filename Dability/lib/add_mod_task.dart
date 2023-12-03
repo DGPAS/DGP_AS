@@ -22,16 +22,16 @@ class AddModTask extends StatefulWidget {
       required this.typeForm,
       this.title,
       this.description,
-      this.idTareas,
-      this.miniatura,
+      this.idTasks,
+      this.thumbnail,
       this.videoUrl})
       : super(key: key);
 
   AddModType typeForm;
   String? title;
   String? description;
-  String? idTareas;
-  String? miniatura;
+  String? idTasks;
+  String? thumbnail;
   String? videoUrl;
 
   @override
@@ -39,8 +39,8 @@ class AddModTask extends StatefulWidget {
       typeForm: typeForm,
       title: title,
       description: description,
-      idTareas: idTareas,
-      miniatura: miniatura,
+      idTasks: idTasks,
+      thumbnail: thumbnail,
       videoUrl: videoUrl,
   );
 }
@@ -50,7 +50,7 @@ class AddModTask extends StatefulWidget {
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
-      {required this.typeForm, this.title, this.description, this.idTareas, this.miniatura, this.videoUrl});
+      {required this.typeForm, this.title, this.description, this.idTasks, this.thumbnail, this.videoUrl});
 
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(
@@ -66,9 +66,9 @@ class _AddModTaskState extends State<AddModTask> {
   // Variables donde se almacenará el valor del titulo y la descripcion
   String? title;
   String? description;
-  String? idTareas;
-  String? miniatura;
-  Image? miniaturaImage;
+  String? idTasks;
+  String? thumbnail;
+  Image? thumbnailImage;
   String? videoUrl;
   // isPressed: variable para la ayuda de añadir pasos
   bool isPressed = false;
@@ -97,15 +97,15 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.originalText = description;
     descriptionForm.text = description!;
 
-    if (idTareas != null) {
+    if (idTasks != null) {
       getInitialSteps();
-      actualTaskId = idTareas!;
+      actualTaskId = idTasks!;
     }
 
-    if(widget.miniatura != null) {
-     selectedImage = widget.miniatura!;
+    if(widget.thumbnail != null) {
+     selectedImage = widget.thumbnail!;
     }
-    getMiniature();
+    getThumbnail();
     isPressed = false;
   }
 
@@ -114,9 +114,9 @@ class _AddModTaskState extends State<AddModTask> {
   Future<void> getInitialSteps() async {
     // La direccion ip debe ser la de red del portatil para conectar con
     // la tablet ó 10.0.2.2 para conectar con emuladores
-    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTareas";
+    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTasks";
     try {
-      print(idTareas!);
+      print(idTasks!);
       var response = await http.get(
         Uri.parse(uri),
         headers: {
@@ -250,7 +250,7 @@ class _AddModTaskState extends State<AddModTask> {
     try {
       var res=await http.post(Uri.parse(uri),body: {
         "steps": jsonEncode(steps.map((step) => step.toJson()).toList()),
-        "idTarea": idTareas,
+        "idTarea": idTasks,
       });
 
       var response=jsonDecode(res.body);
@@ -323,9 +323,9 @@ class _AddModTaskState extends State<AddModTask> {
 
 
 
-void getMiniature() {
+void getThumbnail() {
     setState(() {
-      miniaturaImage = Image.network("${dotenv.env['API_URL']}/images/$miniatura");
+      thumbnailImage = Image.network("${dotenv.env['API_URL']}/images/$thumbnail");
     });
   }
 
@@ -351,7 +351,7 @@ void getMiniature() {
       return const Image(
           image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
     } else {
-      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.miniatura)) {
+      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.thumbnail)) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       } else {
         return Image.network("${dotenv.env['API_URL']}/images/$urlPath", fit: BoxFit.cover);
@@ -801,7 +801,7 @@ void getMiniature() {
                   (description == '' || description == null)) {
                   print("Los campos titulo y descripción son obligatorios");
                   } else {
-                    submitForm(idTareas);
+                    submitForm(idTasks);
                     Navigator.of(context).pop();
                   }
                 },

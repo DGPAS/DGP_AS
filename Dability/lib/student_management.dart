@@ -12,8 +12,6 @@ class StudentManagement extends StatefulWidget {
 
   @override
   State<StudentManagement> createState() => _StudentManagementState();
-
-// _StudentManagementState createState() => _StudentManagementState();
 }
 
 class _StudentManagementState extends State<StudentManagement> {

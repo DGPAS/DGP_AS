@@ -162,14 +162,14 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        bool loginCorrecto = authenticateUser(
+                        bool correctLogin = authenticateUser(
                             _emailController.text, _passwordController.text);
 
                         setState(() {
-                          loginError = !loginCorrecto;
+                          loginError = !correctLogin;
                         });
 
-                        if(loginCorrecto){ // se redirecciona
+                        if(correctLogin){ // se redirecciona
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AdminHome()),

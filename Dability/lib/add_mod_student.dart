@@ -44,8 +44,8 @@ class _AddModStudentState extends State<AddModStudent> {
   String? id;
   String actualStudentId = '';
   String title = "Añadir Estudiante";
-  String? nameAlumno;
-  String? surnameAlumno;
+  String? nameStudent;
+  String? surnameStudent;
   File? _photo;
   String selectedPhoto = "";
   bool? readCheck = false;
@@ -55,14 +55,14 @@ class _AddModStudentState extends State<AddModStudent> {
   List<String> selectedPasswd = ['','','',''];
   List<String> selectedDBPasswd = ['','','',''];
 
-  // Formulario para el nombre del alumno
+  // Formulario para el nombre del estudiante
   TextForm nameForm = TextForm(
       requiredField: true,
-      titulo: "Nombre del Alumno",
+      titulo: "Nombre del Estudiante",
       tipo: TextFormType.title);
   TextForm surnameForm = TextForm(
       requiredField: true,
-      titulo: "Apellido del Alumno",
+      titulo: "Apellido del Estudiante",
       tipo: TextFormType.title);
 
   @override
@@ -83,8 +83,8 @@ class _AddModStudentState extends State<AddModStudent> {
       actualStudentId = id!;
     }
 
-    nameAlumno = widget.name;
-    surnameAlumno = widget.surname;
+    nameStudent = widget.name;
+    surnameStudent = widget.surname;
 
     if (widget.readCheck != null) {
       if (widget.readCheck == '0') {
@@ -118,13 +118,13 @@ class _AddModStudentState extends State<AddModStudent> {
       getStudentPassword();
     }
 
-    nameAlumno ??= nameForm.getText();
-    surnameAlumno ??= surnameForm.getText();
+    nameStudent ??= nameForm.getText();
+    surnameStudent ??= surnameForm.getText();
 
-    nameForm.originalText = nameAlumno;
-    surnameForm.originalText = surnameAlumno;
-    nameForm.text = nameAlumno!;
-    surnameForm.text = surnameAlumno!;
+    nameForm.originalText = nameStudent;
+    surnameForm.originalText = surnameStudent;
+    nameForm.text = nameStudent!;
+    surnameForm.text = surnameStudent!;
 
 
     getTitle();
@@ -162,8 +162,8 @@ class _AddModStudentState extends State<AddModStudent> {
       String uri = "${dotenv.env['API_URL']}/insert_student.php";
 
       var res = await http.post(Uri.parse(uri), body: {
-        "nombre": nameAlumno,
-        "Apellido": surnameAlumno,
+        "nombre": nameStudent,
+        "Apellido": surnameStudent,
         "foto": '',
         "texto": readCheck.toString() == 'true' ? '1' : '0',
         "audio": soundCheck.toString() == 'true' ? '1' : '0',
@@ -214,15 +214,15 @@ class _AddModStudentState extends State<AddModStudent> {
       try {
         var request = http.MultipartRequest('POST', Uri.parse(uri));
         request.fields['idStudent'] = actualStudentId;
-        var pictograma1 = await http.MultipartFile.fromPath(
+        var pictogram1 = await http.MultipartFile.fromPath(
             "pictograma1", selectedPasswd[1]);
-        request.files.add(pictograma1);
-        var pictograma2 = await http.MultipartFile.fromPath(
+        request.files.add(pictogram1);
+        var pictogram2 = await http.MultipartFile.fromPath(
             "pictograma2", selectedPasswd[2]);
-        request.files.add(pictograma2);
-        var pictograma3 = await http.MultipartFile.fromPath(
+        request.files.add(pictogram2);
+        var pictogram3 = await http.MultipartFile.fromPath(
             "pictograma3", selectedPasswd[3]);
-        request.files.add(pictograma3);
+        request.files.add(pictogram3);
         var response = await request.send();
 
         if (response.statusCode == 200) {
@@ -241,15 +241,15 @@ class _AddModStudentState extends State<AddModStudent> {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(uri));
       request.fields['idStudent'] = actualStudentId;
-      var pictograma1 = await http.MultipartFile.fromPath(
+      var pictogram1 = await http.MultipartFile.fromPath(
           "pictograma1", selectedPasswd[1]);
-      request.files.add(pictograma1);
-      var pictograma2 = await http.MultipartFile.fromPath(
+      request.files.add(pictogram1);
+      var pictogram2 = await http.MultipartFile.fromPath(
           "pictograma2", selectedPasswd[2]);
-      request.files.add(pictograma2);
-      var pictograma3 = await http.MultipartFile.fromPath(
+      request.files.add(pictogram2);
+      var pictogram3 = await http.MultipartFile.fromPath(
           "pictograma3", selectedPasswd[3]);
-      request.files.add(pictograma3);
+      request.files.add(pictogram3);
       var response = await request.send();
 
       if (response.statusCode == 200) {
@@ -269,8 +269,8 @@ class _AddModStudentState extends State<AddModStudent> {
     try {
       var res=await http.post(Uri.parse(uri),body: {
         "idStudent": idStudent,
-        "nombre": nameAlumno,
-        "Apellido": surnameAlumno,
+        "nombre": nameStudent,
+        "Apellido": surnameStudent,
         "texto": readCheck.toString() == 'true' ? '1' : '0',
         "audio": soundCheck.toString() == 'true' ? '1' : '0',
         "video": videoCheck.toString() == 'true' ? '1' : '0',
@@ -313,7 +313,7 @@ class _AddModStudentState extends State<AddModStudent> {
     if (typeForm == AddModType.add) {
       title =  'Crear Estudiante';
     } else {
-      title = 'Modificar Estudiante: $nameAlumno';
+      title = 'Modificar Estudiante: $nameStudent';
     }
   }
 
@@ -429,7 +429,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   ),
                 ],
               ),
-              const Text('Fotografía del Alumno'),
+              const Text('Fotografía del Estudiante'),
               GestureDetector(
                 onTap: () async {
                   final picker = ImagePicker();
@@ -467,7 +467,7 @@ class _AddModStudentState extends State<AddModStudent> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text("Contraseña del Alumno ordenada"),
+                    const Text("Contraseña del Estudiante ordenada"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -578,7 +578,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   ],
                 ),
               ),
-              const Text('Formatos aptos para el alumno'),
+              const Text('Formatos aptos para el estudiante'),
               SizedBox(
                 width: 200,
                 child: CheckboxListTile(
@@ -790,10 +790,10 @@ class _AddModStudentState extends State<AddModStudent> {
                     backgroundColor:
                     MaterialStatePropertyAll<Color>(Colors.white)),
                 onPressed: () {
-                  nameAlumno = nameForm.getText();
-                  surnameAlumno = surnameForm.getText();
-                  if ((nameAlumno == '' || nameAlumno == null) ||
-                      (surnameAlumno == '' || surnameAlumno == null) ||
+                  nameStudent = nameForm.getText();
+                  surnameStudent = surnameForm.getText();
+                  if ((nameStudent == '' || nameStudent == null) ||
+                      (surnameStudent == '' || surnameStudent == null) ||
                       (selectedPasswd[1] == '' || selectedPasswd[2] == '' || selectedPasswd[3] == '')) {
                     print("Los campos nombre, apellido, y los 3 pictogramas de la contraseña son obligatorios");
                   } else {

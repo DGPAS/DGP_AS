@@ -74,21 +74,21 @@
     }
 
     Future<void> deleteTask(String idTareas) async {
-    String uri = "http://10.0.2.2:80/delete_data.php";
-    try {
-      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
-      var response = jsonDecode(res.body);
-      if (response["success"] == true) {
-        print("Task deleted");
-        // Refresh the task list after deletion
-        getrecord();
-      } else {
-        print("Task not deleted. Server response: ${response['error']}");
+      String uri = "http://10.0.2.2:80/delete_data.php";
+      try {
+        var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+        var response = jsonDecode(res.body);
+        if (response["success"] == true) {
+          print("Task deleted");
+          // Refresh the task list after deletion
+          getrecord();
+        } else {
+          print("Task not deleted. Server response: ${response['error']}");
+        }
+      } catch (e) {
+        print("Error during task deletion: $e");
       }
-    } catch (e) {
-      print("Error during task deletion: $e");
     }
-  }
 
     @override
     void initState() {
@@ -152,35 +152,35 @@
 
   class _InsertDataScreenState extends State<InsertDataScreen> {
     TextEditingController nameController = TextEditingController();
-    bool realizadaValue = false;
-    TextEditingController descripcionController = TextEditingController();
-    String? inicioDate;
+    bool doneValue = false;
+    TextEditingController descriptionController = TextEditingController();
+    String? startDate;
     String? finalDate;
     TextEditingController agendaIdController = TextEditingController();
-    TextEditingController miniaturaController = TextEditingController();
+    TextEditingController thumbnailController = TextEditingController();
 
     Future<void> insertData() async {
       if (nameController.text.isEmpty ||
-          realizadaValue == null ||
-          descripcionController.text.isEmpty ||
-          inicioDate == null ||
+          doneValue == null ||
+          descriptionController.text.isEmpty ||
+          startDate == null ||
           finalDate == null ||
-          miniaturaController.text.isEmpty) {
+          thumbnailController.text.isEmpty) {
         print("Todos los campos son obligatorios");
       } else {
         try {
           String uri = "http://10.0.2.2:80/insert_data.php";
 
-          print("Datos a enviar: ${nameController.text}, ${realizadaValue ? "1" : "0"}, ${descripcionController.text}, $inicioDate, $finalDate, ${agendaIdController.text}, ${miniaturaController.text}");
+          print("Datos a enviar: ${nameController.text}, ${doneValue ? "1" : "0"}, ${descriptionController.text}, $startDate, $finalDate, ${agendaIdController.text}, ${thumbnailController.text}");
 
           var res = await http.post(Uri.parse(uri), body: {
             "nombre": nameController.text.trim(),
-            "realizada": realizadaValue != null ? (realizadaValue ? "1" : "0") : "0",
-            "descripcion": descripcionController.text.trim(),
-            "inicio": inicioDate ?? "",
+            "realizada": doneValue != null ? (doneValue ? "1" : "0") : "0",
+            "descripcion": descriptionController.text.trim(),
+            "inicio": startDate ?? "",
             "final": finalDate ?? "",
             "agenda_id": agendaIdController.text.trim(),
-            "miniatura": miniaturaController.text.trim(),
+            "miniatura": thumbnailController.text.trim(),
           });
 
           var response = jsonDecode(res.body);
@@ -211,20 +211,20 @@
               ),
               CheckboxListTile(
                 title: const Text('Realizada'),
-                value: realizadaValue ?? false,
+                value: doneValue ?? false,
                 onChanged: (bool? value) {
                   setState(() {
-                    realizadaValue = value ?? false;
+                    doneValue = value ?? false;
                   });
                 },
               ),
               TextField(
-                controller: descripcionController,
+                controller: descriptionController,
                 decoration: const InputDecoration(labelText: 'Descripción'),
               ),
               TextField(
                 readOnly: true,
-                controller: TextEditingController(text: inicioDate),
+                controller: TextEditingController(text: startDate),
                 onTap: () async {
                   DateTime? selectedDate = await showDatePicker(
                     context: context,
@@ -234,7 +234,7 @@
                   );
                   if (selectedDate != null) {
                     setState(() {
-                      inicioDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+                      startDate = DateFormat('yyyy-MM-dd').format(selectedDate);
                     });
                   }
                 },
@@ -263,7 +263,7 @@
                 decoration: const InputDecoration(labelText: 'Número de Agenda'),
               ),
               TextField(
-                controller: miniaturaController,
+                controller: thumbnailController,
                 decoration: const InputDecoration(labelText: 'Miniatura'),
               ),
               ElevatedButton(
