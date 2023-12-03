@@ -6,30 +6,20 @@ import 'student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
+  // Loads the environment variables from .env
   await dotenv.load();
   runApp(const DAbility());
 }
 
-// TODOLIST
-// TODO: AGREGAR TABLAS TAREASASIGNADAS
-//    Contiene idAgenda, idTarea, realizada, fechaIni, fechaFin
-// TODO: REALIZAR INSERCION DE TAREAS EN AGENDAS
-// TODO: VISUALIZAR AGENDAS CON TAREAS
-// TODO: CREAR ESTUDIANTES
-// TODO: INSERTAR ESTUDIANTES
-// TODO: MODIFICAR ESTUDIANTES Y LISTA DE TAREAS DE ESTUDIANTES
-// TODO: ELIMINAR ESTUDIANTES
-
 class DAbility extends StatelessWidget {
   const DAbility({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //MaterialApp means the app follows material pattern by google
       title: 'D-Ability',
-      // Elimina la etiqueta de debug
+      // Remove the debug tag
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -84,6 +74,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                // Button to access as administrator
                 Container(
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
@@ -109,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                // Button to access as student
                 Container(
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
