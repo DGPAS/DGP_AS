@@ -14,14 +14,21 @@ class TaskManagement extends StatefulWidget {
 }
 
 class _TaskManagementState extends State<TaskManagement> {
+  /// Text controller for task filter
+  ///
+  /// If the text on the filter changes, it stores changes
+  /// TODO: NO ES NECESARIO ESTE CONTROLLER PORQUE NO SE USA
   TextEditingController _controller = TextEditingController();
 
+  /// List that stores tasks form DataBase
   List<dynamic> tasks = [];
 
-  // Funcion que devuelve las tareas de la base de datos
+  /// It returns all the task that are stored in DataBase
+  /// in a dynamic list
+  ///
+  /// Throws an [error] if the query fails
   Future<void> getTasks() async {
-    // La direccion ip debe ser la de red del portatil para conectar con
-    // la tablet ó 10.0.2.2 para conectar con emuladores
+    // Uri whose IP is on .env
     String uri = "${dotenv.env['API_URL']}/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
@@ -33,12 +40,14 @@ class _TaskManagementState extends State<TaskManagement> {
       } else {
         print('Error en la solicitud: ${response.statusCode}');
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 
-  // Funcion que borra una tarea concreta de la base de datos
+  /// It deletes a task with id = [idTareas] from the DataBase
+  ///
+  /// Throws an [error] if the query fails
   Future<void> deleteTask(String idTareas) async {
     String uri = "${dotenv.env['API_URL']}/delete_data.php";
     try {
@@ -56,15 +65,22 @@ class _TaskManagementState extends State<TaskManagement> {
     }
   }
 
-  double maxWidt = 500;
+  /// Maximum with of the list of tasks
+  double maxWidth = 500;
 
+  /// Filtered list of tasks
   List<dynamic> displayedItems = [];
 
+  /// Function that calls [getTasks] who returns the DataBase tasks
+  /// and adds them to [displayedItems]
   Future<void> getData () async {
     await getTasks();
     displayedItems.addAll(tasks);
   }
 
+  /// Init State
+  ///
+  /// Initialize the list of task by calling [getData]
   @override
   void initState() {
     super.initState();
@@ -72,6 +88,10 @@ class _TaskManagementState extends State<TaskManagement> {
     getData();
   }
 
+  /// Function that filters the list of this whose name matches
+  /// or contains [query] updating [displayedItems]
+  ///
+  /// If they don't match, it adds all tasks to [displayedItems]
   void filterSearchResults(String query) {
     List<dynamic> searchResults = [];
 
@@ -91,6 +111,7 @@ class _TaskManagementState extends State<TaskManagement> {
     });
   }
 
+  /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,12 +121,11 @@ class _TaskManagementState extends State<TaskManagement> {
       ),
       body: Container(
         padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
+        /// Column that contains a button that adds tasks,
+        /// the task filter and the filterd list of tasks
         child: Column(
-          // columna con el boton de añadir, y el container de la lista
-          //mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              // tiene el elevated button de añadir tarea
               // width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
               alignment: Alignment.center,
               // padding: EdgeInsets.symmetric(horizontal: 14),
@@ -126,7 +146,8 @@ class _TaskManagementState extends State<TaskManagement> {
                       EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
                 ),
                 onPressed: () {
-                  // Irá a la pantalla de añadir tarea - descomentar
+                  /// When pressed it goes to [add_mod_task.dart] with [AddModType.add]
+                  /// to add a new task
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -140,6 +161,7 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
               ),
             ),
+            /// SizedBox for the filter
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.152,
               child: Padding(
@@ -161,6 +183,7 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
               ),
             ),
+            /// List of tasks
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -174,13 +197,18 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
                 height: 400,
                 width: (MediaQuery.of(context).size.width - 30)
-                    .clamp(0.0, maxWidt.toDouble()),
+                    .clamp(0.0, maxWidth.toDouble()),
                 padding:
                     EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
                 child: ListView(children: [
                   SizedBox(
                     height: 30,
                   ),
+                  /// It returns a list of ElevatedButton
+                  ///
+                  /// One ElevatedButton for each task in [displayedItems]
+                  /// Each item of the list contains the name of the task,
+                  /// a button for update the task and another one to delete it
                   ...List.generate(displayedItems.length, (index) {
                     return Column(
                       children: [
@@ -203,11 +231,13 @@ class _TaskManagementState extends State<TaskManagement> {
                                 horizontal: 20), // Margen horizontal del texto
                           ),
                           onPressed: () {
-                            // acción
+                            // no action
                           },
+                          /// The content of each task
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                /// Name of the task
                                 Text(
                                   displayedItems[index]['nombre'],
                                   //textAlign: TextAlign.center,
@@ -217,11 +247,12 @@ class _TaskManagementState extends State<TaskManagement> {
                                   ),
                                 ),
 
-                                /////
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
+                                      /// Button that navigates to [add_mod_task.dart] with [AddModType.mod]
+                                      /// to modify the current task
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -244,6 +275,9 @@ class _TaskManagementState extends State<TaskManagement> {
                                           height: 35,
                                         ),
                                       ),
+                                      /// Button that deletes the current task
+                                      ///
+                                      /// It shows a dialog to confirm the action
                                       ElevatedButton(
                                         onPressed: () {
                                           showDialog(

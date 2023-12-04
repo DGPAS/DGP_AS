@@ -6,7 +6,7 @@ import 'student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  // Loads the environment variables from .env
+  /// Loads the environment variables from .env
   await dotenv.load();
   runApp(const DAbility());
 }
@@ -38,6 +38,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+///  Main Page
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
@@ -54,12 +55,14 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            /// Logo
             Container(
                 padding: const EdgeInsets.all(15.0),
                 child: Image.asset(
                   'images/Logo.png',
                   height: 100,
                 )),
+            /// Slogan
             Text(
               "Soluciones de accesibilidad para la independencia y facilidad de todos",
               textAlign: TextAlign.center,
@@ -74,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // Button to access as administrator
+                /// Button to access as administrator
                 Container(
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
@@ -100,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                // Button to access as student
+                /// Button to access as student
                 Container(
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
