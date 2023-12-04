@@ -23,12 +23,12 @@ class _TaskManagementState extends State<TaskManagement> {
   /// List that stores tasks form DataBase
   List<dynamic> tasks = [];
 
-  /// It returns all the task that are stored in DataBase
-  /// in a dynamic list
+  /// It saves all the task that are stored from DataBase in a dynamic
+  /// list [tasks]
   ///
   /// Throws an [error] if the query fails
   Future<void> getTasks() async {
-    // Uri whose IP is on .env
+    /// Uri whose IP is on .env that calls API
     String uri = "${dotenv.env['API_URL']}/view_data.php";
     try {
       var response = await http.get(Uri.parse(uri));
@@ -49,6 +49,7 @@ class _TaskManagementState extends State<TaskManagement> {
   ///
   /// Throws an [error] if the query fails
   Future<void> deleteTask(String idTareas) async {
+    /// Uri whose IP is on .env that calls API
     String uri = "${dotenv.env['API_URL']}/delete_data.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
