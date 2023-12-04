@@ -3,6 +3,7 @@ import 'task_management.dart';
 import 'student_management.dart';
 import 'dability.dart';
 
+/// # Home page of Admin
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
 
@@ -11,19 +12,11 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  final ButtonStyle style = ElevatedButton.styleFrom(
-    minimumSize: Size(400, 120),
-    textStyle: const TextStyle(
-      fontSize: 30,
-      color: Colors.black,
-    ),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30),
-    ),
-    backgroundColor: Color(0xFF4A6987),
-    padding: EdgeInsets.symmetric(horizontal: 40),
-  );
 
+  /// Main builder of the page
+  ///
+  /// It contains an appBar and two buttons in a Column
+  /// One goes to student management and the other to task management
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +70,7 @@ class _AdminHomeState extends State<AdminHome> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          /// Button that navigates to [student_management.dart]
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(20),
@@ -94,6 +88,7 @@ class _AdminHomeState extends State<AdminHome> {
               ),
             ),
           ),
+          /// Button that navigates to [task_management.dart]
           Container(
             alignment: Alignment.center,
             padding: EdgeInsets.all(20),
@@ -115,4 +110,18 @@ class _AdminHomeState extends State<AdminHome> {
       ),
     );
   }
+
+  /// Predefined style for buttons
+  final ButtonStyle style = ElevatedButton.styleFrom(
+    minimumSize: Size(400, 120),
+    textStyle: const TextStyle(
+      fontSize: 30,
+      color: Colors.black,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30),
+    ),
+    backgroundColor: Color(0xFF4A6987),
+    padding: EdgeInsets.symmetric(horizontal: 40),
+  );
 }
