@@ -2,22 +2,22 @@ import 'package:dability/student_home.dart';
 import 'package:flutter/material.dart';
 
 class StudentPictoLogin extends StatefulWidget {
-  final int id_alumno;
+  final int idStudent;
 
-  const StudentPictoLogin({Key? key, required this.id_alumno})
+  const StudentPictoLogin({Key? key, required this.idStudent})
       : super(key: key);
 
   @override
   State<StudentPictoLogin> createState() =>
-      _StudentPictoLoginState(id_alumno: this.id_alumno);
+      _StudentPictoLoginState(idStudent: idStudent);
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {
-  final int id_alumno;
+  final int idStudent;
 
-  _StudentPictoLoginState({required this.id_alumno});
+  _StudentPictoLoginState({required this.idStudent});
 
-  List<String> elementos = [];
+  List<String> elements = [];
   String student = "JUAN";
   List<String> students = [];
   List<String> displayedItems = [];
@@ -29,12 +29,12 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
   void initState() {
     super.initState();
     setState(() {
-      elementos.add("Spiderman");
-      elementos.add("Batman");
-      elementos.add("Superman");
-      elementos.add("Pantera");
-      elementos.add("Luffy");
-      elementos.add("Goku");
+      elements.add("Spiderman");
+      elements.add("Batman");
+      elements.add("Superman");
+      elements.add("Pantera");
+      elements.add("Luffy");
+      elements.add("Goku");
 
       students.add("JOAQUIN");
       students.add("MANUEL");
@@ -43,7 +43,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
       students.add("JUAN");
       students.add("ALICIA");
 
-      student = students[id_alumno];
+      student = students[idStudent];
 
       password = ["Spiderman", "Batman", "Superman"];
     });
@@ -130,7 +130,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                       onPressed: () {
                         setState(() {
                           if (displayedItems.length < 3) {
-                            displayedItems.add(elementos[index]);
+                            displayedItems.add(elements[index]);
                           }
                         });
                         // si displayedItems no es igual a password
@@ -157,7 +157,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>
-                                StudentHome(id_alumno: id_alumno)),
+                                StudentHome(idStudent: idStudent)),
                           );
                         }
                       },
@@ -187,7 +187,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                     // Selecciona la imagen en función de la comprobación
                     String imagePath = "";
 
-                    int elementIndex = elementos.indexOf(currentElement);
+                    int elementIndex = elements.indexOf(currentElement);
 
                     if (elementIndex == 0) {
                       imagePath = 'images/spiderman.png';

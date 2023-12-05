@@ -17,14 +17,14 @@ class _AdminLoginState extends State<AdminLogin> {
   TextEditingController _passwordController = TextEditingController();
 
   // Credenciales de prueba
-  String user_email = "prueba@correo.es";
-  String user_password = "123";
+  String userEmail = "prueba@correo.es";
+  String userPassword = "123";
 
   bool loginError = false;
 
 
   bool authenticateUser(String email, String password){
-    if(email == user_email && password == user_password){
+    if(email == userEmail && password == userPassword){
       return true;
     }
 
@@ -162,14 +162,14 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        bool loginCorrecto = authenticateUser(
+                        bool correctLogin = authenticateUser(
                             _emailController.text, _passwordController.text);
 
                         setState(() {
-                          loginError = !loginCorrecto;
+                          loginError = !correctLogin;
                         });
 
-                        if(loginCorrecto){ // se redirecciona
+                        if(correctLogin){ // se redirecciona
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AdminHome()),

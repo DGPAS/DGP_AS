@@ -12,8 +12,6 @@ class StudentManagement extends StatefulWidget {
 
   @override
   State<StudentManagement> createState() => _StudentManagementState();
-
-// _StudentManagementState createState() => _StudentManagementState();
 }
 
 class _StudentManagementState extends State<StudentManagement> {
@@ -78,7 +76,7 @@ class _StudentManagementState extends State<StudentManagement> {
 
     if (query.isNotEmpty) {
       for (var i = 0; i < students.length; i++) {
-        if (students[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
+        if (students[i]['name'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(students[i]);
         }
       }
@@ -202,7 +200,7 @@ class _StudentManagementState extends State<StudentManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  '${displayedItems[index]['nombre']} ${displayedItems[index]['Apellido']}',
+                                  '${displayedItems[index]['name']} ${displayedItems[index]['lastName']}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -217,7 +215,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['nombre'], surname: displayedItems[index]['Apellido'], readCheck: displayedItems[index]['texto'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['foto'])),
+                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['name'], surname: displayedItems[index]['lastName'], readCheck: displayedItems[index]['text'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['picture'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(

@@ -10,7 +10,7 @@ class StudentLogin extends StatefulWidget {
 
 class _StudentLoginState extends State<StudentLogin> {
 
-  List<String> students = []; // lista de tareas
+  List<String> students = []; // lista de estudiantes
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _StudentLoginState extends State<StudentLogin> {
                   // llevarte al alumno seleccionado
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StudentPictoLogin(id_alumno: index)),
+                    MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: index)),
                   );
                 },
                 child: Column(

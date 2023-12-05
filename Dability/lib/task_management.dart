@@ -48,11 +48,11 @@ class _TaskManagementState extends State<TaskManagement> {
   /// It deletes a task with id = [idTareas] from the DataBase
   ///
   /// Throws an [error] if the query fails
-  Future<void> deleteTask(String idTareas) async {
+  Future<void> deleteTask(String idTasks) async {
     /// Uri whose IP is on .env that calls API
     String uri = "${dotenv.env['API_URL']}/delete_data.php";
     try {
-      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+      var res = await http.post(Uri.parse(uri), body: {"idTasks": idTasks});
       var response = jsonDecode(res.body);
       if (response["success"] == true) {
         print("Task deleted");
@@ -98,7 +98,7 @@ class _TaskManagementState extends State<TaskManagement> {
 
     if (query.isNotEmpty) {
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
+        if (tasks[i]['name'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(tasks[i]);
         }
       }
@@ -240,7 +240,7 @@ class _TaskManagementState extends State<TaskManagement> {
                               children: [
                                 /// Name of the task
                                 Text(
-                                  displayedItems[index]['nombre'],
+                                  displayedItems[index]['name'],
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -262,7 +262,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod, title: displayedItems[index]['nombre'], description: displayedItems[index]['descripcion'], idTareas: displayedItems[index]['idTareas'], miniatura: displayedItems[index]['miniatura'])),
+                                                            AddModType.mod, title: displayedItems[index]['name'], description: displayedItems[index]['description'], idTasks: displayedItems[index]['idTasks'], thumbnail: displayedItems[index]['thumbnail'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -299,7 +299,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      deleteTask(displayedItems[index]['idTareas']);
+                                                      deleteTask(displayedItems[index]['idTasks']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },

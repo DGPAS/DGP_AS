@@ -5,15 +5,15 @@ import 'student_task.dart';
 class Task {
   String name;
   String imagePath;
-  int ID;
+  int id;
 
-  Task(this.name, this.imagePath, this.ID);
+  Task(this.name, this.imagePath, this.id);
 }
 
 class ToDoList extends StatefulWidget {
   int counter = 0;
   //Obtener de la BD
-  List<Task> tareas = [
+  List<Task> tasks = [
     Task('Tarea 1', 'images/planTask.png', 1),
     Task('Tarea 2', 'images/microwaveTask.png', 2),
     Task('Tarea 3', 'images/domesticTask.png', 3),
@@ -34,8 +34,8 @@ class ToDoList extends StatefulWidget {
 
   ToDoList(int value) {
     counter = value;
-    numPages = (tareas.length / numTasksPerPage).ceil();
-    isImageVisibleList = List.generate(tareas.length, (index) => false);
+    numPages = (tasks.length / numTasksPerPage).ceil();
+    isImageVisibleList = List.generate(tasks.length, (index) => false);
   }
 
   @override
@@ -50,8 +50,8 @@ class _ToDoListState extends State<ToDoList> {
     int startIndex = (widget.counter - 1) * widget.numTasksPerPage;
     int endIndex = startIndex + widget.numTasksPerPage;
     endIndex =
-    endIndex > widget.tareas.length ? widget.tareas.length : endIndex;
-    List<Task> currentTasks = widget.tareas.sublist(startIndex, endIndex);
+    endIndex > widget.tasks.length ? widget.tasks.length : endIndex;
+    List<Task> currentTasks = widget.tasks.sublist(startIndex, endIndex);
     final double buttonSize = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
@@ -143,7 +143,7 @@ class _ToDoListState extends State<ToDoList> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => StudentTask(currentTasks[i].ID)),
+                                            builder: (context) => StudentTask(currentTasks[i].id)),
                                       );
                                     },
                                     child: Row(

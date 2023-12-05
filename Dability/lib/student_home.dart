@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'to_do_list.dart';
 
 class StudentHome extends StatefulWidget {
-  final int id_alumno;
+  final int idStudent;
 
-  const StudentHome({Key? key, required this.id_alumno}); // deberia recibir el id del alumno
+  const StudentHome({Key? key, required this.idStudent}); // deberia recibir el id del alumno
 
   @override
   State<StudentHome> createState() =>
-      _StudentHomeState(id_alumno: this.id_alumno);
+      _StudentHomeState(idStudent: this.idStudent);
 }
 
 class _StudentHomeState extends State<StudentHome> {
-  final int id_alumno;
+  final int idStudent;
 
-  _StudentHomeState({required this.id_alumno});
+  _StudentHomeState({required this.idStudent});
 
 
   //// esto es de prueba hasta que se tenga la bd
@@ -33,7 +33,7 @@ class _StudentHomeState extends State<StudentHome> {
       students.add("JUAN");
       students.add("ALICIA");
 
-      student = students[id_alumno];
+      student = students[idStudent];
     });
   }
 
@@ -80,7 +80,6 @@ class _StudentHomeState extends State<StudentHome> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Utiliza la función personalizada para manejar la navegación hacia atrás
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) =>
@@ -102,7 +101,7 @@ class _StudentHomeState extends State<StudentHome> {
                   alignment: Alignment.center,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
-                        30.0), // Ajusta el valor para controlar la redondez de los bordes
+                        30.0),
                   ),
                   backgroundColor: Color(0xFF4A6987),
                   padding: EdgeInsets.all(40),
@@ -120,7 +119,7 @@ class _StudentHomeState extends State<StudentHome> {
                       'AGENDA PERSONAL',
                       style: TextStyle(
                         fontSize: 20,
-                      ), // Aplica el estilo del botón al texto
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(

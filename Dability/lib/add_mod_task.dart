@@ -21,16 +21,16 @@ class AddModTask extends StatefulWidget {
       required this.typeForm,
       this.title,
       this.description,
-      this.idTareas,
-      this.miniatura,
+      this.idTasks,
+      this.thumbnail,
       this.videoUrl})
       : super(key: key);
 
   AddModType typeForm;
   String? title;
   String? description;
-  String? idTareas;
-  String? miniatura;
+  String? idTasks;
+  String? thumbnail;
   String? videoUrl;
 
   @override
@@ -38,8 +38,8 @@ class AddModTask extends StatefulWidget {
       typeForm: typeForm,
       title: title,
       description: description,
-      idTareas: idTareas,
-      miniatura: miniatura,
+      idTasks: idTasks,
+      thumbnail: thumbnail,
       videoUrl: videoUrl,
   );
 }
@@ -47,26 +47,25 @@ class AddModTask extends StatefulWidget {
 
 class _AddModTaskState extends State<AddModTask> {
   _AddModTaskState(
-      {required this.typeForm, this.title, this.description, this.idTareas, this.miniatura, this.videoUrl});
+      {required this.typeForm, this.title, this.description, this.idTasks, this.thumbnail, this.videoUrl});
 
   /// Form that contains the name of the task to add or modify
   TextForm titleForm = TextForm(
       requiredField: true,
-      titulo: "Nombre de la tarea",
-      tipo: TextFormType.title);
-
+      title: "Nombre de la tarea",
+      type: TextFormType.title);
   /// Form that contains the description of the task to add or modify
   TextForm descriptionForm = TextForm(
       requiredField: false,
-      titulo: "Descripción general de la tarea",
-      tipo: TextFormType.description);
+      title: "Descripción general de la tarea",
+      type: TextFormType.description);
 
   /// Variables where it will be stored the data of a task
   String? title;
   String? description;
-  String? idTareas;
-  String? miniatura;
-  Image? miniaturaImage;
+  String? idTasks;
+  String? thumbnail;
+  Image? thumbnailImage;
   String? videoUrl;
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
@@ -102,16 +101,16 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.text = description!;
 
     /// If the task exits, it calls [getInitialSteps] and get the actualTaskId
-    if (idTareas != null) {
+    if (idTasks != null) {
       getInitialSteps();
-      actualTaskId = idTareas!;
+      actualTaskId = idTasks!;
     }
 
     /// If the miniature exits, it initializes it
-    if(widget.miniatura != null) {
-     selectedImage = widget.miniatura!;
+    if(widget.thumbnail != null) {
+     selectedImage = widget.thumbnail!;
     }
-    getMiniature();
+    getThumbnail();
     isPressed = false;
   }
 
@@ -122,9 +121,9 @@ class _AddModTaskState extends State<AddModTask> {
   /// Throws an [error] if the query fails
   Future<void> getInitialSteps() async {
     /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTareas";
+    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTasks";
     try {
-      print(idTareas!);
+      print(idTasks!);
       var response = await http.get(
         Uri.parse(uri),
         headers: {
@@ -139,9 +138,9 @@ class _AddModTaskState extends State<AddModTask> {
         // Convertir cada elemento en responseData a ListStep y agregarlo a loadedSteps
         for (var stepData in responseData) {
           loadedSteps.add(ListStep(
-            stepData['numPaso'],
-            stepData['imagen'],
-            stepData['descripcion'],
+            stepData['numStep'],
+            stepData['image'],
+            stepData['description'],
           ));
         }
 
@@ -197,9 +196,9 @@ class _AddModTaskState extends State<AddModTask> {
       String uri = "${dotenv.env['API_URL']}/insert_task.php";
 
         var res = await http.post(Uri.parse(uri), body: {
-          "nombre": title?.trim(),
-          "descripcion": description?.trim(),
-          "miniatura": '',
+          "name": title?.trim(),
+          "description": description?.trim(),
+          "thumbnail": '',
           "video": '',
         });
 
@@ -207,7 +206,7 @@ class _AddModTaskState extends State<AddModTask> {
         if (response["success"] == "true") {
           print("Datos insertados");
 
-          int newTaskId = response["idTareas"];
+          int newTaskId = response["idTasks"];
           print("Nuevo idTareas: $newTaskId");
           setState(() {
             actualTaskId = newTaskId.toString();
@@ -234,10 +233,10 @@ class _AddModTaskState extends State<AddModTask> {
       print('Datos a enviar: numPaso: ${step.numStep}, idTarea: $actualTaskId, description: ${step.description}, imagen: ${step.image}');
 
       var res = await http.post(Uri.parse(uri), body: {
-        "numPaso": step.numStep.toString(),
-        "idTarea": actualTaskId,
-        "descripcion": step.description,
-        "imagen": step.image
+        "numStep": step.numStep.toString(),
+        "idTask": actualTaskId,
+        "description": step.description,
+        "image": step.image
       });
 
       var response = jsonDecode(res.body);
@@ -265,9 +264,9 @@ class _AddModTaskState extends State<AddModTask> {
       print("Datos a modificar: ${title}, ${description}");
 
       var res=await http.post(Uri.parse(uri),body: {
-        "idTareas": idTareas,
-        "nombre": title?.trim(),
-        "descripcion": description?.trim(),
+        "idTasks": idTareas,
+        "name": title?.trim(), // nombre
+        "description": description?.trim(),
       });
 
       var response=jsonDecode(res.body);
@@ -296,7 +295,7 @@ class _AddModTaskState extends State<AddModTask> {
     try {
       var res=await http.post(Uri.parse(uri),body: {
         "steps": jsonEncode(steps.map((step) => step.toJson()).toList()),
-        "idTarea": idTareas,
+        "idTask": idTasks,
       });
 
       var response=jsonDecode(res.body);
@@ -325,7 +324,7 @@ class _AddModTaskState extends State<AddModTask> {
 
     try {
       var request = http.MultipartRequest('POST', Uri.parse(uri));
-      request.fields['idTareas'] = actualTaskId;
+      request.fields['idTasks'] = actualTaskId;
       var picture = await http.MultipartFile.fromPath("image", selectedImage);
       request.files.add(picture);
       var response = await request.send();
@@ -365,7 +364,7 @@ class _AddModTaskState extends State<AddModTask> {
       // Esto puede variar según el emulador que estés utilizando
 
       // Simplemente usa el path del video seleccionado
-      request.fields['idTareas'] = actualTaskId;
+      request.fields['idTasks'] = actualTaskId;
       var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
       request.files.add(videoFile);
 
@@ -385,11 +384,11 @@ class _AddModTaskState extends State<AddModTask> {
 
   /// Function that updates the miniature task by searching it on
   /// API images directory
-  void getMiniature() {
-      setState(() {
-        miniaturaImage = Image.network("${dotenv.env['API_URL']}/images/$miniatura");
-      });
-    }
+  void getThumbnail() {
+    setState(() {
+      thumbnailImage = Image.network("${dotenv.env['API_URL']}/images/$thumbnail");
+    });
+  }
 
 
   /// Function that returns the title of [AppBar]
@@ -436,7 +435,7 @@ class _AddModTaskState extends State<AddModTask> {
       return const Image(
           image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
     } else {
-      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.miniatura)) {
+      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.thumbnail)) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       } else {
         return Image.network("${dotenv.env['API_URL']}/images/$urlPath", fit: BoxFit.cover);
@@ -900,7 +899,7 @@ class _AddModTaskState extends State<AddModTask> {
                   (description == '' || description == null)) {
                   print("Los campos titulo y descripción son obligatorios");
                   } else {
-                    submitForm(idTareas);
+                    submitForm(idTasks);
                     Navigator.of(context).pop();
                   }
                 },
