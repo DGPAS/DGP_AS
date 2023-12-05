@@ -55,13 +55,13 @@ class _AddModTaskState extends State<AddModTask> {
   // Formulario para el titulo de la tarea
   TextForm titleForm = TextForm(
       requiredField: true,
-      titulo: "Nombre de la tarea",
-      tipo: TextFormType.title);
+      title: "Nombre de la tarea",
+      type: TextFormType.title);
   // Formulario para la descripción de la tarea
   TextForm descriptionForm = TextForm(
       requiredField: false,
-      titulo: "Descripción general de la tarea",
-      tipo: TextFormType.description);
+      title: "Descripción general de la tarea",
+      type: TextFormType.description);
 
   // Variables donde se almacenará el valor del titulo y la descripcion
   String? title;
@@ -131,9 +131,9 @@ class _AddModTaskState extends State<AddModTask> {
         // Convertir cada elemento en responseData a ListStep y agregarlo a loadedSteps
         for (var stepData in responseData) {
           loadedSteps.add(ListStep(
-            stepData['numPaso'],
-            stepData['imagen'],
-            stepData['descripcion'],
+            stepData['numStep'],
+            stepData['image'],
+            stepData['description'],
           ));
         }
 
@@ -172,9 +172,9 @@ class _AddModTaskState extends State<AddModTask> {
         String uri = "${dotenv.env['API_URL']}/insert_task.php";
 
         var res = await http.post(Uri.parse(uri), body: {
-          "nombre": title?.trim(),
-          "descripcion": description?.trim(),
-          "miniatura": '',
+          "name": title?.trim(),
+          "description": description?.trim(),
+          "thumbnail": '',
           "video": '',
         });
 
@@ -182,7 +182,7 @@ class _AddModTaskState extends State<AddModTask> {
         if (response["success"] == "true") {
           print("Datos insertados");
 
-          int newTaskId = response["idTareas"];
+          int newTaskId = response["idTasks"];
           print("Nuevo idTareas: $newTaskId");
           setState(() {
             actualTaskId = newTaskId.toString();
@@ -202,10 +202,10 @@ class _AddModTaskState extends State<AddModTask> {
       print('Datos a enviar: numPaso: ${step.numStep}, idTarea: $actualTaskId, description: ${step.description}, imagen: ${step.image}');
 
       var res = await http.post(Uri.parse(uri), body: {
-        "numPaso": step.numStep.toString(),
-        "idTarea": actualTaskId,
-        "descripcion": step.description,
-        "imagen": step.image
+        "numStep": step.numStep.toString(),
+        "idTask": actualTaskId,
+        "description": step.description,
+        "image": step.image
       });
 
       var response = jsonDecode(res.body);
@@ -226,9 +226,9 @@ class _AddModTaskState extends State<AddModTask> {
       print("Datos a modificar: ${title}, ${description}");
 
       var res=await http.post(Uri.parse(uri),body: {
-        "idTareas": idTareas,
-        "nombre": title?.trim(),
-        "descripcion": description?.trim(),
+        "idTasks": idTareas,
+        "name": title?.trim(), // nombre
+        "description": description?.trim(),
       });
 
       var response=jsonDecode(res.body);
@@ -250,7 +250,7 @@ class _AddModTaskState extends State<AddModTask> {
     try {
       var res=await http.post(Uri.parse(uri),body: {
         "steps": jsonEncode(steps.map((step) => step.toJson()).toList()),
-        "idTarea": idTasks,
+        "idTask": idTasks,
       });
 
       var response=jsonDecode(res.body);
@@ -272,7 +272,7 @@ class _AddModTaskState extends State<AddModTask> {
     try {
 
       var request = http.MultipartRequest('POST', Uri.parse(uri));
-      request.fields['idTareas'] = actualTaskId;
+      request.fields['idTasks'] = actualTaskId;
       var picture = await http.MultipartFile.fromPath("image", selectedImage);
       request.files.add(picture);
       var response = await request.send();
@@ -304,7 +304,7 @@ class _AddModTaskState extends State<AddModTask> {
     // Esto puede variar según el emulador que estés utilizando
 
     // Simplemente usa el path del video seleccionado
-    request.fields['idTareas'] = actualTaskId;
+    request.fields['idTasks'] = actualTaskId;
     var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
     request.files.add(videoFile);
 

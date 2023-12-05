@@ -7,9 +7,9 @@ class ListStep {
 
   Map<String, dynamic> toJson() {
     return {
-      'numPaso': numStep,
-      'imagen': image,
-      'descripcion': description,
+      'numStep': numStep,
+      'image': image,
+      'description': description,
     };
   }
 }

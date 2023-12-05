@@ -12,10 +12,10 @@ class ViewData extends StatefulWidget {
 class _ViewDataState extends State<ViewData> {
   List<dynamic> userdata = [];
 
-  Future<void> delRecord(String idTareas) async {
+  Future<void> delRecord(String idTasks) async {
     String uri = "http://10.0.2.2:80/delete_data.php";
     try {
-      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+      var res = await http.post(Uri.parse(uri), body: {"idTasks": idTasks});
       var response = jsonDecode(res.body);
       if (response["success"] == true) {
         print("Record deleted");

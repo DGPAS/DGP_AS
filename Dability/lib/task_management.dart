@@ -39,10 +39,10 @@ class _TaskManagementState extends State<TaskManagement> {
   }
 
   // Funcion que borra una tarea concreta de la base de datos
-  Future<void> deleteTask(String idTareas) async {
+  Future<void> deleteTask(String idTasks) async {
     String uri = "${dotenv.env['API_URL']}/delete_data.php";
     try {
-      var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+      var res = await http.post(Uri.parse(uri), body: {"idTasks": idTasks});
       var response = jsonDecode(res.body);
       if (response["success"] == true) {
         print("Task deleted");
@@ -56,7 +56,7 @@ class _TaskManagementState extends State<TaskManagement> {
     }
   }
 
-  double maxWidt = 500;
+  double maxWidth = 500;
 
   List<dynamic> displayedItems = [];
 
@@ -77,7 +77,7 @@ class _TaskManagementState extends State<TaskManagement> {
 
     if (query.isNotEmpty) {
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i]['nombre'].toLowerCase().contains(query.toLowerCase())) {
+        if (tasks[i]['name'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(tasks[i]);
         }
       }
@@ -174,7 +174,7 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
                 height: 400,
                 width: (MediaQuery.of(context).size.width - 30)
-                    .clamp(0.0, maxWidt.toDouble()),
+                    .clamp(0.0, maxWidth.toDouble()),
                 padding:
                     EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
                 child: ListView(children: [
@@ -209,7 +209,7 @@ class _TaskManagementState extends State<TaskManagement> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index]['nombre'],
+                                  displayedItems[index]['name'],
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -230,7 +230,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod, title: displayedItems[index]['nombre'], description: displayedItems[index]['descripcion'], idTasks: displayedItems[index]['idTareas'], thumbnail: displayedItems[index]['miniatura'])),
+                                                            AddModType.mod, title: displayedItems[index]['name'], description: displayedItems[index]['description'], idTasks: displayedItems[index]['idTasks'], thumbnail: displayedItems[index]['thumbnail'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -264,7 +264,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      deleteTask(displayedItems[index]['idTareas']);
+                                                      deleteTask(displayedItems[index]['idTasks']);
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },

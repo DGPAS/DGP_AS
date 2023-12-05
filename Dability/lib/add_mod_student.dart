@@ -58,12 +58,12 @@ class _AddModStudentState extends State<AddModStudent> {
   // Formulario para el nombre del estudiante
   TextForm nameForm = TextForm(
       requiredField: true,
-      titulo: "Nombre del Estudiante",
-      tipo: TextFormType.title);
+      title: "Nombre del Estudiante",
+      type: TextFormType.title);
   TextForm surnameForm = TextForm(
       requiredField: true,
-      titulo: "Apellido del Estudiante",
-      tipo: TextFormType.title);
+      title: "Apellido del Estudiante",
+      type: TextFormType.title);
 
   @override
   void initState() {
@@ -142,9 +142,9 @@ class _AddModStudentState extends State<AddModStudent> {
         print("Contraseña obtenida");
 
         setState(() {
-          selectedPasswd[1] = response["data"]["pictograma1"].toString() ?? '';
-          selectedPasswd[2] = response["data"]["pictograma2"].toString() ?? '';
-          selectedPasswd[3] = response["data"]["pictograma3"].toString() ?? '';
+          selectedPasswd[1] = response["data"]["pictogram1"].toString() ?? '';
+          selectedPasswd[2] = response["data"]["pictogram2"].toString() ?? '';
+          selectedPasswd[3] = response["data"]["pictogram3"].toString() ?? '';
           selectedDBPasswd[1] = selectedPasswd[1];
           selectedDBPasswd[2] = selectedPasswd[2];
           selectedDBPasswd[3] = selectedPasswd[3];
@@ -162,10 +162,10 @@ class _AddModStudentState extends State<AddModStudent> {
       String uri = "${dotenv.env['API_URL']}/insert_student.php";
 
       var res = await http.post(Uri.parse(uri), body: {
-        "nombre": nameStudent,
-        "Apellido": surnameStudent,
-        "foto": '',
-        "texto": readCheck.toString() == 'true' ? '1' : '0',
+        "firstName": nameStudent, // nombre
+        "lastName": surnameStudent, // Apellido
+        "picture": '', // foto
+        "text": readCheck.toString() == 'true' ? '1' : '0',
         "audio": soundCheck.toString() == 'true' ? '1' : '0',
         "video": videoCheck.toString() == 'true' ? '1' : '0',
       });
@@ -215,13 +215,13 @@ class _AddModStudentState extends State<AddModStudent> {
         var request = http.MultipartRequest('POST', Uri.parse(uri));
         request.fields['idStudent'] = actualStudentId;
         var pictogram1 = await http.MultipartFile.fromPath(
-            "pictograma1", selectedPasswd[1]);
+            "pictogram1", selectedPasswd[1]);
         request.files.add(pictogram1);
         var pictogram2 = await http.MultipartFile.fromPath(
-            "pictograma2", selectedPasswd[2]);
+            "pictogram2", selectedPasswd[2]);
         request.files.add(pictogram2);
         var pictogram3 = await http.MultipartFile.fromPath(
-            "pictograma3", selectedPasswd[3]);
+            "pictogram3", selectedPasswd[3]);
         request.files.add(pictogram3);
         var response = await request.send();
 
@@ -242,13 +242,13 @@ class _AddModStudentState extends State<AddModStudent> {
       var request = http.MultipartRequest('POST', Uri.parse(uri));
       request.fields['idStudent'] = actualStudentId;
       var pictogram1 = await http.MultipartFile.fromPath(
-          "pictograma1", selectedPasswd[1]);
+          "pictogram1", selectedPasswd[1]);
       request.files.add(pictogram1);
       var pictogram2 = await http.MultipartFile.fromPath(
-          "pictograma2", selectedPasswd[2]);
+          "pictogram2", selectedPasswd[2]);
       request.files.add(pictogram2);
       var pictogram3 = await http.MultipartFile.fromPath(
-          "pictograma3", selectedPasswd[3]);
+          "pictogram3", selectedPasswd[3]);
       request.files.add(pictogram3);
       var response = await request.send();
 
@@ -269,9 +269,9 @@ class _AddModStudentState extends State<AddModStudent> {
     try {
       var res=await http.post(Uri.parse(uri),body: {
         "idStudent": idStudent,
-        "nombre": nameStudent,
-        "Apellido": surnameStudent,
-        "texto": readCheck.toString() == 'true' ? '1' : '0',
+        "firstName": nameStudent, // nombre
+        "lastName": surnameStudent,
+        "text": readCheck.toString() == 'true' ? '1' : '0',
         "audio": soundCheck.toString() == 'true' ? '1' : '0',
         "video": videoCheck.toString() == 'true' ? '1' : '0',
       });

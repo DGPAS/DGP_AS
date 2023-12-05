@@ -19,12 +19,12 @@ class StepsTaskForm extends StatefulWidget {
 
   @override
   State<StepsTaskForm> createState() =>
-      _StepsTaskFormState(requiredField: requiredField, steps: steps);
+      _StepsTaskFormState(isRequiredField: requiredField, steps: steps);
 }
 
 class _StepsTaskFormState extends State<StepsTaskForm> {
-  String campoRequerido = "* Campo requerido";
-  final bool requiredField;
+  String requiredField = "* Campo requerido";
+  final bool isRequiredField;
   // Lista para almacenar los pictogramas con descripcion
   List<ListStep> steps;
 
@@ -36,15 +36,15 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     'Ejemplo de descripcion imagen 1'
   ];
   final descriptionController = TextEditingController();
-  final TextEditingController _numPaso = TextEditingController();
+  final TextEditingController _numStep = TextEditingController();
   TextForm textForm = TextForm(
       requiredField: false,
-      titulo: "Descripcion del pictograma",
-      tipo: TextFormType.description);
+      title: "Descripcion del pictograma",
+      type: TextFormType.description);
   bool error = false;
 
   // Constructor de la clase state
-  _StepsTaskFormState({required this.requiredField, required this.steps});
+  _StepsTaskFormState({required this.isRequiredField, required this.steps});
 
   void _getLastDescriptionValue() {
     actualDescription = descriptionController.text;
@@ -152,7 +152,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                     filled: true,
                     fillColor: Colors.white,
                     contentPadding: EdgeInsets.fromLTRB(10, 20, 0, 200),
-                    helperText: requiredField ? campoRequerido : null,
+                    helperText: isRequiredField ? requiredField : null,
                     alignLabelWithHint: true,
                   ),
                   textAlignVertical: TextAlignVertical.top,
@@ -207,7 +207,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                     width: 50,
                     child: TextFormField(
                       keyboardType: TextInputType.number,
-                      controller: _numPaso,
+                      controller: _numStep,
                       onChanged: (String value) {
                         if (int.parse(value) < 1) {
                           setState(() {
@@ -236,7 +236,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                   backgroundColor: Color(0xFF4A6987),
                 ),
                 onPressed: () {
-                  int numStep = (int.parse(_numPaso.text));
+                  int numStep = (int.parse(_numStep.text));
                   // Buscamos el paso según el numStep
                   var existingStep = steps.firstWhere(
                       (step) => step.numStep == numStep,

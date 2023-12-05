@@ -9,7 +9,7 @@ class StudentPictoLogin extends StatefulWidget {
 
   @override
   State<StudentPictoLogin> createState() =>
-      _StudentPictoLoginState(idStudent: this.idStudent);
+      _StudentPictoLoginState(idStudent: idStudent);
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {

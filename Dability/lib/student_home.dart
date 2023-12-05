@@ -80,7 +80,6 @@ class _StudentHomeState extends State<StudentHome> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Utiliza la función personalizada para manejar la navegación hacia atrás
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) =>
@@ -102,7 +101,7 @@ class _StudentHomeState extends State<StudentHome> {
                   alignment: Alignment.center,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
-                        30.0), // Ajusta el valor para controlar la redondez de los bordes
+                        30.0),
                   ),
                   backgroundColor: Color(0xFF4A6987),
                   padding: EdgeInsets.all(40),
@@ -120,7 +119,7 @@ class _StudentHomeState extends State<StudentHome> {
                       'AGENDA PERSONAL',
                       style: TextStyle(
                         fontSize: 20,
-                      ), // Aplica el estilo del botón al texto
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(

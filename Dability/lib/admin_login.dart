@@ -17,14 +17,14 @@ class _AdminLoginState extends State<AdminLogin> {
   TextEditingController _passwordController = TextEditingController();
 
   // Credenciales de prueba
-  String user_email = "prueba@correo.es";
-  String user_password = "123";
+  String userEmail = "prueba@correo.es";
+  String userPassword = "123";
 
   bool loginError = false;
 
 
   bool authenticateUser(String email, String password){
-    if(email == user_email && password == user_password){
+    if(email == userEmail && password == userPassword){
       return true;
     }
 

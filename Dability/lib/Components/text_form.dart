@@ -5,16 +5,16 @@ import 'package:dability/Components/enum_types.dart';
 
 class TextForm extends StatefulWidget {
   final bool requiredField;
-  final String titulo;
-  final TextFormType tipo;
+  final String title;
+  final TextFormType type;
   String text = "";
   String? originalText;
 
   TextForm(
       {Key? key,
       required this.requiredField,
-      required this.titulo,
-      required this.tipo,
+      required this.title,
+      required this.type,
       this.originalText})
       : super(key: key);
 
@@ -24,24 +24,24 @@ class TextForm extends StatefulWidget {
 
   @override
   State<TextForm> createState() => _TextFormState(
-      requiredField: requiredField,
-      titulo: titulo,
-      tipo: tipo,
+      isRequiredField: requiredField,
+      title: title,
+      type: type,
       originalText: originalText);
 }
 
 class _TextFormState extends State<TextForm> {
   final _formKey = GlobalKey<FormState>();
-  String campoRequerido = "* Campo requerido";
-  String titulo = "";
-  TextFormType tipo = TextFormType.title;
-  final bool requiredField;
+  String requiredField = "* Campo requerido";
+  String title = "";
+  TextFormType type = TextFormType.title;
+  final bool isRequiredField;
   String? originalText;
 
   _TextFormState(
-      {required this.requiredField,
-      required this.titulo,
-      required this.tipo,
+      {required this.isRequiredField,
+      required this.title,
+      required this.type,
       this.originalText});
 
   TextEditingController controller = TextEditingController();
@@ -72,9 +72,9 @@ class _TextFormState extends State<TextForm> {
 
   double getContentPadding() {
 
-    if (tipo == TextFormType.title) {
+    if (type == TextFormType.title) {
       return 12.0;
-    } else if (tipo == TextFormType.description) {
+    } else if (type == TextFormType.description) {
       return 200.0;
     } else {
       return 12.0; // Valor por defecto
@@ -90,7 +90,7 @@ class _TextFormState extends State<TextForm> {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              '$titulo${requiredField ? ' *' : ''}',
+              '$title${isRequiredField ? ' *' : ''}',
             ),
           ),
           TextFormField(
@@ -102,7 +102,7 @@ class _TextFormState extends State<TextForm> {
               contentPadding:
                   EdgeInsets.fromLTRB(10, 20, 0, getContentPadding()),
 
-              helperText: requiredField ? campoRequerido : null,
+              helperText: isRequiredField ? requiredField : null,
               alignLabelWithHint: true,
             ),
             textAlignVertical: TextAlignVertical.top,

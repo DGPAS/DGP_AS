@@ -73,10 +73,10 @@
       }
     }
 
-    Future<void> deleteTask(String idTareas) async {
+    Future<void> deleteTask(String idTasks) async {
       String uri = "http://10.0.2.2:80/delete_data.php";
       try {
-        var res = await http.post(Uri.parse(uri), body: {"idTareas": idTareas});
+        var res = await http.post(Uri.parse(uri), body: {"idTasks": idTasks});
         var response = jsonDecode(res.body);
         if (response["success"] == true) {
           print("Task deleted");
@@ -109,20 +109,20 @@
             return Card(
               margin: EdgeInsets.all(10),
               child: ListTile(
-                title: Text(userdata[index]['idTareas'].toString()),
+                title: Text(userdata[index]['idTasks'].toString()),
                 subtitle: Text(
-                  'nombre: ${userdata[index]['nombre']}\n'
-                  'realizada: ${userdata[index]['realizada']}\n'
-                  'descripción: ${userdata[index]['descripción']}\n'
-                  'inicio: ${userdata[index]['inicio']}\n'
-                  'final: ${userdata[index]['final']}\n'
+                  'name: ${userdata[index]['name']}\n'
+                  'done: ${userdata[index]['done']}\n'
+                  'description: ${userdata[index]['description']}\n'
+                  'start: ${userdata[index]['start']}\n'
+                  'end: ${userdata[index]['end']}\n'
                   'agenda_id: ${userdata[index]['agenda_id']}\n'
-                  'miniatura: ${userdata[index]['miniatura']}\n',
+                  'thumbnail: ${userdata[index]['thumbnail']}\n',
                 ),
                 trailing: ElevatedButton(
                   onPressed: () {
                     // Call the deleteTask function when the button is pressed
-                    deleteTask(userdata[index]['idTareas'].toString());
+                    deleteTask(userdata[index]['idTasks'].toString());
                   },
                   child: Text('Eliminar'),
                 ),
@@ -174,13 +174,13 @@
           print("Datos a enviar: ${nameController.text}, ${doneValue ? "1" : "0"}, ${descriptionController.text}, $startDate, $finalDate, ${agendaIdController.text}, ${thumbnailController.text}");
 
           var res = await http.post(Uri.parse(uri), body: {
-            "nombre": nameController.text.trim(),
-            "realizada": doneValue != null ? (doneValue ? "1" : "0") : "0",
-            "descripcion": descriptionController.text.trim(),
-            "inicio": startDate ?? "",
-            "final": finalDate ?? "",
+            "name": nameController.text.trim(),
+            "done": doneValue != null ? (doneValue ? "1" : "0") : "0",
+            "description": descriptionController.text.trim(),
+            "start": startDate ?? "",
+            "end": finalDate ?? "",
             "agenda_id": agendaIdController.text.trim(),
-            "miniatura": thumbnailController.text.trim(),
+            "thumbnail": thumbnailController.text.trim(),
           });
 
           var response = jsonDecode(res.body);
