@@ -6,6 +6,7 @@ import 'Components/enum_types.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+/// # Page where admin manages tasks
 class TaskManagement extends StatefulWidget {
   const TaskManagement({super.key});
 
@@ -17,7 +18,7 @@ class _TaskManagementState extends State<TaskManagement> {
   /// Text controller for task filter
   ///
   /// If the text on the filter changes, it stores changes
-  /// TODO: NO ES NECESARIO ESTE CONTROLLER PORQUE NO SE USA
+  /// TODO: CREO NO ES NECESARIO ESTE CONTROLLER PORQUE NO SE USA
   TextEditingController _controller = TextEditingController();
 
   /// List that stores tasks form DataBase
@@ -45,7 +46,7 @@ class _TaskManagementState extends State<TaskManagement> {
     }
   }
 
-  /// It deletes a task with id = [idTareas] from the DataBase
+  /// It deletes a task with id = [idTasks] from the DataBase
   ///
   /// Throws an [error] if the query fails
   Future<void> deleteTask(String idTasks) async {
@@ -89,8 +90,8 @@ class _TaskManagementState extends State<TaskManagement> {
     getData();
   }
 
-  /// Function that filters the list of this whose name matches
-  /// or contains [query] updating [displayedItems]
+  /// Function that filters the list of tasks whose name matches
+  /// or contains [query] by updating [displayedItems]
   ///
   /// If they don't match, it adds all tasks to [displayedItems]
   void filterSearchResults(String query) {

@@ -100,7 +100,7 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.originalText = description;
     descriptionForm.text = description!;
 
-    /// If the task exits, it calls [getInitialSteps] and get the actualTaskId
+    /// If the task exists, it calls [getInitialSteps] and get the actualTaskId
     if (idTasks != null) {
       getInitialSteps();
       actualTaskId = idTasks!;
@@ -135,7 +135,6 @@ class _AddModTaskState extends State<AddModTask> {
         List<dynamic> responseData = json.decode(response.body);
         List<ListStep> loadedSteps = [];
 
-        // Convertir cada elemento en responseData a ListStep y agregarlo a loadedSteps
         for (var stepData in responseData) {
           loadedSteps.add(ListStep(
             stepData['numStep'],
@@ -163,7 +162,7 @@ class _AddModTaskState extends State<AddModTask> {
   /// each step in [steps], it adds each one
   ///
   /// If it is modifying a task, it updates the task by
-  /// its id [idTareas], it update the miniature and
+  /// its id [idTareas], it updates the miniature and
   /// it updates its steps
   Future<void> submitForm (String? idTareas) async {
     if (typeForm == AddModType.add) {
