@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'task_steps.dart';
+
+/// # Page to show a task
 class StudentTask extends StatefulWidget {
   //const StudentTask({super.key});
 
@@ -24,6 +26,7 @@ class _StudentTaskState extends State<StudentTask> {
             children: [
               Image.asset('images/DabilityLogo.png', width: 48, height: 48),
               const Expanded(
+                /// Task title on AppBar
                 child: Text(
                   'PONER MICROONDAS',
                   textAlign: TextAlign.center,
@@ -76,6 +79,7 @@ class _StudentTaskState extends State<StudentTask> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  /// Task title Box
                   Container(
                       width: MediaQuery.of(context).size.width * 0.75,
                       height: MediaQuery.of(context).size.height * 0.125,
@@ -155,6 +159,7 @@ class _StudentTaskState extends State<StudentTask> {
                 ],
               ),
             ),
+            /// Container for description task
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -188,6 +193,7 @@ class _StudentTaskState extends State<StudentTask> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, //MainAxisAlignment.spaceBetween
               children: [
+                /// Tutorial video task
                 if (widget.URLVideo != "")
                   Column(
                     children: [
@@ -201,6 +207,7 @@ class _StudentTaskState extends State<StudentTask> {
                       //Aquí iría el vídeo
                     ],
                   ),
+                /// Button to access to [task_steps.dart]
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.only(

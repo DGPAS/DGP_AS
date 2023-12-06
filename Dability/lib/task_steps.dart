@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-
+/// # Page to see each step of a task
 class TaskSteps extends StatefulWidget {
 
   @override
@@ -25,6 +25,7 @@ class _TaskStepsState extends State<TaskSteps> {
         title: Row(
           children: [
             Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            /// Task title on AppBar
             const Expanded(
               child: Text(
                 'TAREA',
@@ -79,7 +80,7 @@ class _TaskStepsState extends State<TaskSteps> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-
+                  /// Step Task Image
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -92,7 +93,7 @@ class _TaskStepsState extends State<TaskSteps> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.025,
                   ),
-
+                  /// Step description
                   Wrap(
                     alignment: WrapAlignment.center,
                     children: [
@@ -111,6 +112,7 @@ class _TaskStepsState extends State<TaskSteps> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.025,
                   ),
+                  /// Button to achieve the step
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -163,6 +165,7 @@ class _TaskStepsState extends State<TaskSteps> {
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
 
+                  /// Button to go to the previous or the next step
                   Row(
                     mainAxisAlignment: widget.index == 0
                         ? MainAxisAlignment.end

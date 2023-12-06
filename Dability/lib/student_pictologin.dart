@@ -1,6 +1,10 @@
 import 'package:dability/student_home.dart';
 import 'package:flutter/material.dart';
 
+/// # Student pictologin to access with his/her credentials
+///
+/// It shows 6 pictures on top and the student can select 3 of them,
+/// which will appear on bottom
 class StudentPictoLogin extends StatefulWidget {
   final int idStudent;
 
@@ -20,6 +24,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
   List<String> elements = [];
   String student = "JUAN";
   List<String> students = [];
+  /// It stores the pictures selected by the student
   List<String> displayedItems = [];
   List<String> password = [];
 
@@ -96,6 +101,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
         child: Column(
           children: [
             Expanded(
+              /// Grid that shows all the picto-password
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
@@ -133,15 +139,15 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                             displayedItems.add(elements[index]);
                           }
                         });
-                        // si displayedItems no es igual a password
+                        /// if displayedItems is not equal to  password
                         for (int i = 0; i < displayedItems.length; i++) {
                           if (displayedItems[i] != password[i]) {
-                            // si deja de coincidir
+                            /// if picto-passwords doesn't match it shows an X
                             setState(() {
                               displayedItems.clear();
                               showError = true;
                             });
-                            // Después de 1 segundo, ocultar la X
+                            /// After 1 seconds, the X dissappear
                             Future.delayed(Duration(seconds: 1), () {
                               setState(() {
                                 showError = false;
@@ -153,7 +159,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                         }
 
                         if(displayedItems.length == 3){
-                          // contraseña correcta
+                          /// If the password is Ok, it goes to the [student_home.dart]
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>
@@ -171,7 +177,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 },
               ),
             ),
-            // Container para mostrar las imágenes correspondientes a displayedItems
+            /// Container to show the [displayedItems] pictures
             Container(
               height: 200,
               width: MediaQuery.sizeOf(context).width,
@@ -215,7 +221,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                       ],
                     );
                   }),
-                  // Container para mostrar la X en caso de error
+                  /// Container show the X if it the password doesn't match
                   Visibility(
                     visible: showError,
                     child: Container(
@@ -233,6 +239,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 ],
               ),
             ),
+            // TODO: Quitar boton limpiar
             ElevatedButton(
               onPressed: () {
                 setState(() {
