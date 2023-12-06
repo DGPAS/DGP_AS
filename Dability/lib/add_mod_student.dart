@@ -9,6 +9,10 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+/// # Page for add or modify an student
+///
+/// It receives a required param [typeForm] that indicates if it is
+/// for add an student or modify the given one with [student]
 class AddModStudent extends StatefulWidget {
   AddModStudent({
     Key? key,
@@ -39,8 +43,12 @@ class _AddModStudentState extends State<AddModStudent> {
   TextEditingController _controller = TextEditingController();
   List<String> displayedItems = [];
 
+  /// Array of static tasks (it should be the array of tasks from Diary in DB)
   List<String> tasks = [];
+
   AddModType typeForm = AddModType.add;
+
+  /// Variables where it will be stored the data of an student
   String? id;
   String actualStudentId = '';
   String title = "Añadir Estudiante";
@@ -52,22 +60,30 @@ class _AddModStudentState extends State<AddModStudent> {
   bool? videoCheck = false;
   bool? soundCheck = false;
 
+  /// Lists that store and manage the password of an student
   List<String> selectedPasswd = ['','','',''];
   List<String> selectedDBPasswd = ['','','',''];
 
-  // Formulario para el nombre del estudiante
+  /// Form that contains the name of the student to add or modify
   TextForm nameForm = TextForm(
       requiredField: true,
       title: "Nombre del Estudiante",
       type: TextFormType.title);
+  /// Form that contains the surname of the student to add or modify
   TextForm surnameForm = TextForm(
       requiredField: true,
       title: "Apellido del Estudiante",
       type: TextFormType.title);
 
+  /// Init State
+  ///
+  /// Initialize the student password and its tasks, if it has,
+  /// by calling [getStudentPassword] and [funtion calls API for student Diary]
   @override
   void initState() {
     super.initState();
+    /// Local implementation (it should call a function that
+    /// calls API to get student tasks from Diary table)
     tasks.add("Tarea 1");
     tasks.add("Tarea 2");
     tasks.add("Tarea 3");
@@ -78,6 +94,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
     typeForm = widget.typeForm;
 
+    /// If the student exists, it saves his actual id
     id = widget.idStudent;
     if (id != null) {
       actualStudentId = id!;
@@ -86,6 +103,7 @@ class _AddModStudentState extends State<AddModStudent> {
     nameStudent = widget.name;
     surnameStudent = widget.surname;
 
+    /// It stores the "format attributes" of the student
     if (widget.readCheck != null) {
       if (widget.readCheck == '0') {
         readCheck = false;
@@ -110,14 +128,18 @@ class _AddModStudentState extends State<AddModStudent> {
       }
     }
 
+    /// If the student exists, it saves the photo form DB
     if (widget.photo != null) {
       selectedPhoto = widget.photo!;
     }
 
+    /// If the student exists, it get his password
     if (typeForm == AddModType.mod) {
       getStudentPassword();
     }
 
+    /// If name or surname are null it means that we are adding an student,
+    /// not modifying him/her, so the values are initialized by the controllers
     nameStudent ??= nameForm.getText();
     surnameStudent ??= surnameForm.getText();
 
@@ -126,12 +148,16 @@ class _AddModStudentState extends State<AddModStudent> {
     nameForm.text = nameStudent!;
     surnameForm.text = surnameStudent!;
 
-
+    /// Get the AppBar title
     getTitle();
 
     displayedItems.addAll(tasks);
   }
 
+  /// Function that saves the student password on a [String] list [selectedPasswd] and [selectedDBPasswd] of the
+  /// existing student with id = [actualStudentId] from DataBase
+  ///
+  /// Throws an [error] if the query fails
   Future<void> getStudentPassword() async {
     String uri = "${dotenv.env['API_URL']}/view_student_password.php?idStudent=$actualStudentId";
     try {
@@ -157,6 +183,11 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  /// Function that inserts an student on DataBase by calling an API function
+  ///
+  /// It adds its name, its lastname, the picture string and the format attributes
+  ///
+  /// Throws an [error] if the query fails
   Future<void> insertStudent() async {
     try {
       String uri = "${dotenv.env['API_URL']}/insert_student.php";
@@ -181,16 +212,21 @@ class _AddModStudentState extends State<AddModStudent> {
       } else {
         print("Datos no insertados");
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 
+  /// Function that uploads the photo of an student on API directory
+  /// by calling an API function
+  ///
+  /// It uploads it with [_photo] by [actualStudentId]
+  ///
+  /// Throws an [error] if the query fails
   Future<void> uploadPhoto() async {
     String uri = "${dotenv.env['API_URL']}/upload_student_photo.php";
 
     try {
-
       var request = http.MultipartRequest('POST', Uri.parse(uri));
       request.fields['idStudent'] = actualStudentId;
       var picture = await http.MultipartFile.fromPath("image", _photo!.path);
@@ -204,11 +240,17 @@ class _AddModStudentState extends State<AddModStudent> {
         print("Error en la subida");
       }
 
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 
+  /// Function that uploads the password of an student on API directory
+  /// by calling an API function
+  ///
+  /// It uploads it with [selectedPasswd] by [actualStudentId]
+  ///
+  /// Throws an [error] if the query fails
   Future<void> uploadPassword() async {
     String uri = "${dotenv.env['API_URL']}/upload_password.php";
       try {
@@ -236,6 +278,11 @@ class _AddModStudentState extends State<AddModStudent> {
       }
   }
 
+  /// Function that updates an student password on DataBase by calling an API function
+  ///
+  /// It updates it with [selectedPasswd] by [actualStudentId]
+  ///
+  /// Throws an [error] if the query fails
   Future<void> updatePassword() async {
     String uri = "${dotenv.env['API_URL']}/update_password.php";
     try {
@@ -258,11 +305,16 @@ class _AddModStudentState extends State<AddModStudent> {
       else {
         print("Error en la subida");
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 
+  /// Function that updates an student on DataBase by calling an API function
+  ///
+  /// It updates its name, its lastname and its format attributes by [idStudent]
+  ///
+  /// Throws an [error] if the query fails
   Future<void> updateStudent (String? idStudent) async {
     String uri = "${dotenv.env['API_URL']}/update_student.php";
 
@@ -284,11 +336,15 @@ class _AddModStudentState extends State<AddModStudent> {
         print("Some issue");
 
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 
+  /// Function that filters the list of student tasks whose name matches
+  /// or contains [query] by updating [displayedItems]
+  ///
+  /// If they don't match, it adds all students to [displayedItems]
   void filterSearchResults(String query) {
     List<String> searchResults = [];
 
@@ -308,7 +364,11 @@ class _AddModStudentState extends State<AddModStudent> {
     });
   }
 
-  // Función para cambiar el titulo de la barra segun sea crear o modificar
+  /// Function that returns the title of [AppBar]
+  ///
+  /// If [typeForm] == [AddModType.add], it updates it to creating an student
+  ///
+  /// If [typeForm] == [AddModType.mod], it updates it to modifying an student
   void getTitle () {
     if (typeForm == AddModType.add) {
       title =  'Crear Estudiante';
@@ -317,6 +377,11 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  /// Function that returns the submit button name of [BottomNavigationBar]
+  ///
+  /// If [typeForm] == [AddModType.add], it updates it to create (an student)
+  ///
+  /// If [typeForm] == [AddModType.mod], it updates it to modify (an student)
   String getSubmitButton () {
     if (typeForm == AddModType.add) {
       return 'Crear';
@@ -325,6 +390,14 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  /// Function that calls funtions that calls API
+  ///
+  /// If it is adding an student, it insert the student data,
+  /// it uploads the phoyo and the password
+  ///
+  /// If it is modifying an student, it updates him/her by
+  /// its id [idStudent], it updates the photo and
+  /// it updates the password
   Future<void> submitForm (String idStudent) async {
     if (typeForm == AddModType.add) {
       await insertStudent();
@@ -339,6 +412,17 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  /// Function that returns widget of the photo of the task by its [urlPath]
+  ///
+  /// If [urlPath] is null, it returns the default image with [AssetImage]
+  ///
+  /// if [urlPath] is not null and it is an adding student or it is a modifying student
+  /// and the [urlPath] it is not the same has the photo given at first,
+  /// it means that the original photo of the student has been modified
+  /// so we show it with [Image.file]
+  ///
+  /// If [urlPath] its the original miniature from the DataBase student that we are
+  /// modifying, we show it with [Image.network]
   Widget _getImage(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
@@ -353,6 +437,17 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  /// Function that returns widget of the password photos of the student by its [urlPath]
+  ///
+  /// If [urlPath] is null, it returns the default image with [AssetImage]
+  ///
+  /// if [urlPath] is not null and it is an adding student or it is a modifying student
+  /// and the [urlPath] it is not the same has one of the photos given at first,
+  /// it means that the original photo from password of the student has been modified
+  /// so we show it with [Image.file]
+  ///
+  /// If [urlPath] its the original photo password from the DataBase student that we are
+  /// modifying, we show it with [Image.network]
   Widget _getPasswd(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
@@ -367,6 +462,7 @@ class _AddModStudentState extends State<AddModStudent> {
     }
   }
 
+  /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -415,12 +511,14 @@ class _AddModStudentState extends State<AddModStudent> {
             child: Column(children: [
               Row(
                 children: [
+                  /// Form to introduce the [name] of the student
                   Expanded(
                     child: Container(
                         padding: EdgeInsets.all(20.0),
                         child: nameForm
                     ),
                   ),
+                  /// Form to introduce the [surname] of the student
                   Expanded(
                     child: Container(
                         padding: EdgeInsets.all(20.0),
@@ -429,6 +527,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   ),
                 ],
               ),
+              /// Container to add the [_photo] of the student
               const Text('Fotografía del Estudiante'),
               GestureDetector(
                 onTap: () async {
@@ -463,6 +562,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   ),
                 ),
               ),
+              /// Container that adds the student password
               Container(
                 padding: EdgeInsets.all(20),
                 child: Column(
@@ -472,7 +572,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
-                    // Imagen pictograma 1
+                    /// Image pictogram 1
                     GestureDetector(
                       onTap: () async {
                         final picker = ImagePicker();
@@ -506,7 +606,7 @@ class _AddModStudentState extends State<AddModStudent> {
                       ),
                     ),
 
-                    // Imagen pictograma 2
+                    /// Image pictogram 2
                     GestureDetector(
                       onTap: () async {
                         final picker = ImagePicker();
@@ -540,7 +640,7 @@ class _AddModStudentState extends State<AddModStudent> {
                       ),
                     ),
 
-                    // Imagen pictograma 3
+                    /// Image pictogram 3
                     GestureDetector(
                       onTap: () async {
                         final picker = ImagePicker();
@@ -578,6 +678,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   ],
                 ),
               ),
+              /// Format attributes of student
               const Text('Formatos aptos para el estudiante'),
               SizedBox(
                 width: 200,
@@ -612,6 +713,8 @@ class _AddModStudentState extends State<AddModStudent> {
                       });
                     }),
               ),
+
+              /// Student tasks filter
               if (typeForm == AddModType.mod)
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.152,
@@ -634,6 +737,7 @@ class _AddModStudentState extends State<AddModStudent> {
                   ),
                 ),
               ),
+              /// Student tasks
               if (typeForm == AddModType.mod)
               Container(
                 child: Container(
@@ -654,6 +758,7 @@ class _AddModStudentState extends State<AddModStudent> {
                     SizedBox(
                       height: 30,
                     ),
+                    /// Generate the list of student tasks
                     ...List.generate(displayedItems.length, (index) {
                       return Column(
                         children: [
@@ -761,7 +866,7 @@ class _AddModStudentState extends State<AddModStudent> {
       ),
 
 
-      // Botones "Cancelar y Crear"
+      /// BottomAppBar to submit or cancel the action
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFF4A6987),
         height: 50,
@@ -770,6 +875,7 @@ class _AddModStudentState extends State<AddModStudent> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              /// Cancel button
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
@@ -785,6 +891,12 @@ class _AddModStudentState extends State<AddModStudent> {
                   ],
                 ),
               ),
+
+              /// Submit button
+              ///
+              /// On pressed, it updates data student and check if they are not
+              /// null. After that, it calls [submitForm] with [actualStudentId] and
+              /// pops to previous page
               ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:

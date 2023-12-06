@@ -2,11 +2,15 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/enum_types.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:dability/Components/full_screen_image.dart';
 import 'package:dability/Components/text_form.dart';
 import 'dart:io';
 import 'package:dability/Components/list_step.dart';
 
+/// # Page for add a step task
+///
+/// It receives a required param [requiredField] that indicates if the step
+/// description is required and another required param [steps] were it will
+/// be stored the new task
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
   List<ListStep> steps;
@@ -25,16 +29,13 @@ class StepsTaskForm extends StatefulWidget {
 class _StepsTaskFormState extends State<StepsTaskForm> {
   String requiredField = "* Campo requerido";
   final bool isRequiredField;
-  // Lista para almacenar los pictogramas con descripcion
+
   List<ListStep> steps;
 
   String selectedImage = "";
   String selectedVideo = "";
   String actualDescription = "";
-  List<String> imageDescriptions = [
-    'Ejemplo de descripcion imagen 1',
-    'Ejemplo de descripcion imagen 1'
-  ];
+
   final descriptionController = TextEditingController();
   final TextEditingController _numStep = TextEditingController();
   TextForm textForm = TextForm(
@@ -43,9 +44,10 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
       type: TextFormType.description);
   bool error = false;
 
-  // Constructor de la clase state
   _StepsTaskFormState({required this.isRequiredField, required this.steps});
 
+  /// Function that updates de [actualDescription] with
+  /// the controller [descriptionController]
   void _getLastDescriptionValue() {
     actualDescription = descriptionController.text;
   }
@@ -54,22 +56,27 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   void initState() {
     super.initState();
 
-    // Start listening to changes.
+    /// Start listening to changes
     descriptionController.addListener(_getLastDescriptionValue);
     error = false;
   }
 
+  /// Cleans up the [descriptionController] when the widget is removed from the
+  /// widget tree.
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the
-    // widget tree.
     descriptionController.dispose();
     super.dispose();
   }
 
+  /// Function that returns a Column Widget with two forms content:
+  ///
+  /// An image for the step, it can be added from gallery or by taking a photo
+  /// And a description for the step
   Widget _getForm() {
     return Column(
       children: [
+        /// The container to add an image
         Container(
           decoration: _buildBoxDecoration(),
           padding: EdgeInsets.only(top: 30, bottom: 30),
@@ -80,6 +87,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  /// It adds the image from the gallery
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
@@ -114,6 +122,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       ),
                     ),
                   ),
+                  /// It adds the image from camera
                   GestureDetector(
                     onTap: () async {
                       final picker = ImagePicker();
@@ -134,6 +143,8 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
             ],
           ),
         ),
+
+        /// Container to add a description
         Container(
           decoration: _buildBoxDecoration(),
           padding: EdgeInsets.only(top: 30, bottom: 30),
@@ -168,6 +179,12 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     );
   }
 
+  /// Function that returns widget of the image step of the task by its [urlPath]
+  ///
+  /// If [urlPath] is null, it returns the default image with [AssetImage]
+  ///
+  /// if [urlPath] is not null it means that an image has been added
+  /// so we show it with [Image.file]
   Widget _getImage(String? urlPath) {
     if (urlPath == null) {
       return const Image(
@@ -177,6 +194,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     }
   }
 
+  /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,10 +205,13 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            /// Container that calls [_getForm] to get the image and description
+            /// form
             Container(
               padding: EdgeInsets.all(30),
               child: _getForm(),
             ),
+            /// Container that shows a form to add the number of the step
             Container(
               decoration: _buildBoxDecoration(),
               padding: EdgeInsets.all(30),
@@ -229,6 +250,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                 ],
               ),
             ),
+            /// Button to submit the creation or modification of the step
             Container(
               padding: EdgeInsets.all(100),
               child: ElevatedButton(
@@ -237,26 +259,27 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                 ),
                 onPressed: () {
                   int numStep = (int.parse(_numStep.text));
-                  // Buscamos el paso según el numStep
+                  /// It search the step in [steps]
                   var existingStep = steps.firstWhere(
                       (step) => step.numStep == numStep,
                       orElse: () => ListStep(numStep, '', 'null'));
-                  // Si se ha encontrado:
+                  /// If it exists ir modifies it
                   if ('null' != existingStep.description) {
                     if (selectedImage != '') existingStep.image = selectedImage;
                     if (actualDescription != '') {
                       existingStep.description = actualDescription;
                     }
+                  /// If it doesn't exist it adds it at the end
                   } else {
                     steps.add(ListStep(numStep, selectedImage,
                         actualDescription));
                   }
 
                   if (numStep > 0) {
-                    // Ordenamos la lista
+                    /// It sorts the list [steps]
                     steps.sort((a, b) => a.numStep.compareTo(b.numStep));
 
-                    // Devolvemos la lista a la pagina anterior
+                    /// It pops to the previous page with the updated [steps]
                     Navigator.of(context).pop(steps);
                   }
                 },
@@ -269,6 +292,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     );
   }
 
+  /// Predefined style for some containers
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
         color: Colors.grey[300],

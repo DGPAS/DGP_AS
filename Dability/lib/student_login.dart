@@ -1,6 +1,10 @@
 import 'package:dability/student_pictologin.dart';
 import 'package:flutter/material.dart';
 
+/// # Page to list all the students
+///
+/// It shows the photo of the students to select one and access to his
+/// pictologin
 class StudentLogin extends StatefulWidget {
   const StudentLogin({super.key});
 
@@ -71,27 +75,28 @@ class _StudentLoginState extends State<StudentLogin> {
       body: Container(
         alignment: Alignment.bottomCenter,
         padding: EdgeInsets.all(20),
+        /// It builds all the students list
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Número de columnas
-            crossAxisSpacing: 8.0, // Espaciado horizontal entre los elementos del grid
-            mainAxisSpacing: 8.0, // Espaciado vertical entre los elementos del grid
+            crossAxisCount: 2, // Column number
+            crossAxisSpacing: 8.0, // Horizontal gap in grid
+            mainAxisSpacing: 8.0, // Vertical gap in grid
           ),
-          itemCount: 6, // Número total de elementos en el grid (3 filas x 2 columnas = 6 elementos)
+          itemCount: 6, // Total number of Students on grid (3 rows x 2 columns = 6 elements)
           itemBuilder: (context, int index) {
             return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 color: Color(0xFF4A6987)
               ),
-              // color: Colors.blue, // Puedes cambiar el color según tus necesidades
+              // color: Colors.blue,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF4A6987), // Establece el color de fondo del botón como transparente
+                  primary: Color(0xFF4A6987),
                   elevation: 0
                 ),
                 onPressed: () {
-                  // llevarte al alumno seleccionado
+                  /// On pressed, it goes to the [student_pictologin.dart]
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: index)),

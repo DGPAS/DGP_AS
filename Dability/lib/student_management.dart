@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
-
+/// # Page where admin manages students
 class StudentManagement extends StatefulWidget {
   const StudentManagement({super.key});
 
@@ -15,28 +15,40 @@ class StudentManagement extends StatefulWidget {
 }
 
 class _StudentManagementState extends State<StudentManagement> {
+  /// Text controller for student filter
+  ///
+  /// If the text on the filter changes, it stores changes
+  /// TODO: CREO NO ES NECESARIO ESTE CONTROLLER PORQUE NO SE USA
   TextEditingController _controller = TextEditingController();
 
+  /// List that stores students form DataBase
   List<dynamic> students = []; // lista de alumnos
   double widthMax = 500;
 
   List<dynamic> displayedItems = [];
 
+  /// Init State
+  ///
+  /// Initialize the list of students by calling [getData]
   @override
   void initState() {
     super.initState();
     getData();
   }
 
+  /// Function that calls [getStudents] who returns the DataBase students
+  /// and adds them to [displayedItems]
   Future<void> getData () async {
     await getStudents();
     displayedItems.addAll(students);
   }
 
-  // Funcion que devuelve los alumnos de la base de datos
+  /// It saves all the students that are stored from DataBase in a dynamic
+  /// list [students]
+  ///
+  /// Throws an [error] if the query fails
   Future<void> getStudents() async {
-    // La direccion ip debe ser la de red del portatil para conectar con
-    // la tablet ó 10.0.2.2 para conectar con emuladores
+    /// Uri whose IP is on .env that calls API
     String uri = "${dotenv.env['API_URL']}/view_students.php";
     try {
       var response = await http.get(Uri.parse(uri));
@@ -48,12 +60,14 @@ class _StudentManagementState extends State<StudentManagement> {
       } else {
         print('Error en la solicitud: ${response.statusCode}');
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print(error);
     }
   }
 
-  // Funcion que borra una tarea concreta de la base de datos
+  /// It deletes a student with id = [idStudent] from the DataBase
+  ///
+  /// Throws an [error] if the query fails
   Future<void> deleteStudent(String idStudent) async {
     String uri = "${dotenv.env['API_URL']}/delete_student.php";
     try {
@@ -71,6 +85,10 @@ class _StudentManagementState extends State<StudentManagement> {
     }
   }
 
+  /// Function that filters the list of students whose name matches
+  /// or contains [query] by updating [displayedItems]
+  ///
+  /// If they don't match, it adds all students to [displayedItems]
   void filterSearchResults(String query) {
     List<dynamic> searchResults = [];
 
@@ -90,6 +108,7 @@ class _StudentManagementState extends State<StudentManagement> {
     });
   }
 
+  /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,11 +119,11 @@ class _StudentManagementState extends State<StudentManagement> {
       body: Container(
         padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
         child: Column(
-          // columna con el boton de añadir, y el container de la lista
-          // mainAxisAlignment: MainAxisAlignment.center,
+          /// Column that contains a button that adds students,
+          /// the students filter and the filterd list of students
           children: [
             Container(
-              // AÑADIR ESTUDIANTE
+              /// ADD STUDENT
               alignment: Alignment.center,
               padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
               child: ElevatedButton(
@@ -122,6 +141,8 @@ class _StudentManagementState extends State<StudentManagement> {
                   padding: EdgeInsets.symmetric(horizontal: 40),
                 ),
                 onPressed: () {
+                  /// When pressed it goes to [add_mod_student.dart] with [AddModType.add]
+                  /// to add a new student
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add)),
@@ -133,8 +154,8 @@ class _StudentManagementState extends State<StudentManagement> {
                 ),
               ),
             ),
+            /// SizedBox for the filter
             SizedBox(
-              // BUSCADOR
               height: MediaQuery.of(context).size.height * 0.152,
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -155,8 +176,8 @@ class _StudentManagementState extends State<StudentManagement> {
                 ),
               ),
             ),
+            /// List of students
             Expanded(
-              // BLOQUE ALUMNOS
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
@@ -174,6 +195,11 @@ class _StudentManagementState extends State<StudentManagement> {
                   SizedBox(
                     height: 30,
                   ),
+                  /// It returns a list of ElevatedButton
+                  ///
+                  /// One ElevatedButton for each student in [displayedItems]
+                  /// Each item of the list contains the name of the student,
+                  /// a button for update the student and another one to delete it
                   ...List.generate(displayedItems.length, (index) {
                     return Column(
                       children: [
@@ -196,9 +222,11 @@ class _StudentManagementState extends State<StudentManagement> {
                           onPressed: () {
                             // acción del botón
                           },
+                          /// The content of each student
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                /// Name of the student
                                 Text(
                                   '${displayedItems[index]['name']} ${displayedItems[index]['lastName']}',
                                   style: const TextStyle(
@@ -209,6 +237,8 @@ class _StudentManagementState extends State<StudentManagement> {
                                   alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
+                                      /// Button that navigates to [add_mod_student.dart] with [AddModType.mod]
+                                      /// to modify the current student
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -229,6 +259,9 @@ class _StudentManagementState extends State<StudentManagement> {
                                           height: 35,
                                         ),
                                       ),
+                                      /// Button that deletes the current student
+                                      ///
+                                      /// It shows a dialog to confirm the action
                                       ElevatedButton(
                                         onPressed: () {
                                           showDialog(

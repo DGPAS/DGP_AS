@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'task_management.dart';
 import 'student_management.dart';
 
+/// # Login page for Admin
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
 
@@ -16,13 +17,18 @@ class _AdminLoginState extends State<AdminLogin> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  // Credenciales de prueba
+  /// Example credentials
   String userEmail = "prueba@correo.es";
   String userPassword = "123";
 
   bool loginError = false;
 
-
+  /// Function that checks if [email] and [password] are identical
+  /// to [userEmail] and [userPassword]
+  ///
+  /// If they are, it returns true
+  ///
+  /// Else, it returns false
   bool authenticateUser(String email, String password){
     if(email == userEmail && password == userPassword){
       return true;
@@ -31,6 +37,7 @@ class _AdminLoginState extends State<AdminLogin> {
     return false;
   }
 
+  /// Main builder for the login
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +83,7 @@ class _AdminLoginState extends State<AdminLogin> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          /// Title of the login
           Container(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -101,6 +109,7 @@ class _AdminLoginState extends State<AdminLogin> {
               key: _formKey,
               child: Column(
                 children: [
+                  /// Label for email
                   Container(
                     // width: MediaQuery.of(context).size.width * 0.6
                     constraints: BoxConstraints(
@@ -120,6 +129,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                   ),
                   SizedBox(height: 16.0),
+                  /// Label for the password
                   Container(
                     constraints: BoxConstraints(
                       maxWidth: 800.0, // Establece el ancho máximo del contenedor
@@ -142,6 +152,7 @@ class _AdminLoginState extends State<AdminLogin> {
                   ),
                   SizedBox(height: 30.0),
 
+                  /// Handler error controller
                   if (loginError)
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
@@ -151,6 +162,7 @@ class _AdminLoginState extends State<AdminLogin> {
                       ),
                     ),
 
+                  /// Submit access button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -183,6 +195,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                   ),
                   SizedBox(height: 30,),
+                  /// Register (TODO: Delete it)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children:[

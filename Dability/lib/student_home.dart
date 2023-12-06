@@ -2,6 +2,7 @@ import 'package:dability/dability.dart';
 import 'package:flutter/material.dart';
 import 'to_do_list.dart';
 
+/// # Home page of Student
 class StudentHome extends StatefulWidget {
   final int idStudent;
 
@@ -18,10 +19,11 @@ class _StudentHomeState extends State<StudentHome> {
   _StudentHomeState({required this.idStudent});
 
 
-  //// esto es de prueba hasta que se tenga la bd
+  /// Data example pre-DataBase
   String student = "JUAN";
   List<String> students = [];
 
+  /// Init state
   @override
   void initState() {
     super.initState();
@@ -37,8 +39,7 @@ class _StudentHomeState extends State<StudentHome> {
     });
   }
 
-  ////
-
+  /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +93,7 @@ class _StudentHomeState extends State<StudentHome> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+          /// Button to access [to_do_list.dart]
           Container(
               padding: EdgeInsets.symmetric(horizontal: 40),
               alignment: Alignment.center,

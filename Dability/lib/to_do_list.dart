@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'student_task.dart';
 
-//Modificar según sea necesario
-class Task {
+/// Auxiliar class while it is on local
+  class Task {
   String name;
   String imagePath;
   int id;
@@ -10,9 +10,10 @@ class Task {
   Task(this.name, this.imagePath, this.id);
 }
 
+/// # Page where the student sees his/her tasks
 class ToDoList extends StatefulWidget {
   int counter = 0;
-  //Obtener de la BD
+  /// Obtain it from DataBase
   List<Task> tasks = [
     Task('Tarea 1', 'images/planTask.png', 1),
     Task('Tarea 2', 'images/microwaveTask.png', 2),
@@ -28,6 +29,7 @@ class ToDoList extends StatefulWidget {
     Task('Tarea 12', 'images/domesticTask.png', 12),
     Task('Tarea 13', 'images/planTask.png', 13),
   ];
+  /// Variable to show [numTasksPerPage] tasks on each page
   int numTasksPerPage = 3;
   int numPages = 0;
   List<bool> isImageVisibleList = [];
