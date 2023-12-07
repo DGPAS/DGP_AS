@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'task_management.dart';
-import 'student_management.dart';
-import 'dability.dart';
+import 'taskManagement/task_management.dart';
+import 'studentManagement/student_management.dart';
+import '../dability.dart';
 
 /// # Home page of Admin
 class AdminHome extends StatefulWidget {

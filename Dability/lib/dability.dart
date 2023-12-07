@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:dability/admin_home.dart';
-import 'student_home.dart';
-import 'admin_login.dart';
-import 'student_login.dart';
+import 'package:dability/Admin/admin_home.dart';
+import 'Student/student_home.dart';
+import 'Admin/login/admin_login.dart';
+import 'Student/Login/student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {

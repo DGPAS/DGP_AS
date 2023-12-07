@@ -1,4 +1,4 @@
-import 'package:dability/student_pictologin.dart';
+import 'package:dability/Student/Login/student_pictologin.dart';
 import 'package:flutter/material.dart';
 
 /// # Page to list all the students
