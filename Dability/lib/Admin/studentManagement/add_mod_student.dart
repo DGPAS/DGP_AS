@@ -17,23 +17,11 @@ class AddModStudent extends StatefulWidget {
   AddModStudent({
     Key? key,
     required this.typeForm,
-    this.idStudent,
-    this.name,
-    this.surname,
-    this.readCheck,
-    this.videoCheck,
-    this.soundCheck,
-    this.photo})
+    this.student})
     : super(key:key);
 
   final AddModType typeForm;
-  final String? idStudent;
-  final String? name;
-  final String? surname;
-  final String? readCheck;
-  final String? videoCheck;
-  final String? soundCheck;
-  final String? photo;
+  final Map<String, dynamic>? student;
 
   @override
   State<AddModStudent> createState() => _AddModStudentState();
@@ -95,33 +83,33 @@ class _AddModStudentState extends State<AddModStudent> {
     typeForm = widget.typeForm;
 
     /// If the student exists, it saves his actual id
-    id = widget.idStudent;
+    id = widget.student?['id'];
     if (id != null) {
       actualStudentId = id!;
     }
 
-    nameStudent = widget.name;
-    surnameStudent = widget.surname;
+    nameStudent = widget.student?['firstName'];
+    surnameStudent = widget.student?['lastName'];
 
     /// It stores the "format attributes" of the student
-    if (widget.readCheck != null) {
-      if (widget.readCheck == '0') {
+    if (widget.student?['text'] != null) {
+      if (widget.student?['text'] == '0') {
         readCheck = false;
       } else {
         readCheck = true;
       }
     }
 
-    if (widget.videoCheck != null) {
-      if (widget.videoCheck == '0') {
+    if (widget.student?['video'] != null) {
+      if (widget.student?['video'] == '0') {
         videoCheck = false;
       } else {
         videoCheck = true;
       }
     }
 
-    if (widget.soundCheck != null) {
-      if (widget.soundCheck == '0') {
+    if (widget.student?['audio'] != null) {
+      if (widget.student?['audio'] == '0') {
         soundCheck = false;
       } else {
         soundCheck = true;
@@ -129,8 +117,8 @@ class _AddModStudentState extends State<AddModStudent> {
     }
 
     /// If the student exists, it saves the photo form DB
-    if (widget.photo != null) {
-      selectedPhoto = widget.photo!;
+    if (widget.student?['picture'] != null) {
+      selectedPhoto = widget.student?['picture'];
     }
 
     /// If the student exists, it get his password
@@ -428,7 +416,7 @@ class _AddModStudentState extends State<AddModStudent> {
       return const Image(
           image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
-      if (typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.photo)) {
+      if (typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.student?['picture'])) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       }
       else {

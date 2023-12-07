@@ -12,14 +12,13 @@ class StudentPictoLogin extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<StudentPictoLogin> createState() =>
-      _StudentPictoLoginState(idStudent: idStudent);
+  State<StudentPictoLogin> createState() => _StudentPictoLoginState();
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {
-  final int idStudent;
+  int idStudent = -1;
 
-  _StudentPictoLoginState({required this.idStudent});
+  _StudentPictoLoginState();
 
   List<String> elements = [];
   String student = "JUAN";
@@ -33,6 +32,9 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
   @override
   void initState() {
     super.initState();
+
+    idStudent = widget.idStudent;
+
     setState(() {
       elements.add("Spiderman");
       elements.add("Batman");
