@@ -3,20 +3,37 @@ import 'package:flutter/material.dart';
 /// # Page to see each step of a task
 class TaskSteps extends StatefulWidget {
 
+  final int index;
+  final int numberOfSteps;
+  final List<bool> checkedStep;
+
+  TaskSteps({
+    required this.index,
+    required this.numberOfSteps,
+    required this.checkedStep,
+  });
+
   @override
   State<TaskSteps> createState() => _TaskStepsState();
-  int index = 0, numberOfSteps = 0;
-  List<bool> checkedStep = List.generate(0, (index) => false);
-  TaskSteps(int initialPage, int stepsQuantity, List<bool> checks){
-    index = initialPage;
-    numberOfSteps = stepsQuantity;
-    checkedStep = checks;
-  }
 }
 
 
 class _TaskStepsState extends State<TaskSteps> {
+  _TaskStepsState();
+
+  int index = 0;
+  int numberOfSteps = 0;
+  List<bool> checkedStep = [];
   bool isImageVisible = false;
+
+  @override
+  void initState () {
+    super.initState();
+
+    index = widget.index;
+    numberOfSteps = widget.numberOfSteps;
+    checkedStep = widget.checkedStep;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +136,7 @@ class _TaskStepsState extends State<TaskSteps> {
                       ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              widget.checkedStep[widget.index] = !widget.checkedStep[widget.index];
+                              checkedStep[index] = !checkedStep[index];
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -144,7 +161,7 @@ class _TaskStepsState extends State<TaskSteps> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.025,
                               ),
-                              widget.checkedStep[widget.index] ?
+                              checkedStep[index] ?
                                 Image.asset('assets/images/checkIcon.png',
                                     height: MediaQuery.of(context).size.height * 0.075,
                                 ):
@@ -154,7 +171,7 @@ class _TaskStepsState extends State<TaskSteps> {
                             ],
                           ),
 
-                        //  child: widget.checkedStep[widget.index] ?
+                        //  child: checkedStep[index] ?
                           //Image.asset('assets/images/checkIcon.png'):
                           //Image.asset('assets/images/greyIcon.jpg') ,
                       ),
@@ -167,15 +184,15 @@ class _TaskStepsState extends State<TaskSteps> {
 
                   /// Button to go to the previous or the next step
                   Row(
-                    mainAxisAlignment: widget.index == 0
+                    mainAxisAlignment: index == 0
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.spaceBetween,
                     children: [
-                      if (widget.index > 0)
+                      if (index > 0)
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              widget.index -= 1;
+                              index -= 1;
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -190,11 +207,11 @@ class _TaskStepsState extends State<TaskSteps> {
                               width: MediaQuery.of(context).size.height * 0.1,
                           ),
                         ),
-                      if (widget.index < widget.numberOfSteps - 1)
+                      if (index < numberOfSteps - 1)
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              widget.index += 1;
+                              index += 1;
                             });
                           },
                           style: ElevatedButton.styleFrom(

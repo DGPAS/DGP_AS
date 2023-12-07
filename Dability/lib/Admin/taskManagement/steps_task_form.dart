@@ -13,7 +13,7 @@ import 'package:dability/Components/list_step.dart';
 /// be stored the new task
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
-  List<ListStep> steps;
+  final List<ListStep> steps;
 
   StepsTaskForm({
     Key? key,
@@ -22,15 +22,16 @@ class StepsTaskForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StepsTaskForm> createState() =>
-      _StepsTaskFormState(isRequiredField: requiredField, steps: steps);
+  State<StepsTaskForm> createState() => _StepsTaskFormState();
 }
 
 class _StepsTaskFormState extends State<StepsTaskForm> {
-  String requiredField = "* Campo requerido";
-  final bool isRequiredField;
+  _StepsTaskFormState();
 
-  List<ListStep> steps;
+  String requiredField = "* Campo requerido";
+  bool isRequiredField = false;
+
+  List<ListStep> steps = [];
 
   String selectedImage = "";
   String selectedVideo = "";
@@ -44,8 +45,6 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
       type: TextFormType.description);
   bool error = false;
 
-  _StepsTaskFormState({required this.isRequiredField, required this.steps});
-
   /// Function that updates de [actualDescription] with
   /// the controller [descriptionController]
   void _getLastDescriptionValue() {
@@ -55,6 +54,9 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   @override
   void initState() {
     super.initState();
+
+    isRequiredField = widget.requiredField;
+    steps = widget.steps;
 
     /// Start listening to changes
     descriptionController.addListener(_getLastDescriptionValue);
@@ -111,7 +113,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                           dashPattern: [10, 6],
                           borderType: BorderType.RRect,
                           radius: const Radius.circular(20),
-                          child: Container(
+                          child: SizedBox(
                             height: 200,
                             width: 800,
                             child: ClipRRect(

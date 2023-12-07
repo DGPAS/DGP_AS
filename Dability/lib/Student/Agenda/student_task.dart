@@ -3,20 +3,21 @@ import 'task_steps.dart';
 
 /// # Page to show a task
 class StudentTask extends StatefulWidget {
-  //const StudentTask({super.key});
+  StudentTask({
+    Key? key,
+    required this.taskID,
+  }) : super(key:key);
+
+  final int taskID;
 
   @override
   State<StudentTask> createState() => _StudentTaskState();
-  String URLVideo = "a";       //Get de la BD
-  int taskID = 0;
-  StudentTask(int id){
-    taskID = id;
-    //Get de la BD de la URL
-  }
 }
 
 class _StudentTaskState extends State<StudentTask> {
   bool done = false;
+  /// Video string (get from DataBase)
+  String urlVideo = "a";
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +195,7 @@ class _StudentTaskState extends State<StudentTask> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly, //MainAxisAlignment.spaceBetween
               children: [
                 /// Tutorial video task
-                if (widget.URLVideo != "")
+                if (urlVideo != "")
                   Column(
                     children: [
                       Text(
@@ -228,7 +229,7 @@ class _StudentTaskState extends State<StudentTask> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TaskSteps(0, 3, List.generate(3, (index) => false))),
+                      MaterialPageRoute(builder: (context) => TaskSteps(index: 0, numberOfSteps: 3, checkedStep: List.generate(3, (index) => false))),
                     );
                   },
                   child:

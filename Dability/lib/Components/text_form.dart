@@ -23,11 +23,7 @@ class TextForm extends StatefulWidget {
   }
 
   @override
-  State<TextForm> createState() => _TextFormState(
-      isRequiredField: requiredField,
-      title: title,
-      type: type,
-      originalText: originalText);
+  State<TextForm> createState() => _TextFormState();
 }
 
 class _TextFormState extends State<TextForm> {
@@ -35,20 +31,21 @@ class _TextFormState extends State<TextForm> {
   String requiredField = "* Campo requerido";
   String title = "";
   TextFormType type = TextFormType.title;
-  final bool isRequiredField;
+  bool isRequiredField = false;
   String? originalText;
 
-  _TextFormState(
-      {required this.isRequiredField,
-      required this.title,
-      required this.type,
-      this.originalText});
+  _TextFormState();
 
   TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    isRequiredField = widget.requiredField;
+    title = widget.title;
+    type = widget.type;
+    originalText = widget.originalText;
 
     if (originalText != null) {
       controller.text = originalText!;
