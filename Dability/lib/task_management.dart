@@ -30,7 +30,7 @@ class _TaskManagementState extends State<TaskManagement> {
   /// Throws an [error] if the query fails
   Future<void> getTasks() async {
     /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/view_data.php";
+    String uri = "${dotenv.env['API_URL']}/view_tasks.php";
     try {
       var response = await http.get(Uri.parse(uri));
 
@@ -39,7 +39,7 @@ class _TaskManagementState extends State<TaskManagement> {
           tasks = json.decode(response.body);
         });
       } else {
-        print('Error en la solicitud: ${response.statusCode}');
+        print('Error en la solicitud getTasks: ${response.statusCode}');
       }
     } catch (error) {
       print(error);
@@ -51,7 +51,7 @@ class _TaskManagementState extends State<TaskManagement> {
   /// Throws an [error] if the query fails
   Future<void> deleteTask(String idTasks) async {
     /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/delete_data.php";
+    String uri = "${dotenv.env['API_URL']}/delete_task.php";
     try {
       var res = await http.post(Uri.parse(uri), body: {"idTasks": idTasks});
       var response = jsonDecode(res.body);

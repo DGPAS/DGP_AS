@@ -94,7 +94,7 @@ class _StudentManagementState extends State<StudentManagement> {
 
     if (query.isNotEmpty) {
       for (var i = 0; i < students.length; i++) {
-        if (students[i]['name'].toLowerCase().contains(query.toLowerCase())) {
+        if (("${students[i]['firstName']} ${students[i]['lastName']}").toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(students[i]);
         }
       }
@@ -228,7 +228,7 @@ class _StudentManagementState extends State<StudentManagement> {
                               children: [
                                 /// Name of the student
                                 Text(
-                                  '${displayedItems[index]['name']} ${displayedItems[index]['lastName']}',
+                                  '${displayedItems[index]['firstName']} ${displayedItems[index]['lastName']}',
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -245,7 +245,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['name'], surname: displayedItems[index]['lastName'], readCheck: displayedItems[index]['text'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['picture'])),
+                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['firstName'], surname: displayedItems[index]['lastName'], readCheck: displayedItems[index]['text'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['picture'])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
