@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dability/Admin/taskManagement/steps_task_form.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
@@ -26,28 +25,20 @@ class AddModTask extends StatefulWidget {
       this.videoUrl})
       : super(key: key);
 
-  AddModType typeForm;
-  String? title;
-  String? description;
-  String? idTasks;
-  String? thumbnail;
-  String? videoUrl;
+  final AddModType typeForm;
+  final String? title;
+  final String? description;
+  final String? idTasks;
+  final String? thumbnail;
+  final String? videoUrl;
 
   @override
-  State<AddModTask> createState() => _AddModTaskState(
-      typeForm: typeForm,
-      title: title,
-      description: description,
-      idTasks: idTasks,
-      thumbnail: thumbnail,
-      videoUrl: videoUrl,
-  );
+  State<AddModTask> createState() => _AddModTaskState();
 }
 
 
 class _AddModTaskState extends State<AddModTask> {
-  _AddModTaskState(
-      {required this.typeForm, this.title, this.description, this.idTasks, this.thumbnail, this.videoUrl});
+  _AddModTaskState();
 
   /// Form that contains the name of the task to add or modify
   TextForm titleForm = TextForm(
@@ -69,7 +60,7 @@ class _AddModTaskState extends State<AddModTask> {
   String? videoUrl;
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
-  AddModType typeForm;
+  AddModType? typeForm;
 
   /// Lists that store and manage the steps of a task
   List<ListStep> steps = [];
@@ -77,8 +68,6 @@ class _AddModTaskState extends State<AddModTask> {
   List<ListStep> auxSteps = [];
   /// Variables to manage the task data
   String actualTaskId = '';
-  File? _image;
-  File? _video;
   String selectedImage = "";
   String selectedVideo = "";
 
@@ -90,6 +79,13 @@ class _AddModTaskState extends State<AddModTask> {
   @override
   void initState() {
     super.initState();
+
+    typeForm = widget.typeForm;
+    title = widget.title;
+    description = widget.description;
+    idTasks = widget.idTasks;
+    thumbnail = widget.thumbnail;
+    videoUrl = widget.videoUrl;
     /// If title or description are null it means that we are adding a task,
     /// not modifying it, so the values are initialized by the controllers
     title ??= titleForm.getText();
@@ -260,7 +256,7 @@ class _AddModTaskState extends State<AddModTask> {
     String uri = "${dotenv.env['API_URL']}/update_data.php";
 
     try {
-      print("Datos a modificar: ${title}, ${description}");
+      print("Datos a modificar: $title, $description");
 
       var res=await http.post(Uri.parse(uri),body: {
         "idTasks": idTareas,
@@ -457,28 +453,26 @@ class _AddModTaskState extends State<AddModTask> {
                     style: const TextStyle(fontWeight: FontWeight.bold)),
 
                 /// Button to delete [step] from [steps]
-                Container(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll<Color>(Colors.red),
-                    ),
-                    child: const Text('Eliminar Paso'),
-                    onPressed: () {
-                      auxSteps = steps;
-                      auxSteps.removeWhere((stepToDelete) =>
-                          stepToDelete.numStep == step.numStep);
-                      setState(() {
-                        steps = auxSteps;
-                      });
-                    },
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.red),
                   ),
+                  child: const Text('Eliminar Paso'),
+                  onPressed: () {
+                    auxSteps = steps;
+                    auxSteps.removeWhere((stepToDelete) =>
+                        stepToDelete.numStep == step.numStep);
+                    setState(() {
+                      steps = auxSteps;
+                    });
+                  },
                 ),
               ],
             ),
           ),
           /// It only shows the step image when it is not null
-          if (step.image != '' && step.image != null)
+          if (step.image != '')
             Column(
               children: [
                 Container(
@@ -575,7 +569,6 @@ class _AddModTaskState extends State<AddModTask> {
 
                               setState(() {
                                 selectedImage = pickedFile!.path;
-                                _image = File(selectedImage);
                               });
                             },
                             child: Container(
@@ -590,7 +583,7 @@ class _AddModTaskState extends State<AddModTask> {
                                 dashPattern: [10, 6],
                                 borderType: BorderType.RRect,
                                 radius: const Radius.circular(20),
-                                child: Container(
+                                child: SizedBox(
                                   height: 200,
                                   width: 800,
                                   child: ClipRRect(
@@ -610,7 +603,6 @@ class _AddModTaskState extends State<AddModTask> {
 
                             setState(() {
                               selectedImage = pickedFile!.path;
-                              _image = File(selectedImage);
                             });
                           },
                           child: Container(
@@ -648,7 +640,6 @@ class _AddModTaskState extends State<AddModTask> {
                               );
                             setState(() {
                               selectedVideo = pickedFile!.path;
-                              _video = File(selectedVideo);
 
                             });
                               if (pickedFile != null) {
@@ -668,7 +659,7 @@ class _AddModTaskState extends State<AddModTask> {
                                 dashPattern: [10, 6],
                                 borderType: BorderType.RRect,
                                 radius: const Radius.circular(20),
-                                child: Container(
+                                child: SizedBox(
                                   height: 200,
                                   width: 800,
                                   // Puedes personalizar este widget según tu necesidad
@@ -721,29 +712,25 @@ class _AddModTaskState extends State<AddModTask> {
 
                 /// Container that shows the helper adding steps
                 /// and the button to add them
-                child: Container(
+                child: SizedBox(
                   width: 1000,
                   child: Column(
                     children: <Widget>[
                       Row(
                         children: [
                           const Text('Puede añadir pasos a la tarea.'),
-                          Container(
-                            child: GestureDetector(
-                              onTapDown: (_) {
-                                setState(() {
-                                  isPressed = true;
-                                });
-                              },
-                              onTapUp: (_) {
-                                setState(() {
-                                  isPressed = false;
-                                });
-                              },
-                              child: Container(
-                                child: const Icon(Icons.help),
-                              ),
-                            ),
+                          GestureDetector(
+                            onTapDown: (_) {
+                              setState(() {
+                                isPressed = true;
+                              });
+                            },
+                            onTapUp: (_) {
+                              setState(() {
+                                isPressed = false;
+                              });
+                            },
+                            child: const Icon(Icons.help),
                           ),
                         ],
                       ),

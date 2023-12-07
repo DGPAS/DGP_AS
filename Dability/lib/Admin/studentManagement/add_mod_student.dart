@@ -26,14 +26,14 @@ class AddModStudent extends StatefulWidget {
     this.photo})
     : super(key:key);
 
-  AddModType typeForm;
-  String? idStudent;
-  String? name;
-  String? surname;
-  String? readCheck;
-  String? videoCheck;
-  String? soundCheck;
-  String? photo;
+  final AddModType typeForm;
+  final String? idStudent;
+  final String? name;
+  final String? surname;
+  final String? readCheck;
+  final String? videoCheck;
+  final String? soundCheck;
+  final String? photo;
 
   @override
   State<AddModStudent> createState() => _AddModStudentState();
@@ -168,9 +168,9 @@ class _AddModStudentState extends State<AddModStudent> {
         print("Contraseña obtenida");
 
         setState(() {
-          selectedPasswd[1] = response["data"]["pictogram1"].toString() ?? '';
-          selectedPasswd[2] = response["data"]["pictogram2"].toString() ?? '';
-          selectedPasswd[3] = response["data"]["pictogram3"].toString() ?? '';
+          selectedPasswd[1] = response["data"]["pictogram1"].toString();
+          selectedPasswd[2] = response["data"]["pictogram2"].toString();
+          selectedPasswd[3] = response["data"]["pictogram3"].toString();
           selectedDBPasswd[1] = selectedPasswd[1];
           selectedDBPasswd[2] = selectedPasswd[2];
           selectedDBPasswd[3] = selectedPasswd[3];
@@ -472,7 +472,7 @@ class _AddModStudentState extends State<AddModStudent> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
              Expanded(
               child: Text(
-                '$title',
+                title,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -537,7 +537,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
                       setState(() {
                         selectedPhoto = pickedFile!.path;
-                        _photo = File(pickedFile!.path);
+                        _photo = File(pickedFile.path);
                       });
                 },
                 child: Container(
@@ -740,127 +740,125 @@ class _AddModStudentState extends State<AddModStudent> {
               /// Student tasks
               if (typeForm == AddModType.mod)
               Container(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFF4A6987),
-                    borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF4A6987), Colors.white],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                decoration: BoxDecoration(
+                  color: Color(0xFF4A6987),
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF4A6987), Colors.white],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
-                  height: 400,
-                  width: (MediaQuery.of(context).size.width - 30).clamp(0.0, 500),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
-                  child: ListView(children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    /// Generate the list of student tasks
-                    ...List.generate(displayedItems.length, (index) {
-                      return Column(
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(
-                                  double.infinity,
-                                  MediaQuery.of(context).size.height *
-                                      0.1), // inf, 80
-                              textStyle: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    30), // Redondear los bordes del botón
-                              ),
-                              backgroundColor: Color(0xFFF5F5F5),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20), // Margen horizontal del texto
-                            ),
-                            onPressed: () {
-                              // acción
-                            },
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    displayedItems[index],
-                                    //textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors
-                                          .black, // Cambia el color del texto a rojo
-                                    ),
-                                  ),
-
-                                  /////
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Row(
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                      'Confirmar eliminación'),
-                                                  content: Text(
-                                                      '¿Estás seguro de que deseas eliminar esta tarea?'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop(); // Cierra el diálogo
-                                                      },
-                                                      child: Text('Cancelar'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          tasks.remove(
-                                                              displayedItems[
-                                                                  index]);
-                                                          displayedItems.remove(
-                                                              displayedItems[
-                                                                  index]);
-                                                        });
-                                                        Navigator.of(context)
-                                                            .pop(); // Cierra el diálogo
-                                                      },
-                                                      child: Text('Eliminar'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            minimumSize: Size(10, 20),
-                                            backgroundColor: Color(0xFFF5F5F5),
-                                            elevation: 0,
-                                          ),
-                                          child: Image.asset(
-                                            'assets/images/DeleteIcon.png',
-                                            width: 30,
-                                            height: 35,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  /////
-                                ]),
-                          ),
-                          SizedBox(height: 30), //espacio entre tareas
-                        ],
-                      );
-                    })
-                  ]),
                 ),
+                height: 400,
+                width: (MediaQuery.of(context).size.width - 30).clamp(0.0, 500),
+                padding:
+                    EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
+                child: ListView(children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  /// Generate the list of student tasks
+                  ...List.generate(displayedItems.length, (index) {
+                    return Column(
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(
+                                double.infinity,
+                                MediaQuery.of(context).size.height *
+                                    0.1), // inf, 80
+                            textStyle: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  30), // Redondear los bordes del botón
+                            ),
+                            backgroundColor: Color(0xFFF5F5F5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20), // Margen horizontal del texto
+                          ),
+                          onPressed: () {
+                            // acción
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  displayedItems[index],
+                                  //textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors
+                                        .black, // Cambia el color del texto a rojo
+                                  ),
+                                ),
+
+                                /////
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Row(
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                    'Confirmar eliminación'),
+                                                content: Text(
+                                                    '¿Estás seguro de que deseas eliminar esta tarea?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(); // Cierra el diálogo
+                                                    },
+                                                    child: Text('Cancelar'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        tasks.remove(
+                                                            displayedItems[
+                                                                index]);
+                                                        displayedItems.remove(
+                                                            displayedItems[
+                                                                index]);
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop(); // Cierra el diálogo
+                                                    },
+                                                    child: Text('Eliminar'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(10, 20),
+                                          backgroundColor: Color(0xFFF5F5F5),
+                                          elevation: 0,
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/DeleteIcon.png',
+                                          width: 30,
+                                          height: 35,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                /////
+                              ]),
+                        ),
+                        SizedBox(height: 30), //espacio entre tareas
+                      ],
+                    );
+                  })
+                ]),
               ),
             ])),
       ),
