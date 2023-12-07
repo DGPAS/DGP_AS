@@ -1,4 +1,4 @@
-import 'package:dability/student_home.dart';
+import 'package:dability/Student/student_home.dart';
 import 'package:flutter/material.dart';
 
 /// # Student pictologin to access with his/her credentials
