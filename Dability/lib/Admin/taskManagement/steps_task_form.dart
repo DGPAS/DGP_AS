@@ -188,7 +188,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   Widget _getImage(String? urlPath) {
     if (urlPath == null) {
       return const Image(
-          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
       return Image.file(File(urlPath), fit: BoxFit.cover);
     }

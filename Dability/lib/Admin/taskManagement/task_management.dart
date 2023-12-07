@@ -272,7 +272,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                           elevation: 0,
                                         ),
                                         child: Image.asset(
-                                          'images/EditIcon.png',
+                                          'assets/images/EditIcon.png',
                                           width: 30,
                                           height: 35,
                                         ),
@@ -317,7 +317,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                           elevation: 0,
                                         ),
                                         child: Image.asset(
-                                          'images/DeleteIcon.png',
+                                          'assets/images/DeleteIcon.png',
                                           width: 30,
                                           height: 35,
                                         ),

@@ -426,7 +426,7 @@ class _AddModStudentState extends State<AddModStudent> {
   Widget _getImage(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
-          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
       if (typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.photo)) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
@@ -451,7 +451,7 @@ class _AddModStudentState extends State<AddModStudent> {
   Widget _getPasswd(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
-          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
       if (typeForm == AddModType.add || (typeForm == AddModType.mod && (urlPath != selectedDBPasswd[1] && urlPath != selectedDBPasswd[2] && urlPath != selectedDBPasswd[3]))) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
@@ -469,7 +469,7 @@ class _AddModStudentState extends State<AddModStudent> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
              Expanded(
               child: Text(
                 '$title',
@@ -494,7 +494,7 @@ class _AddModStudentState extends State<AddModStudent> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'images/userIcon.png',
+                    'assets/images/userIcon.png',
                     width: 48,
                     height: 48,
                   ),
@@ -844,7 +844,7 @@ class _AddModStudentState extends State<AddModStudent> {
                                             elevation: 0,
                                           ),
                                           child: Image.asset(
-                                            'images/DeleteIcon.png',
+                                            'assets/images/DeleteIcon.png',
                                             width: 30,
                                             height: 35,
                                           ),

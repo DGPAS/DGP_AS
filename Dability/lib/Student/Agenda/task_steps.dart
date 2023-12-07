@@ -24,7 +24,7 @@ class _TaskStepsState extends State<TaskSteps> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             /// Task title on AppBar
             const Expanded(
               child: Text(
@@ -33,7 +33,7 @@ class _TaskStepsState extends State<TaskSteps> {
               ),
             ),
             Image.asset(
-              'images/agendaLogo.png',
+              'assets/images/agendaLogo.png',
               width: 46,
               height: 46,
             ),
@@ -55,7 +55,7 @@ class _TaskStepsState extends State<TaskSteps> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'images/userIcon.png',
+                    'assets/images/userIcon.png',
                     width: 48,
                     height: 48,
                   ),
@@ -84,7 +84,7 @@ class _TaskStepsState extends State<TaskSteps> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('images/pruebaPaso.png',
+                      Image.asset('assets/images/pruebaPaso.png',
                         height: MediaQuery.of(context).size.height * 0.25,
                         width: MediaQuery.of(context).size.width * 0.75,
                       ),
@@ -145,18 +145,18 @@ class _TaskStepsState extends State<TaskSteps> {
                                 width: MediaQuery.of(context).size.width * 0.025,
                               ),
                               widget.checkedStep[widget.index] ?
-                                Image.asset('images/checkIcon.png',
+                                Image.asset('assets/images/checkIcon.png',
                                     height: MediaQuery.of(context).size.height * 0.075,
                                 ):
-                                Image.asset('images/greyIcon.jpg',
+                                Image.asset('assets/images/greyIcon.jpg',
                                   height: MediaQuery.of(context).size.height * 0.075,
                                 ) ,
                             ],
                           ),
 
                         //  child: widget.checkedStep[widget.index] ?
-                          //Image.asset('images/checkIcon.png'):
-                          //Image.asset('images/greyIcon.jpg') ,
+                          //Image.asset('assets/images/checkIcon.png'):
+                          //Image.asset('assets/images/greyIcon.jpg') ,
                       ),
                     ],
                   ),
@@ -186,7 +186,7 @@ class _TaskStepsState extends State<TaskSteps> {
                             ),
                           ),
                           child: Image.asset(
-                              'images/formerPageArrow.png',
+                              'assets/images/formerPageArrow.png',
                               width: MediaQuery.of(context).size.height * 0.1,
                           ),
                         ),
@@ -205,7 +205,7 @@ class _TaskStepsState extends State<TaskSteps> {
                             ),
                           ),
                           child: Image.asset(
-                              'images/nextPageArrow.png',
+                              'assets/images/nextPageArrow.png',
                               width: MediaQuery.of(context).size.height * 0.1,
                           ),
                         ),

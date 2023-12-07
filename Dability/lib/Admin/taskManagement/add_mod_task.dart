@@ -432,7 +432,7 @@ class _AddModTaskState extends State<AddModTask> {
   Widget _getImage(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
-          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
       if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.thumbnail)) {
         return Image.file(File(urlPath), fit: BoxFit.cover);

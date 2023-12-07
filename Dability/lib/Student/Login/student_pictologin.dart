@@ -60,7 +60,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
                 'PictoLogin ' + student,
@@ -85,7 +85,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'images/userIcon.png',
+                    'assets/images/userIcon.png',
                     width: 48,
                     height: 48,
                   ),
@@ -113,17 +113,17 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                   String imagePath = "";
 
                   if (index == 0) {
-                    imagePath = 'images/spiderman.png';
+                    imagePath = 'assets/images/spiderman.png';
                   } else if (index == 1) {
-                    imagePath = 'images/batman.jpeg';
+                    imagePath = 'assets/images/batman.jpeg';
                   } else if (index == 2) {
-                    imagePath = 'images/superman.jpg';
+                    imagePath = 'assets/images/superman.jpg';
                   } else if (index == 3) {
-                    imagePath = 'images/pantera.jfif';
+                    imagePath = 'assets/images/pantera.jfif';
                   } else if (index == 4) {
-                    imagePath = 'images/luffy.jpeg';
+                    imagePath = 'assets/images/luffy.jpeg';
                   } else if (index == 5) {
-                    imagePath = 'images/goku.jpg';
+                    imagePath = 'assets/images/goku.jpg';
                   }
 
                   return Container(
@@ -196,17 +196,17 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                     int elementIndex = elements.indexOf(currentElement);
 
                     if (elementIndex == 0) {
-                      imagePath = 'images/spiderman.png';
+                      imagePath = 'assets/images/spiderman.png';
                     } else if (elementIndex == 1) {
-                      imagePath = 'images/batman.jpeg';
+                      imagePath = 'assets/images/batman.jpeg';
                     } else if (elementIndex == 2) {
-                      imagePath = 'images/superman.jpg';
+                      imagePath = 'assets/images/superman.jpg';
                     } else if (elementIndex == 3) {
-                      imagePath = 'images/pantera.jpeg';
+                      imagePath = 'assets/images/pantera.jpeg';
                     } else if (elementIndex == 4) {
-                      imagePath = 'images/luffy.jpeg';
+                      imagePath = 'assets/images/luffy.jpeg';
                     } else if (elementIndex == 5) {
-                      imagePath = 'images/goku.jpeg';
+                      imagePath = 'assets/images/goku.jpeg';
                     }
 
                     return Column(

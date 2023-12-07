@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dability/Admin/admin_home.dart';
-import 'Student/student_home.dart';
 import 'Admin/login/admin_login.dart';
 import 'Student/Login/student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -59,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             Container(
                 padding: const EdgeInsets.all(15.0),
                 child: Image.asset(
-                  'images/Logo.png',
+                  'assets/images/Logo.png',
                   height: 100,
                 )),
             /// Slogan

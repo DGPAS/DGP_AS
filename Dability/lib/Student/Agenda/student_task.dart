@@ -24,7 +24,7 @@ class _StudentTaskState extends State<StudentTask> {
         appBar: AppBar(
           title: Row(
             children: [
-              Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+              Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
               const Expanded(
                 /// Task title on AppBar
                 child: Text(
@@ -33,7 +33,7 @@ class _StudentTaskState extends State<StudentTask> {
                 ),
               ),
               Image.asset(
-                'images/agendaLogo.png',
+                'assets/images/agendaLogo.png',
                 width: 46,
                 height: 46,
               ),
@@ -55,7 +55,7 @@ class _StudentTaskState extends State<StudentTask> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      'images/userIcon.png',
+                      'assets/images/userIcon.png',
                       width: 48,
                       height: 48,
                     ),
@@ -147,7 +147,7 @@ class _StudentTaskState extends State<StudentTask> {
                             },
                             child: done
                                 ? Image.asset(
-                                    'images/checkIcon.png',
+                                    'assets/images/checkIcon.png',
                                     width: 100,
                                   )
                                 : null,
@@ -245,7 +245,7 @@ class _StudentTaskState extends State<StudentTask> {
                         ),
 
                         Image.asset(
-                          'images/taskImage.png',
+                          'assets/images/taskImage.png',
                           height: MediaQuery.of(context).size.height * 0.20,
                           width: MediaQuery.of(context).size.height * 0.20,
                         ),
