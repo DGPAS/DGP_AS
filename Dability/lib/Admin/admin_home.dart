@@ -23,14 +23,14 @@ class _AdminHomeState extends State<AdminHome> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
                 'Inicio Admin',
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),
-            Image.asset('images/currentPageIcon.png', width: 46, height: 46),
+            Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
             SizedBox(
               width: 50,
             ),
@@ -48,7 +48,7 @@ class _AdminHomeState extends State<AdminHome> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset('images/userIcon.png', width: 48, height: 48),
+                  Image.asset('assets/images/userIcon.png', width: 48, height: 48),
                 ],
               ),
             ),

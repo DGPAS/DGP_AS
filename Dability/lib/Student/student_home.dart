@@ -46,14 +46,14 @@ class _StudentHomeState extends State<StudentHome> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
                 'INICIO ' + student,
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),
-            Image.asset('images/currentPageIcon.png', width: 46, height: 46),
+            Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
             SizedBox(
               width: 50,
             ),
@@ -71,7 +71,7 @@ class _StudentHomeState extends State<StudentHome> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset('images/userIcon.png', width: 48, height: 48),
+                  Image.asset('assets/images/userIcon.png', width: 48, height: 48),
                 ],
               ),
             ),
@@ -127,7 +127,7 @@ class _StudentHomeState extends State<StudentHome> {
                     SizedBox(
                         height: MediaQuery.of(context).size.height * 0.025),
                     Image.asset(
-                      'images/agendaLogo.png',
+                      'assets/images/agendaLogo.png',
                       width: MediaQuery.of(context).size.width * 0.1,
                     ),
                   ],

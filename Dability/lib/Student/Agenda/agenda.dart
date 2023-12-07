@@ -15,19 +15,19 @@ class ToDoList extends StatefulWidget {
   int counter = 0;
   /// Obtain it from DataBase
   List<Task> tasks = [
-    Task('Tarea 1', 'images/planTask.png', 1),
-    Task('Tarea 2', 'images/microwaveTask.png', 2),
-    Task('Tarea 3', 'images/domesticTask.png', 3),
-    Task('Tarea 4', 'images/planTask.png', 4),
-    Task('Tarea 5', 'images/microwaveTask.png', 5),
-    Task('Tarea 6', 'images/domesticTask.png', 6),
-    Task('Tarea 7', 'images/planTask.png', 7),
-    Task('Tarea 8', 'images/microwaveTask.png', 8),
-    Task('Tarea 9', 'images/domesticTask.png', 9),
-    Task('Tarea 10', 'images/planTask.png', 10),
-    Task('Tarea 11', 'images/microwaveTask.png', 11),
-    Task('Tarea 12', 'images/domesticTask.png', 12),
-    Task('Tarea 13', 'images/planTask.png', 13),
+    Task('Tarea 1', 'assets/images/planTask.png', 1),
+    Task('Tarea 2', 'assets/images/microwaveTask.png', 2),
+    Task('Tarea 3', 'assets/images/domesticTask.png', 3),
+    Task('Tarea 4', 'assets/images/planTask.png', 4),
+    Task('Tarea 5', 'assets/images/microwaveTask.png', 5),
+    Task('Tarea 6', 'assets/images/domesticTask.png', 6),
+    Task('Tarea 7', 'assets/images/planTask.png', 7),
+    Task('Tarea 8', 'assets/images/microwaveTask.png', 8),
+    Task('Tarea 9', 'assets/images/domesticTask.png', 9),
+    Task('Tarea 10', 'assets/images/planTask.png', 10),
+    Task('Tarea 11', 'assets/images/microwaveTask.png', 11),
+    Task('Tarea 12', 'assets/images/domesticTask.png', 12),
+    Task('Tarea 13', 'assets/images/planTask.png', 13),
   ];
   /// Variable to show [numTasksPerPage] tasks on each page
   int numTasksPerPage = 3;
@@ -60,7 +60,7 @@ class _ToDoListState extends State<ToDoList> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             const Expanded(
               child: Text(
                 'AGENDA',
@@ -68,7 +68,7 @@ class _ToDoListState extends State<ToDoList> {
               ),
             ),
             Image.asset(
-              'images/agendaLogo.png',
+              'assets/images/agendaLogo.png',
               width: 46,
               height: 46,
             ),
@@ -90,7 +90,7 @@ class _ToDoListState extends State<ToDoList> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'images/userIcon.png',
+                    'assets/images/userIcon.png',
                     width: 48,
                     height: 48,
                   ),
@@ -212,7 +212,7 @@ class _ToDoListState extends State<ToDoList> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset(
-                                  'images/formerPageArrow.png',
+                                  'assets/images/formerPageArrow.png',
                                   width: MediaQuery.of(context).size.height * 0.1,
                                 ),
                               ],
@@ -254,7 +254,7 @@ class _ToDoListState extends State<ToDoList> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset(
-                                  'images/nextPageArrow.png',
+                                  'assets/images/nextPageArrow.png',
                                   width: MediaQuery.of(context).size.height * 0.1,
                                 ),
                               ],
@@ -348,7 +348,7 @@ class _ToDoListState extends State<ToDoList> {
                                     });
                                   },
                                   child: widget.isImageVisibleList[startIndex + i]
-                                      ? Image.asset('images/checkIcon.png', fit: BoxFit.fill)
+                                      ? Image.asset('assets/images/checkIcon.png', fit: BoxFit.fill)
                                       : SizedBox(height: 100, width: 100),
                                 ),
                               ],

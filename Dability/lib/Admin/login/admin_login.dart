@@ -44,7 +44,7 @@ class _AdminLoginState extends State<AdminLogin> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             const Expanded(
               child: Text(
                 'Login Admin',
@@ -69,7 +69,7 @@ class _AdminLoginState extends State<AdminLogin> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'images/userIcon.png',
+                    'assets/images/userIcon.png',
                     width: 48,
                     height: 48,
                   ),
