@@ -9,14 +9,13 @@ class StudentHome extends StatefulWidget {
   const StudentHome({Key? key, required this.idStudent}); // deberia recibir el id del alumno
 
   @override
-  State<StudentHome> createState() =>
-      _StudentHomeState(idStudent: this.idStudent);
+  State<StudentHome> createState() => _StudentHomeState();
 }
 
 class _StudentHomeState extends State<StudentHome> {
-  final int idStudent;
+  int idStudent = -1;
 
-  _StudentHomeState({required this.idStudent});
+  _StudentHomeState();
 
 
   /// Data example pre-DataBase
@@ -27,6 +26,9 @@ class _StudentHomeState extends State<StudentHome> {
   @override
   void initState() {
     super.initState();
+
+    idStudent = widget.idStudent;
+
     setState(() {
       students.add("JOAQUIN");
       students.add("MANUEL");

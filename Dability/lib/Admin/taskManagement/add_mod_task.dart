@@ -18,19 +18,12 @@ class AddModTask extends StatefulWidget {
   AddModTask(
       {Key? key,
       required this.typeForm,
-      this.title,
-      this.description,
-      this.idTasks,
-      this.thumbnail,
-      this.videoUrl})
+      this.task
+      })
       : super(key: key);
 
   final AddModType typeForm;
-  final String? title;
-  final String? description;
-  final String? idTasks;
-  final String? thumbnail;
-  final String? videoUrl;
+  final Map<String, dynamic>? task;
 
   @override
   State<AddModTask> createState() => _AddModTaskState();
@@ -81,11 +74,11 @@ class _AddModTaskState extends State<AddModTask> {
     super.initState();
 
     typeForm = widget.typeForm;
-    title = widget.title;
-    description = widget.description;
-    idTasks = widget.idTasks;
-    thumbnail = widget.thumbnail;
-    videoUrl = widget.videoUrl;
+    title = widget.task?['taskName'];
+    description = widget.task?['description'];
+    idTasks = widget.task?['idTask'];
+    thumbnail = widget.task?['thumbnail'];
+    videoUrl = widget.task?['video'];
     /// If title or description are null it means that we are adding a task,
     /// not modifying it, so the values are initialized by the controllers
     title ??= titleForm.getText();
@@ -103,8 +96,8 @@ class _AddModTaskState extends State<AddModTask> {
     }
 
     /// If the miniature exits, it initializes it
-    if(widget.thumbnail != null) {
-     selectedImage = widget.thumbnail!;
+    if(widget.task?['thumbnail'] != null) {
+     selectedImage = widget.task?['thumbnail'];
     }
     getThumbnail();
     isPressed = false;
@@ -191,9 +184,8 @@ class _AddModTaskState extends State<AddModTask> {
       String uri = "${dotenv.env['API_URL']}/insert_task.php";
 
         var res = await http.post(Uri.parse(uri), body: {
-          "name": title?.trim(),
+          "taskName": title?.trim(),
           "description": description?.trim(),
-          "thumbnail": '',
           "video": '',
         });
 
@@ -430,7 +422,7 @@ class _AddModTaskState extends State<AddModTask> {
       return const Image(
           image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
-      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.thumbnail)) {
+      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.task?['thumbnail'])) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       } else {
         return Image.network("${dotenv.env['API_URL']}/images/$urlPath", fit: BoxFit.cover);

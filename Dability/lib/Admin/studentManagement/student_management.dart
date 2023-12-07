@@ -245,7 +245,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent(typeForm: AddModType.mod, idStudent: displayedItems[index]['id'], name: displayedItems[index]['firstName'], surname: displayedItems[index]['lastName'], readCheck: displayedItems[index]['text'], soundCheck: displayedItems[index]['audio'], videoCheck: displayedItems[index]['video'], photo: displayedItems[index]['picture'])),
+                                                    AddModStudent(typeForm: AddModType.mod, student: displayedItems[index])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(

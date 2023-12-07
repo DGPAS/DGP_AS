@@ -99,7 +99,7 @@ class _TaskManagementState extends State<TaskManagement> {
 
     if (query.isNotEmpty) {
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i]['name'].toLowerCase().contains(query.toLowerCase())) {
+        if (tasks[i]['taskName'].toLowerCase().contains(query.toLowerCase())) {
           searchResults.add(tasks[i]);
         }
       }
@@ -241,7 +241,7 @@ class _TaskManagementState extends State<TaskManagement> {
                               children: [
                                 /// Name of the task
                                 Text(
-                                  displayedItems[index]['name'],
+                                  displayedItems[index]['taskName'],
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -263,7 +263,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                                 builder: (context) =>
                                                     AddModTask(
                                                         typeForm:
-                                                            AddModType.mod, title: displayedItems[index]['name'], description: displayedItems[index]['description'], idTasks: displayedItems[index]['idTasks'], thumbnail: displayedItems[index]['thumbnail'])),
+                                                            AddModType.mod, task: displayedItems[index])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
