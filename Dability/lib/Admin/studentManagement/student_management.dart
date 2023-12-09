@@ -41,8 +41,10 @@ class _StudentManagementState extends State<StudentManagement> {
   /// and adds them to [displayedItems]
   Future<void> getData () async {
     students = await getStudents();
-    displayedItems.addAll(students);
-    filterSearchResults('');
+    setState(() {
+      displayedItems.clear();
+      displayedItems.addAll(students);
+    });
   }
 
   /// Function that filters the list of students whose name matches

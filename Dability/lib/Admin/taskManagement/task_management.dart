@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import '../../Api_Requests/Task_requests.dart';
 import 'add_mod_task.dart';
 import '../../Components/enum_types.dart';
 import 'package:http/http.dart' as http;
@@ -24,61 +24,11 @@ class _TaskManagementState extends State<TaskManagement> {
   /// List that stores tasks form DataBase
   List<dynamic> tasks = [];
 
-  /// It saves all the task that are stored from DataBase in a dynamic
-  /// list [tasks]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> getTasks() async {
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/view_tasks.php";
-    try {
-      var response = await http.get(Uri.parse(uri));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          tasks = json.decode(response.body);
-        });
-      } else {
-        print('Error en la solicitud getTasks: ${response.statusCode}');
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  /// It deletes a task with id = [idTasks] from the DataBase
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> deleteTask(String idTasks) async {
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/delete_task.php";
-    try {
-      var res = await http.post(Uri.parse(uri), body: {"idTasks": idTasks});
-      var response = jsonDecode(res.body);
-      if (response["success"] == true) {
-        print("Task deleted");
-        // Refresh the task list after deletion
-        getTasks();
-      } else {
-        print("Task not deleted. Server response: ${response['error']}");
-      }
-    } catch (e) {
-      print("Error during task deletion: $e");
-    }
-  }
-
   /// Maximum with of the list of tasks
   double maxWidth = 500;
 
   /// Filtered list of tasks
   List<dynamic> displayedItems = [];
-
-  /// Function that calls [getTasks] who returns the DataBase tasks
-  /// and adds them to [displayedItems]
-  Future<void> getData () async {
-    await getTasks();
-    displayedItems.addAll(tasks);
-  }
 
   /// Init State
   ///
@@ -88,6 +38,16 @@ class _TaskManagementState extends State<TaskManagement> {
     super.initState();
 
     getData();
+  }
+
+  /// Function that calls [getTasks] who returns the DataBase tasks
+  /// and adds them to [displayedItems]
+  Future<void> getData () async {
+    tasks = await getTasks();
+    setState(() {
+      displayedItems.clear();
+      displayedItems.addAll(tasks);
+    });
   }
 
   /// Function that filters the list of tasks whose name matches
@@ -300,7 +260,8 @@ class _TaskManagementState extends State<TaskManagement> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      deleteTask(displayedItems[index]['idTasks']);
+                                                      deleteTask(displayedItems[index]['idTask']);
+                                                      getData();
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
