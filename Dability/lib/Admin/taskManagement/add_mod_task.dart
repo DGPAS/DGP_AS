@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import '../../Api_Requests/Steps_requests.dart';
+import '../../Api_Requests/Task_requests.dart';
 
 /// # Page for add or modify a task
 ///
@@ -47,7 +49,7 @@ class _AddModTaskState extends State<AddModTask> {
   /// Variables where it will be stored the data of a task
   String? title;
   String? description;
-  String? idTasks;
+  String? idTask;
   String? thumbnail;
   Image? thumbnailImage;
   String? videoUrl;
@@ -76,7 +78,7 @@ class _AddModTaskState extends State<AddModTask> {
     typeForm = widget.typeForm;
     title = widget.task?['taskName'];
     description = widget.task?['description'];
-    idTasks = widget.task?['idTask'];
+    idTask = widget.task?['idTask'];
     thumbnail = widget.task?['thumbnail'];
     videoUrl = widget.task?['video'];
     /// If title or description are null it means that we are adding a task,
@@ -90,57 +92,25 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.text = description!;
 
     /// If the task exists, it calls [getInitialSteps] and get the actualTaskId
-    if (idTasks != null) {
-      getInitialSteps();
-      actualTaskId = idTasks!;
+    if (idTask != null) {
+      getData();
     }
 
     /// If the miniature exits, it initializes it
     if(widget.task?['thumbnail'] != null) {
      selectedImage = widget.task?['thumbnail'];
     }
-    getThumbnail();
+    getThumbnail(thumbnail!);
     isPressed = false;
   }
 
-
-  /// Function that saves the steps on a [ListStep] list [steps] of the
-  /// existing task with id = [idTareas] from DataBase
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> getInitialSteps() async {
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTasks";
-    try {
-      print(idTasks!);
-      var response = await http.get(
-        Uri.parse(uri),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> responseData = json.decode(response.body);
-        List<ListStep> loadedSteps = [];
-
-        for (var stepData in responseData) {
-          loadedSteps.add(ListStep(
-            stepData['numStep'],
-            stepData['image'],
-            stepData['description'],
-          ));
-        }
-
-        setState(() {
-          steps = loadedSteps;
-        });
-      } else {
-        print('Error en la solicitud: ${response.statusCode}');
-      }
-    } catch (error) {
-      print(error);
-    }
+  /// Function that calls [getInitialSteps] who returns the DataBase tasks
+  /// and adds them to [steps]
+  Future<void> getData () async {
+    steps = await getInitialSteps(idTask!);
+    setState(() {
+      actualTaskId = idTask!;
+    });
   }
 
 
@@ -151,230 +121,22 @@ class _AddModTaskState extends State<AddModTask> {
   /// each step in [steps], it adds each one
   ///
   /// If it is modifying a task, it updates the task by
-  /// its id [idTareas], it updates the miniature and
+  /// its id [id], it updates the miniature and
   /// it updates its steps
-  Future<void> submitForm (String? idTareas) async {
+  Future<void> submitForm (String? id) async {
     if (typeForm == AddModType.add) {
-      await insertTaskData();
-      await uploadImage();
-      await saveVideo();
+      actualTaskId = await insertTaskData(title!, description!);
+      await uploadImage(actualTaskId, selectedImage);
+      await saveVideo(actualTaskId, selectedVideo);
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
-        await insertStepsData(steps[i]);
+        await insertStepsData(actualTaskId, steps[i]);
       }
     } else {
-      await updateData(idTareas);
-      await uploadImage();
-      await updateSteps();
-
-      
-
+      await updateData(id!, title!, description!);
+      await uploadImage(id, selectedImage);
+      await updateSteps(id,steps);
     }
-  }
-
-
-  /// Function that inserts a task on DataBase by calling an API function
-  ///
-  /// It adds its name, its description, the miniature name and the video name
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> insertTaskData() async {
-    try {
-      /// Uri whose IP is on .env that calls API
-      String uri = "${dotenv.env['API_URL']}/insert_task.php";
-
-        var res = await http.post(Uri.parse(uri), body: {
-          "taskName": title?.trim(),
-          "description": description?.trim(),
-          "video": '',
-        });
-
-        var response = jsonDecode(res.body);
-        if (response["success"] == "true") {
-          print("Datos insertados");
-
-          int newTaskId = response["idTasks"];
-          print("Nuevo idTareas: $newTaskId");
-          setState(() {
-            actualTaskId = newTaskId.toString();
-          });
-        } else {
-          print("Datos no insertados");
-        }
-      } catch (error) {
-        print(error);
-      }
-  }
-
-
-  /// Function that inserts a [step] of a task on DataBase by calling an API function
-  ///
-  /// It adds its step number [numStep], its description and its image name by the [actualTaskId]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> insertStepsData(ListStep step) async {
-    try {
-      /// Uri whose IP is on .env that calls API
-      String uri = "${dotenv.env['API_URL']}/insert_steps.php";
-
-      print('Datos a enviar: numPaso: ${step.numStep}, idTarea: $actualTaskId, description: ${step.description}, imagen: ${step.image}');
-
-      var res = await http.post(Uri.parse(uri), body: {
-        "numStep": step.numStep.toString(),
-        "idTask": actualTaskId,
-        "description": step.description,
-        "image": step.image
-      });
-
-      var response = jsonDecode(res.body);
-      if (response["success"] == "true") {
-        print("Datos insertados");
-      } else {
-        print("Datos no insertados");
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-
-  /// Function that updates a task on DataBase by calling an API function
-  ///
-  /// It updates its name and description by [idTareas]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> updateData (String? idTareas) async {
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/update_data.php";
-
-    try {
-      print("Datos a modificar: $title, $description");
-
-      var res=await http.post(Uri.parse(uri),body: {
-        "idTasks": idTareas,
-        "name": title?.trim(), // nombre
-        "description": description?.trim(),
-      });
-
-      var response=jsonDecode(res.body);
-
-      if(response["success"]=="true"){
-        print("Datos actualizados");
-      }else{
-        print("Some issue");
-
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-
-  /// Function that updates the steps of a task on DataBase by calling an API function
-  ///
-  /// It updates them with [steps] by [idTareas]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> updateSteps () async {
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/update_steps.php";
-
-    try {
-      var res=await http.post(Uri.parse(uri),body: {
-        "steps": jsonEncode(steps.map((step) => step.toJson()).toList()),
-        "idTask": idTasks,
-      });
-
-      var response=jsonDecode(res.body);
-
-      if(response["success"]=="true"){
-        print("Steps actualizados");
-      }else{
-        print("Some issue");
-
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-
-  /// Function that uploads the miniature of a task on API directory
-  /// by calling an API function
-  ///
-  /// It uploads it with [selectedImage] by [actualTaskId]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> uploadImage() async {
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/upload_image.php";
-
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(uri));
-      request.fields['idTasks'] = actualTaskId;
-      var picture = await http.MultipartFile.fromPath("image", selectedImage);
-      request.files.add(picture);
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print ("Image Uploaded");
-      }
-      else {
-        print("Error en la subida");
-      }
-
-    } catch (error) {
-      print(error);
-    }
-  }
-
-
-  /// Function that uploads the video of a task on API directory
-  /// by calling an API function
-  ///
-  /// It uploads it with [selectedVideo] by [actualTaskId]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> saveVideo() async {
-    if (selectedVideo == "") {
-      print("No se ha seleccionado ningún video");
-      return;
-    }
-
-    /// Uri whose IP is on .env that calls API
-    String uri = "${dotenv.env['API_URL']}/saveVideo.php";
-
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(uri));
-
-      // Puedes agregar la lógica para seleccionar un video específico en el emulador
-      // Esto puede variar según el emulador que estés utilizando
-
-      // Simplemente usa el path del video seleccionado
-      request.fields['idTasks'] = actualTaskId;
-      var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
-      request.files.add(videoFile);
-
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print("Video Uploaded");
-        print("Response Body: ${await response.stream.bytesToString()}");
-      } else {
-        print("Error in uploading video. Status Code: ${response.statusCode}");
-      }
-    } catch (error) {
-      print("Exception during video upload: $error");
-    }
-}
-
-
-  /// Function that updates the miniature task by searching it on
-  /// API images directory
-  void getThumbnail() {
-    setState(() {
-      thumbnailImage = Image.network("${dotenv.env['API_URL']}/images/$thumbnail");
-    });
   }
 
 
@@ -577,7 +339,7 @@ class _AddModTaskState extends State<AddModTask> {
                                 radius: const Radius.circular(20),
                                 child: SizedBox(
                                   height: 200,
-                                  width: 800,
+                                  width: 200,
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(45),
                                       child: _getImage(selectedImage)),
@@ -864,7 +626,7 @@ class _AddModTaskState extends State<AddModTask> {
               /// Submit button
               ///
               /// On pressed, it updates data task and check if they are not
-              /// null. After that, it calls [submitForm] with [idTareas] and
+              /// null. After that, it calls [submitForm] with [id] and
               /// pops to previous page
               ElevatedButton(
                 style: ButtonStyle(
@@ -876,8 +638,9 @@ class _AddModTaskState extends State<AddModTask> {
                   if ((title == '' || title == null) ||
                   (description == '' || description == null)) {
                   print("Los campos titulo y descripción son obligatorios");
-                  } else {
-                    submitForm(idTasks);
+                  }
+                  else {
+                    submitForm(idTask);
                     Navigator.of(context).pop();
                   }
                 },

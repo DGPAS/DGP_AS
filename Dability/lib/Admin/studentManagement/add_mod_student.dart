@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:dability/Api_Requests/Student_requests.dart';
 
 /// # Page for add or modify an student
 ///
@@ -50,7 +51,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
   /// Lists that store and manage the password of an student
   List<String> selectedPasswd = ['','','',''];
-  List<String> selectedDBPasswd = ['','','',''];
+  List<String> selectedDBPasswd = [];
 
   /// Form that contains the name of the student to add or modify
   TextForm nameForm = TextForm(
@@ -66,7 +67,7 @@ class _AddModStudentState extends State<AddModStudent> {
   /// Init State
   ///
   /// Initialize the student password and its tasks, if it has,
-  /// by calling [getStudentPassword] and [funtion calls API for student Diary]
+  /// by calling [getData] and [funtion calls API for student Diary]
   @override
   void initState() {
     super.initState();
@@ -86,6 +87,11 @@ class _AddModStudentState extends State<AddModStudent> {
     id = widget.student?['id'];
     if (id != null) {
       actualStudentId = id!;
+    }
+
+    /// If the student exists, it get his password
+    if (typeForm == AddModType.mod) {
+      getData();
     }
 
     nameStudent = widget.student?['firstName'];
@@ -121,11 +127,6 @@ class _AddModStudentState extends State<AddModStudent> {
       selectedPhoto = widget.student?['picture'];
     }
 
-    /// If the student exists, it get his password
-    if (typeForm == AddModType.mod) {
-      getStudentPassword();
-    }
-
     /// If name or surname are null it means that we are adding an student,
     /// not modifying him/her, so the values are initialized by the controllers
     nameStudent ??= nameForm.getText();
@@ -142,192 +143,17 @@ class _AddModStudentState extends State<AddModStudent> {
     displayedItems.addAll(tasks);
   }
 
-  /// Function that saves the student password on a [String] list [selectedPasswd] and [selectedDBPasswd] of the
-  /// existing student with id = [actualStudentId] from DataBase
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> getStudentPassword() async {
-    String uri = "${dotenv.env['API_URL']}/view_student_password.php?idStudent=$actualStudentId";
-    try {
-      var res = await http.get(Uri.parse(uri));
-
-      var response = jsonDecode(res.body);
-      if (response["success"] == "true") {
-        print("Contraseña obtenida");
-
-        setState(() {
-          selectedPasswd[1] = response["data"]["pictogram1"].toString();
-          selectedPasswd[2] = response["data"]["pictogram2"].toString();
-          selectedPasswd[3] = response["data"]["pictogram3"].toString();
-          selectedDBPasswd[1] = selectedPasswd[1];
-          selectedDBPasswd[2] = selectedPasswd[2];
-          selectedDBPasswd[3] = selectedPasswd[3];
-        });
-      } else {
-        print("Error en response getStudentPassword");
-      }
-    } catch (e) {
-      print(e);
-    }
+  /// Function that calls [getStudentPassword] who returns the DataBase student
+  /// password and adds it to [selectedPasswd] and [selectedDBPasswd]
+  Future<void> getData () async {
+    selectedPasswd = await getStudentPassword(actualStudentId);
+    setState(() {
+      selectedDBPasswd.clear();
+      selectedDBPasswd.addAll(selectedPasswd);
+    });
+    print("------------------------ ${selectedDBPasswd}");
   }
 
-  /// Function that inserts an student on DataBase by calling an API function
-  ///
-  /// It adds its name, its lastname, the picture string and the format attributes
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> insertStudent() async {
-    try {
-      String uri = "${dotenv.env['API_URL']}/insert_student.php";
-
-      var res = await http.post(Uri.parse(uri), body: {
-        "firstName": nameStudent, // nombre
-        "lastName": surnameStudent, // Apellido
-        "picture": '', // foto
-        "text": readCheck.toString() == 'true' ? '1' : '0',
-        "audio": soundCheck.toString() == 'true' ? '1' : '0',
-        "video": videoCheck.toString() == 'true' ? '1' : '0',
-      });
-
-      var response = jsonDecode(res.body);
-      if (response["success"] == "true") {
-        print("Datos insertados");
-        int newStudentId = response["idStudent"];
-        setState(() {
-          actualStudentId = newStudentId.toString();
-          print("Nuevo idStudent: $actualStudentId");
-        });
-      } else {
-        print("Datos no insertados");
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  /// Function that uploads the photo of an student on API directory
-  /// by calling an API function
-  ///
-  /// It uploads it with [_photo] by [actualStudentId]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> uploadPhoto() async {
-    String uri = "${dotenv.env['API_URL']}/upload_student_photo.php";
-
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(uri));
-      request.fields['idStudent'] = actualStudentId;
-      var picture = await http.MultipartFile.fromPath("image", _photo!.path);
-      request.files.add(picture);
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print ("Image Uploaded");
-      }
-      else {
-        print("Error en la subida");
-      }
-
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  /// Function that uploads the password of an student on API directory
-  /// by calling an API function
-  ///
-  /// It uploads it with [selectedPasswd] by [actualStudentId]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> uploadPassword() async {
-    String uri = "${dotenv.env['API_URL']}/upload_password.php";
-      try {
-        var request = http.MultipartRequest('POST', Uri.parse(uri));
-        request.fields['idStudent'] = actualStudentId;
-        var pictogram1 = await http.MultipartFile.fromPath(
-            "pictogram1", selectedPasswd[1]);
-        request.files.add(pictogram1);
-        var pictogram2 = await http.MultipartFile.fromPath(
-            "pictogram2", selectedPasswd[2]);
-        request.files.add(pictogram2);
-        var pictogram3 = await http.MultipartFile.fromPath(
-            "pictogram3", selectedPasswd[3]);
-        request.files.add(pictogram3);
-        var response = await request.send();
-
-        if (response.statusCode == 200) {
-          print("Image Uploaded");
-        }
-        else {
-          print("Error en la subida");
-        }
-      } catch (e) {
-        print(e);
-      }
-  }
-
-  /// Function that updates an student password on DataBase by calling an API function
-  ///
-  /// It updates it with [selectedPasswd] by [actualStudentId]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> updatePassword() async {
-    String uri = "${dotenv.env['API_URL']}/update_password.php";
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(uri));
-      request.fields['idStudent'] = actualStudentId;
-      var pictogram1 = await http.MultipartFile.fromPath(
-          "pictogram1", selectedPasswd[1]);
-      request.files.add(pictogram1);
-      var pictogram2 = await http.MultipartFile.fromPath(
-          "pictogram2", selectedPasswd[2]);
-      request.files.add(pictogram2);
-      var pictogram3 = await http.MultipartFile.fromPath(
-          "pictogram3", selectedPasswd[3]);
-      request.files.add(pictogram3);
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print("Password Updated");
-      }
-      else {
-        print("Error en la subida");
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  /// Function that updates an student on DataBase by calling an API function
-  ///
-  /// It updates its name, its lastname and its format attributes by [idStudent]
-  ///
-  /// Throws an [error] if the query fails
-  Future<void> updateStudent (String? idStudent) async {
-    String uri = "${dotenv.env['API_URL']}/update_student.php";
-
-    try {
-      var res=await http.post(Uri.parse(uri),body: {
-        "idStudent": idStudent,
-        "firstName": nameStudent, // nombre
-        "lastName": surnameStudent,
-        "text": readCheck.toString() == 'true' ? '1' : '0',
-        "audio": soundCheck.toString() == 'true' ? '1' : '0',
-        "video": videoCheck.toString() == 'true' ? '1' : '0',
-      });
-
-      var response=jsonDecode(res.body);
-
-      if(response["success"]=="true"){
-        print("Datos actualizados");
-      }else{
-        print("Some issue");
-
-      }
-    } catch (error) {
-      print(error);
-    }
-  }
 
   /// Function that filters the list of student tasks whose name matches
   /// or contains [query] by updating [displayedItems]
@@ -388,15 +214,17 @@ class _AddModStudentState extends State<AddModStudent> {
   /// it updates the password
   Future<void> submitForm (String idStudent) async {
     if (typeForm == AddModType.add) {
-      await insertStudent();
+      actualStudentId = await insertStudent(nameStudent!, surnameStudent!,
+                            readCheck!, soundCheck!, videoCheck!);
       if (_photo != null) {
-        await uploadPhoto();
+        await uploadPhoto(actualStudentId, _photo!);
       }
-      await uploadPassword();
+      await uploadPassword(actualStudentId, selectedPasswd);
     } else {
-      await updateStudent(idStudent);
-      await uploadPhoto();
-      await updatePassword();
+      await updateStudent(idStudent, nameStudent!, surnameStudent!,
+          readCheck!, soundCheck!, videoCheck!);
+      await uploadPhoto(actualStudentId, _photo!);
+      await updatePassword(actualStudentId, selectedPasswd);
     }
   }
 
@@ -436,15 +264,19 @@ class _AddModStudentState extends State<AddModStudent> {
   ///
   /// If [urlPath] its the original photo password from the DataBase student that we are
   /// modifying, we show it with [Image.network]
-  Widget _getPasswd(String? urlPath) {
+  Widget _getPasswd(String? urlPath, int numImage) {
     if (urlPath == null || urlPath == '') {
+      print("getPasswd -------- Cargo del asset");
       return const Image(
           image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
-      if (typeForm == AddModType.add || (typeForm == AddModType.mod && (urlPath != selectedDBPasswd[1] && urlPath != selectedDBPasswd[2] && urlPath != selectedDBPasswd[3]))) {
+      if (typeForm == AddModType.add || (typeForm == AddModType.mod && (urlPath != selectedDBPasswd[numImage]))) {
+        //print("$urlPath == ${selectedDBPasswd[numImage]}");
+        print("getPasswd -------- Cargo del file (add)");
         return Image.file(File(urlPath), fit: BoxFit.cover);
       }
       else {
+        print("getPasswd -------- Cargo de network (else)");
         return Image.network("${dotenv.env['API_URL']}/images/students/passwords/$urlPath");
       }
     }
@@ -588,7 +420,7 @@ class _AddModStudentState extends State<AddModStudent> {
                             width: 200,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: _getPasswd(selectedPasswd[1])),
+                                child: _getPasswd(selectedPasswd[1],1)),
                           ),
                         ),
                       ),
@@ -622,7 +454,7 @@ class _AddModStudentState extends State<AddModStudent> {
                             width: 200,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: _getPasswd(selectedPasswd[2])),
+                                child: _getPasswd(selectedPasswd[2],2)),
                           ),
                         ),
                       ),
@@ -656,7 +488,7 @@ class _AddModStudentState extends State<AddModStudent> {
                             width: 200,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(45),
-                                child: _getPasswd(selectedPasswd[3])),
+                                child: _getPasswd(selectedPasswd[3],3)),
                           ),
                         ),
                       ),
