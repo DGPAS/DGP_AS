@@ -5,10 +5,10 @@ import 'task_steps.dart';
 class StudentTask extends StatefulWidget {
   StudentTask({
     Key? key,
-    required this.taskID,
+    required this.task,
   }) : super(key:key);
 
-  final int taskID;
+  final Map<String, dynamic> task;
 
   @override
   State<StudentTask> createState() => _StudentTaskState();

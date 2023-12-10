@@ -16,7 +16,7 @@ class StudentPictoLogin extends StatefulWidget {
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {
-  String idStudent = "23";
+  String idStudent = "-1";
 
   _StudentPictoLoginState();
 

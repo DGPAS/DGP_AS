@@ -14,8 +14,8 @@ class StudentHome extends StatefulWidget {
 }
 
 class _StudentHomeState extends State<StudentHome> {
-  String idStudent = "-1";
   Map<String,dynamic> student = {};
+  String name = 'ALUMNO';
 
   _StudentHomeState();
 
@@ -24,15 +24,27 @@ class _StudentHomeState extends State<StudentHome> {
   void initState() {
     super.initState();
 
-    idStudent = widget.idStudent;
-
     getData();
   }
 
   /// Function that calls [getStudentById] who returns the DataBase student
-  /// with id [idStudent] and adds them to [student]
+  /// with id [widget.idStudent] and adds them to [student]
   Future<void> getData () async {
-    student = await getStudentById(idStudent);
+    Map<String,dynamic> aux = await getStudentById(widget.idStudent);
+
+    setState(() {
+      student = aux;
+      name = student['firstName'].toString().toUpperCase();
+    });
+  }
+
+  /// Function that returns the title of [AppBar]
+  ///
+  /// If [typeForm] == [AddModType.add], it updates it to creating a task
+  ///
+  /// If [typeForm] == [AddModType.mod], it updates it to modifying a task
+  String _getTitle () {
+      return 'INICIO $name';
   }
 
   /// Main builder of the page
@@ -45,7 +57,7 @@ class _StudentHomeState extends State<StudentHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'INICIO ${student['firstName'].toString().toUpperCase()}',
+                _getTitle(),
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),
@@ -107,7 +119,7 @@ class _StudentHomeState extends State<StudentHome> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Agenda()),
+                    MaterialPageRoute(builder: (context) => Agenda(student: student)),
                   );
                 },
                 child: Column(

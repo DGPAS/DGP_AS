@@ -99,7 +99,7 @@ class _StudentLoginState extends State<StudentLogin> {
                   /// On pressed, it goes to the [student_pictologin.dart]
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: "23")),
+                    MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: "23")), /// Pasar el id del alumno correspondiente o un Map<String, dynamic> student completo
                   );
                 },
                 child: Column(
