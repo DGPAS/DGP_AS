@@ -1,10 +1,7 @@
 import 'package:dability/Components/enum_types.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'add_mod_student.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:dability/Api_Requests/Student_requests.dart';
+import 'package:dability/Api_Requests/student_requests.dart';
 
 
 /// # Page where admin manages students

@@ -1,14 +1,7 @@
 import 'dart:convert';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:dability/Admin/taskManagement/steps_task_form.dart';
-import 'package:flutter/material.dart';
-import 'package:dability/Components/text_form.dart';
-import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 /// Function that saves the steps on a [ListStep] list [steps] of the
 /// existing task with id = [idTareas] from DataBase

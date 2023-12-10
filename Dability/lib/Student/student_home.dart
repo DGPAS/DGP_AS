@@ -1,26 +1,23 @@
+import 'package:dability/Api_Requests/student_requests.dart';
 import 'package:dability/dability.dart';
 import 'package:flutter/material.dart';
 import 'Agenda/agenda.dart';
 
 /// # Home page of Student
 class StudentHome extends StatefulWidget {
-  final int idStudent;
+  final String idStudent;
 
-  const StudentHome({Key? key, required this.idStudent}); // deberia recibir el id del alumno
+  const StudentHome({Key? key, required this.idStudent});
 
   @override
   State<StudentHome> createState() => _StudentHomeState();
 }
 
 class _StudentHomeState extends State<StudentHome> {
-  int idStudent = -1;
+  String idStudent = "-1";
+  Map<String,dynamic> student = {};
 
   _StudentHomeState();
-
-
-  /// Data example pre-DataBase
-  String student = "JUAN";
-  List<String> students = [];
 
   /// Init state
   @override
@@ -29,16 +26,13 @@ class _StudentHomeState extends State<StudentHome> {
 
     idStudent = widget.idStudent;
 
-    setState(() {
-      students.add("JOAQUIN");
-      students.add("MANUEL");
-      students.add("SARA");
-      students.add("RUBEN");
-      students.add("JUAN");
-      students.add("ALICIA");
+    getData();
+  }
 
-      student = students[idStudent];
-    });
+  /// Function that calls [getStudentById] who returns the DataBase student
+  /// with id [idStudent] and adds them to [student]
+  Future<void> getData () async {
+    student = await getStudentById(idStudent);
   }
 
   /// Main builder of the page
@@ -51,7 +45,7 @@ class _StudentHomeState extends State<StudentHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'INICIO ' + student,
+                'INICIO ${student['firstName'].toString().toUpperCase()}',
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),

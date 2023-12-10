@@ -92,14 +92,14 @@ class _StudentLoginState extends State<StudentLogin> {
               // color: Colors.blue,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF4A6987),
+                  backgroundColor: Color(0xFF4A6987),
                   elevation: 0
                 ),
                 onPressed: () {
                   /// On pressed, it goes to the [student_pictologin.dart]
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: index)),
+                    MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: "23")),
                   );
                 },
                 child: Column(

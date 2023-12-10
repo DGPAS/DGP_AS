@@ -44,8 +44,8 @@ Future<void> deleteStudent(String idStudent) async {
     } else {
       print("Task not deleted. Server response: ${response['error']}");
     }
-  } catch (e) {
-    print("Error during task deletion: $e");
+  } catch (error) {
+    print("Error during task deletion: $error");
   }
 }
 
@@ -71,8 +71,8 @@ Future<List<String>> getStudentPassword(String actualStudentId) async {
     } else {
       print("Error en response getStudentPassword");
     }
-  } catch (e) {
-    print(e);
+  } catch (error) {
+    print(error);
   }
 
   return selectedPasswd;
@@ -178,8 +178,8 @@ Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd)
     else {
       print("Error en la subida");
     }
-  } catch (e) {
-    print(e);
+  } catch (error) {
+    print(error);
   }
 }
 
@@ -249,4 +249,28 @@ Future<void> updateStudent (String idStudent, String name, String surname,
   } catch (error) {
     print(error);
   }
+}
+
+
+/// It gets a student with id = [idStudent] from the DataBase
+///
+/// Throws an [error] if the query fails
+Future<Map<String,dynamic>> getStudentById(String idStudent) async {
+  Map<String,dynamic> student = {};
+
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/view_student_by_id.php?idStudent=$idStudent";
+  try {
+    var response = await http.get(Uri.parse(uri));
+
+    if (response.statusCode == 200) {
+      student = json.decode(response.body)['data'];
+    } else {
+      print('Error en la solicitud: ${response.statusCode}');
+    }
+  } catch (error) {
+    print(error);
+  }
+
+  return student;
 }
