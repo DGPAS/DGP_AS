@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
@@ -7,8 +5,7 @@ import 'package:dability/Components/enum_types.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:dability/Api_Requests/Student_requests.dart';
+import 'package:dability/Api_Requests/student_requests.dart';
 
 /// # Page for add or modify an student
 ///
@@ -151,7 +148,7 @@ class _AddModStudentState extends State<AddModStudent> {
       selectedDBPasswd.clear();
       selectedDBPasswd.addAll(selectedPasswd);
     });
-    print("------------------------ ${selectedDBPasswd}");
+    print("------------------------ $selectedDBPasswd");
   }
 
 

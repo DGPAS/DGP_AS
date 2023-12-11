@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 /// It shows 6 pictures on top and the student can select 3 of them,
 /// which will appear on bottom
 class StudentPictoLogin extends StatefulWidget {
-  final int idStudent;
+  final String idStudent;
 
   const StudentPictoLogin({Key? key, required this.idStudent})
       : super(key: key);
@@ -16,7 +16,7 @@ class StudentPictoLogin extends StatefulWidget {
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {
-  int idStudent = -1;
+  String idStudent = "-1";
 
   _StudentPictoLoginState();
 
@@ -50,7 +50,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
       students.add("JUAN");
       students.add("ALICIA");
 
-      student = students[idStudent];
+      student = students[0];
 
       password = ["Spiderman", "Batman", "Superman"];
     });
@@ -65,7 +65,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'PictoLogin ' + student,
+                'PictoLogin $student',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -134,7 +134,7 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                         color: Color(0xFF4A6987)),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Color(0xFF4A6987), elevation: 0),
+                          backgroundColor: Color(0xFF4A6987), elevation: 0),
                       onPressed: () {
                         setState(() {
                           if (displayedItems.length < 3) {
@@ -213,12 +213,10 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
 
                     return Column(
                       children: [
-                        Container(
-                          child: Image.asset(
-                            imagePath,
-                            width: MediaQuery.sizeOf(context).width * 0.3,
-                            height: MediaQuery.sizeOf(context).height * 0.2,
-                          ),
+                        Image.asset(
+                          imagePath,
+                          width: MediaQuery.sizeOf(context).width * 0.3,
+                          height: MediaQuery.sizeOf(context).height * 0.2,
                         ),
                       ],
                     );

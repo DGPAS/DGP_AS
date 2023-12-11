@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../Components/list_step.dart';
+import 'package:dability/Student/Agenda/finish_task.dart';
 
 /// # Page to see each step of a task
 class TaskSteps extends StatefulWidget {
 
-  final int index;
-  final int numberOfSteps;
-  final List<bool> checkedStep;
+  final List<ListStep> steps;
+  final Map<String, dynamic> task;
+  final Map<String, dynamic> student;
 
-  TaskSteps({
-    required this.index,
-    required this.numberOfSteps,
-    required this.checkedStep,
-  });
+  TaskSteps ({
+    Key? key,
+    required this.steps,
+    required this.task,
+    required this.student
+  }) : super(key:key);
 
   @override
   State<TaskSteps> createState() => _TaskStepsState();
@@ -21,6 +25,8 @@ class TaskSteps extends StatefulWidget {
 class _TaskStepsState extends State<TaskSteps> {
   _TaskStepsState();
 
+  Map<String, dynamic> task = {};
+  List<ListStep> steps = [];
   int index = 0;
   int numberOfSteps = 0;
   List<bool> checkedStep = [];
@@ -30,9 +36,11 @@ class _TaskStepsState extends State<TaskSteps> {
   void initState () {
     super.initState();
 
-    index = widget.index;
-    numberOfSteps = widget.numberOfSteps;
-    checkedStep = widget.checkedStep;
+    task = widget.task;
+
+    steps = widget.steps;
+    numberOfSteps = steps.length;
+    checkedStep = List.generate(numberOfSteps, (index) => false);
   }
 
   @override
@@ -43,14 +51,13 @@ class _TaskStepsState extends State<TaskSteps> {
           children: [
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             /// Task title on AppBar
-            const Expanded(
+            Expanded(
               child: Text(
-                'TAREA',
+                task['taskName'].toString().toUpperCase(),
                 textAlign: TextAlign.center,
               ),
             ),
-            Image.asset(
-              'assets/images/agendaLogo.png',
+            Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
               width: 46,
               height: 46,
             ),
@@ -85,6 +92,7 @@ class _TaskStepsState extends State<TaskSteps> {
       ),
       body:
         Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: EdgeInsets.only(
@@ -101,7 +109,7 @@ class _TaskStepsState extends State<TaskSteps> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/pruebaPaso.png',
+                      Image.network("${dotenv.env['API_URL']}/images/steps/${steps[index].image.toString()}",
                         height: MediaQuery.of(context).size.height * 0.25,
                         width: MediaQuery.of(context).size.width * 0.75,
                       ),
@@ -115,10 +123,7 @@ class _TaskStepsState extends State<TaskSteps> {
                     alignment: WrapAlignment.center,
                     children: [
                       Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat in nunc id pharetra. '
-                          'Phasellus et gravida risus, vel pulvinar tortor. Proin dictum, dolor vel volutpat lacinia, '
-                          'velit turpis cursus orci, et dictum erat est et quam. Sed sed arcu ut libero vulputate '
-                          'suscipit quis ultricies magna. In ut vestibulum turpis'.toUpperCase(),
+                        steps[index].description.toString().toUpperCase(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: MediaQuery.of(context).size.height * 0.025,
@@ -153,7 +158,7 @@ class _TaskStepsState extends State<TaskSteps> {
                           child: Row(
                             children: [
                               Text(
-                                'Paso completado',
+                                'MARCAR PASO COMPLETADO',
                                 style: TextStyle(
                                   fontSize: MediaQuery.of(context).size.height * 0.030
                                 ),
@@ -170,10 +175,6 @@ class _TaskStepsState extends State<TaskSteps> {
                                 ) ,
                             ],
                           ),
-
-                        //  child: checkedStep[index] ?
-                          //Image.asset('assets/images/checkIcon.png'):
-                          //Image.asset('assets/images/greyIcon.jpg') ,
                       ),
                     ],
                   ),
@@ -188,6 +189,7 @@ class _TaskStepsState extends State<TaskSteps> {
                         ? MainAxisAlignment.end
                         : MainAxisAlignment.spaceBetween,
                     children: [
+                      /// Back button
                       if (index > 0)
                         ElevatedButton(
                           onPressed: () {
@@ -207,7 +209,8 @@ class _TaskStepsState extends State<TaskSteps> {
                               width: MediaQuery.of(context).size.height * 0.1,
                           ),
                         ),
-                      if (index < numberOfSteps - 1)
+                      /// Next button
+                      if (index < numberOfSteps - 1 && checkedStep[index] == true)
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -224,6 +227,37 @@ class _TaskStepsState extends State<TaskSteps> {
                           child: Image.asset(
                               'assets/images/nextPageArrow.png',
                               width: MediaQuery.of(context).size.height * 0.1,
+                          ),
+                        ),
+                      if (index == numberOfSteps-1 && checkedStep[index] == true)
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FinishTask(task: task, student: widget.student)),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF4A6987),
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.all(20),
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text("TERMINAR"),
+                                Image.asset(
+                                  'assets/images/checkIcon.png',
+                                  width: MediaQuery.of(context).size.height * 0.05,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                     ],

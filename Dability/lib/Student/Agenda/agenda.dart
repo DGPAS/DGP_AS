@@ -1,24 +1,27 @@
+import 'package:dability/Student/student_home.dart';
 import 'package:flutter/material.dart';
+import '../../Api_Requests/agenda_requests.dart';
 import 'student_task.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-/// Auxiliary class while it is on local
-  class Task {
-  String name;
-  String imagePath;
-  int id;
-
-  Task(this.name, this.imagePath, this.id);
-}
 
 /// # Page where the student sees his/her tasks
 class Agenda extends StatefulWidget {
 
+    final Map<String, dynamic> student;
+
+  const Agenda({Key? key, required this.student});
+
   @override
-  State<Agenda> createState() => _AgendaState();
+    State<Agenda> createState() => _AgendaState();
 }
 
 class _AgendaState extends State<Agenda> {
   _AgendaState();
+
+  Map<String, dynamic> student = {};
+  List<dynamic> tasks = [];
+  List<dynamic> currentTasks = [];
 
   /// Variable to show [numTasksPerPage] tasks on each page
   final int numTasksPerPage = 3;
@@ -26,37 +29,38 @@ class _AgendaState extends State<Agenda> {
   bool isImageVisible = false;
   int counter = 1;
 
-  /// Obtain it from DataBase
-  final List<Task> tasks = [
-    Task('Tarea 1', 'assets/images/planTask.png', 1),
-    Task('Tarea 2', 'assets/images/microwaveTask.png', 2),
-    Task('Tarea 3', 'assets/images/domesticTask.png', 3),
-    Task('Tarea 4', 'assets/images/planTask.png', 4),
-    Task('Tarea 5', 'assets/images/microwaveTask.png', 5),
-    Task('Tarea 6', 'assets/images/domesticTask.png', 6),
-    Task('Tarea 7', 'assets/images/planTask.png', 7),
-    Task('Tarea 8', 'assets/images/microwaveTask.png', 8),
-    Task('Tarea 9', 'assets/images/domesticTask.png', 9),
-    Task('Tarea 10', 'assets/images/planTask.png', 10),
-    Task('Tarea 11', 'assets/images/microwaveTask.png', 11),
-    Task('Tarea 12', 'assets/images/domesticTask.png', 12),
-    Task('Tarea 13', 'assets/images/planTask.png', 13),
-  ];
-
   @override
   void initState () {
     super.initState();
 
-    numPages = (tasks.length / numTasksPerPage).ceil();
+    student = widget.student;
+
+    getData(student['id'].toString());
+  }
+
+  /// Function that calls [getStudentAgenda] who returns the DataBase student
+  /// tasks where idStudent is [id] and adds them to [tasks]
+  Future<void> getData (String id) async {
+    List<dynamic> aux = await getStudentAgenda(id);
+    setState(() {
+      tasks = aux;
+      numPages = (tasks.length / numTasksPerPage).ceil();
+    });
+  }
+
+  /// Function thats return the orientation of the device
+  Orientation _orientation (double width, double height) {
+    return width > height ? Orientation.landscape : Orientation.portrait;
   }
 
   @override
   Widget build(BuildContext context) {
     int startIndex = (counter - 1) * numTasksPerPage;
     int endIndex = startIndex + numTasksPerPage;
-    endIndex =
-    endIndex > tasks.length ? tasks.length : endIndex;
-    List<Task> currentTasks = tasks.sublist(startIndex, endIndex);
+    endIndex = endIndex > tasks.length ? tasks.length : endIndex;
+    setState(() {
+      currentTasks = tasks.sublist(startIndex, endIndex);
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -102,6 +106,16 @@ class _AgendaState extends State<Agenda> {
           ],
         ),
         backgroundColor: Color(0xFF4A6987),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  StudentHome(idStudent: student['id'].toString())),
+            );
+          },
+        ),
       ),
       body: Stack(
         children: [
@@ -109,7 +123,7 @@ class _AgendaState extends State<Agenda> {
             EdgeInsets.only(
                 left: MediaQuery.of(context).size.width * 0.01,
                 right: MediaQuery.of(context).size.width * 0.01,
-                top:  MediaQuery.of(context).size.height * 0.01,
+                top:  MediaQuery.of(context).size.height * 0.03,
                 bottom: MediaQuery.of(context).size.height * 0.01
             ),
             child: Positioned.fill(
@@ -121,52 +135,73 @@ class _AgendaState extends State<Agenda> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.20,
+                            height: MediaQuery.of(context).size.height * 0.22,
                               child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
 
                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    maximumSize: Size(double.infinity, MediaQuery.of(context).size.height * 0.40),
-                                    alignment: Alignment.centerLeft,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
+                                /// Container for each task
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      maximumSize: Size(double.infinity, MediaQuery.of(context).size.height * 0.40),
+                                      alignment: Alignment.centerLeft,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30.0),
+                                      ),
+                                      backgroundColor: Color(0xFF4A6987),
+                                      padding: EdgeInsets.only(
+                                        top: MediaQuery.of(context).size.height * 0.40 * 0.05,
+                                        bottom: MediaQuery.of(context).size.height * 0.40 * 0.05,
+                                        left: MediaQuery.of(context).size.width * 0.01,
+                                        right: MediaQuery.of(context).size.width * 0.01,
+                                      ),
                                     ),
-                                    backgroundColor: Color(0xFF4A6987),
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height * 0.40 * 0.05,
-                                      bottom: MediaQuery.of(context).size.height * 0.40 * 0.05,
-                                      left: MediaQuery.of(context).size.width * 0.01,
-                                      right: MediaQuery.of(context).size.width * 0.01,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => StudentTask(taskID: currentTasks[i].id)),
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        currentTasks[i].name, // NOMBRE DE LA TAREA
-                                        style: TextStyle(
-                                          fontSize: MediaQuery.of(context).size.height * 0.05,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => StudentTask(task: currentTasks[i], student: student)),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.only(left: 15, right: 15),
+                                      child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            /// Task name
+                                            Text(
+                                              currentTasks[i]['taskName'].toString().toUpperCase(),
+                                              style: TextStyle(
+                                                fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                    ? MediaQuery.of(context).size.width *0.04   /// landscape
+                                                    : MediaQuery.of(context).size.width *0.04,  /// portrait
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 0.075,
+                                            ),
+                                            Container(
+                                              width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                ? MediaQuery.of(context).size.width *0.20     /// landscape
+                                                : MediaQuery.of(context).size.width *0.20,    /// portrait
+                                              height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                ? MediaQuery.of(context).size.height *0.20     /// landscape
+                                                : MediaQuery.of(context).size.height *0.17,    /// portrait
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(20),
+                                              ),
+                                              child: Image.network("${dotenv.env['API_URL']}/images/${currentTasks[i]['thumbnail'].toString()}",
+                                                fit: BoxFit.scaleDown,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.075,
-                                      ),
-                                      Image.asset(
-                                        currentTasks[i].imagePath,
-                                        width: MediaQuery.of(context).size.height * 0.20,
-                                        height: MediaQuery.of(context).size.height * 0.20,
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                                 // SizedBox(width: MediaQuery.of(context).size.width * 0.025,),
