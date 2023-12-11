@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../Api_Requests/steps_requests.dart';
+import '../../Components/list_step.dart';
 import 'task_steps.dart';
 
 /// # Page to show a task
@@ -6,9 +9,11 @@ class StudentTask extends StatefulWidget {
   StudentTask({
     Key? key,
     required this.task,
+    required this.student
   }) : super(key:key);
 
   final Map<String, dynamic> task;
+  final Map<String, dynamic> student;
 
   @override
   State<StudentTask> createState() => _StudentTaskState();
@@ -16,8 +21,33 @@ class StudentTask extends StatefulWidget {
 
 class _StudentTaskState extends State<StudentTask> {
   bool done = false;
-  /// Video string (get from DataBase)
-  String urlVideo = "a";
+
+  Map<String, dynamic> task = {};
+  List<ListStep> steps = [];
+
+  /// Init state to initialize the variables
+  @override
+  void initState() {
+    super.initState();
+
+    task = widget.task;
+
+    getData(task['idTask'].toString());
+  }
+
+  /// Function that calls [getTaskSteps] who returns the DataBase task
+  /// steps where idTask is [id] and adds them to [steps]
+  Future<void> getData (String id) async {
+    List<ListStep> aux = await getTaskSteps(id);
+    setState(() {
+      steps = aux;
+    });
+  }
+
+  /// Function thats return the orientation of the device
+  Orientation _orientation (double width, double height) {
+    return width > height ? Orientation.landscape : Orientation.portrait;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +56,14 @@ class _StudentTaskState extends State<StudentTask> {
           title: Row(
             children: [
               Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
-              const Expanded(
+              Expanded(
                 /// Task title on AppBar
                 child: Text(
-                  'PONER MICROONDAS',
+                  task['taskName'].toString().toUpperCase(),
                   textAlign: TextAlign.center,
                 ),
               ),
-              Image.asset(
-                'assets/images/agendaLogo.png',
+              Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
                 width: 46,
                 height: 46,
               ),
@@ -71,9 +100,12 @@ class _StudentTaskState extends State<StudentTask> {
           padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width * 0.05,
               right: MediaQuery.of(context).size.width * 0.05,
-              top: MediaQuery.of(context).size.height * 0.025,
+              top: MediaQuery.of(context).size.height * 0.015,
+              bottom: MediaQuery.of(context).size.height * 0.015
           ),
-          child: Column(children: [
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -82,9 +114,9 @@ class _StudentTaskState extends State<StudentTask> {
                 children: [
                   /// Task title Box
                   Container(
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      height: MediaQuery.of(context).size.height * 0.125,
-                      padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.125 * 0.1,),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      padding: const EdgeInsets.all(20),
+                      alignment: Alignment.center,
                       decoration: ShapeDecoration(
                         color: Color(0xFF4A6987),
                         shape: RoundedRectangleBorder(
@@ -99,64 +131,41 @@ class _StudentTaskState extends State<StudentTask> {
                           ),
                         ],
                       ),
-                      child: Text(
-                        "Poner el \n Microondas".toUpperCase(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.height * 0.04,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w700,
-                          height: 0,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            task['taskName'].toString().toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                  ? MediaQuery.of(context).size.width *0.03     /// landscape
+                                  : MediaQuery.of(context).size.width *0.035,    /// portrait
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
+                          ),
+                          Container(
+                            width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                ? MediaQuery.of(context).size.width *0.20     /// landscape
+                                : MediaQuery.of(context).size.width *0.15,    /// portrait
+                            height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                ? MediaQuery.of(context).size.height *0.20     /// landscape
+                                : MediaQuery.of(context).size.height *0.15,    /// portrait
+                            margin: const EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ],
                       )
                   ),
-                  /*Container(
-                    padding: const EdgeInsets.all(10.0),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(color: Color(0xFFD9D9D9)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          padding:
-                              const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                          child: Text(
-                            'Marcar como\nrealizada ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              fixedSize: Size(100, 100),
-                              elevation: 0,
-                              backgroundColor: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                done = !done;
-                              });
-                            },
-                            child: done
-                                ? Image.asset(
-                                    'assets/images/checkIcon.png',
-                                    width: 100,
-                                  )
-                                : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                 ],
               ),
             ),
@@ -178,12 +187,7 @@ class _StudentTaskState extends State<StudentTask> {
                           textAlign: TextAlign.left,
                         ),
                         Text(
-                          'Lorem ipsum dolor sit amet consectetur adipiscing elit, tristique non montes '
-                          'congue rhoncus Lorem ipsum dolor sit amet consectetur adipiscing elit, '
-                          'tristique non montes congue rhoncus orci et nam, molestie enim habitasse '
-                          'mus in ornare. Nascetur hendrerit interdum natoque venenatis iaculis quis '
-                          'praesent, commodo luctus dictum eu pellentesque in litora, lacus sodales '
-                          'nullam metus himenaeos vestibulum.'.toUpperCase(),
+                          task['description'].toString().toUpperCase(),
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.height * 0.02,
                           ),
@@ -192,11 +196,12 @@ class _StudentTaskState extends State<StudentTask> {
                       ])),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, //MainAxisAlignment.spaceBetween
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 /// Tutorial video task
-                if (urlVideo != "")
+                if (task['video'] != "")
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         'TUTORIAL',
@@ -229,7 +234,8 @@ class _StudentTaskState extends State<StudentTask> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => TaskSteps(index: 0, numberOfSteps: 3, checkedStep: List.generate(3, (index) => false))),
+                      MaterialPageRoute(
+                          builder: (context) => TaskSteps(steps: steps, task: task, student: widget.student)),
                     );
                   },
                   child:

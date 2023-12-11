@@ -1,3 +1,4 @@
+import 'package:dability/Student/student_home.dart';
 import 'package:flutter/material.dart';
 import '../../Api_Requests/agenda_requests.dart';
 import 'student_task.dart';
@@ -105,6 +106,16 @@ class _AgendaState extends State<Agenda> {
           ],
         ),
         backgroundColor: Color(0xFF4A6987),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+                  StudentHome(idStudent: student['id'].toString())),
+            );
+          },
+        ),
       ),
       body: Stack(
         children: [
@@ -152,7 +163,7 @@ class _AgendaState extends State<Agenda> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => StudentTask(task: currentTasks[i])),
+                                            builder: (context) => StudentTask(task: currentTasks[i], student: student)),
                                       );
                                     },
                                     child: Container(

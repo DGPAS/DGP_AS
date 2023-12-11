@@ -26,3 +26,30 @@ Future<List<dynamic>> getStudentAgenda(String id) async {
 
   return tasks;
 }
+
+/// Function that updates a task on DataBase by calling an API function
+///
+/// It updates its attribute "done" by [id]
+///
+/// Throws an [error] if the query fails
+Future<void> updateFinishedTask (String id) async {
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/update_finished_task.php";
+
+  try {
+    var res=await http.post(Uri.parse(uri),body: {
+      "idTask": id,
+    });
+
+    var response=jsonDecode(res.body);
+
+    if(response["success"]=="true"){
+      print("Tarea actualizada");
+    }else{
+      print("Some issue");
+
+    }
+  } catch (error) {
+    print(error);
+  }
+}

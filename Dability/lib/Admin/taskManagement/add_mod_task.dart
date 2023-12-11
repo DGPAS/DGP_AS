@@ -69,7 +69,7 @@ class _AddModTaskState extends State<AddModTask> {
   /// Init State
   ///
   /// Initialize the task data and its steps, if it has,
-  /// by calling [getInitialSteps]
+  /// by calling [getTaskSteps]
   @override
   void initState() {
     super.initState();
@@ -90,7 +90,7 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.originalText = description;
     descriptionForm.text = description!;
 
-    /// If the task exists, it calls [getInitialSteps] and get the actualTaskId
+    /// If the task exists, it calls [getTaskSteps] and get the actualTaskId
     if (idTask != null) {
       getData();
     }
@@ -103,10 +103,10 @@ class _AddModTaskState extends State<AddModTask> {
     isPressed = false;
   }
 
-  /// Function that calls [getInitialSteps] who returns the DataBase tasks
+  /// Function that calls [getTaskSteps] who returns the DataBase tasks
   /// and adds them to [steps]
   Future<void> getData () async {
-    steps = await getInitialSteps(idTask!);
+    steps = await getTaskSteps(idTask!);
     setState(() {
       actualTaskId = idTask!;
     });

@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 /// existing task with id = [idTareas] from DataBase
 ///
 /// Throws an [error] if the query fails
-Future<List<ListStep>> getInitialSteps(String idTask) async {
+Future<List<ListStep>> getTaskSteps(String idTask) async {
   List<ListStep> loadedSteps = [];
 
   /// Uri whose IP is on .env that calls API
@@ -36,8 +36,6 @@ Future<List<ListStep>> getInitialSteps(String idTask) async {
   } catch (error) {
     print(error);
   }
-
-  print(loadedSteps);
 
   return loadedSteps;
 }
