@@ -4,7 +4,10 @@ import 'package:dability/Components/enum_types.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dability/Components/text_form.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:dability/Components/list_step.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 /// # Page for add a step task
 ///
@@ -44,6 +47,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
       title: "Descripcion del pictograma",
       type: TextFormType.description);
   bool error = false;
+  
 
   /// Function that updates de [actualDescription] with
   /// the controller [descriptionController]

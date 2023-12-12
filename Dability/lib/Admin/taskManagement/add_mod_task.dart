@@ -61,6 +61,7 @@ class _AddModTaskState extends State<AddModTask> {
   List<ListStep> copy = [];
   List<ListStep> auxSteps = [];
   /// Variables to manage the task data
+  /// File? video;
   String actualTaskId = '';
   String selectedImage = "";
   String selectedVideo = "";
@@ -111,7 +112,37 @@ class _AddModTaskState extends State<AddModTask> {
       actualTaskId = idTask!;
     });
   }
+/*Future<void> saveVideo() async {
+  if (selectedVideo == "") {
+    print("No se ha seleccionado ningún video");
+    return;
+  }
 
+  String uri = "${dotenv.env['API_URL']}/saveVideo.php";
+
+  try {
+    var request = http.MultipartRequest('POST', Uri.parse(uri));
+
+    // Puedes agregar la lógica para seleccionar un video específico en el emulador
+    // Esto puede variar según el emulador que estés utilizando
+
+    // Simplemente usa el path del video seleccionado
+    request.fields['idTareas'] = actualTaskId;
+    var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
+    request.files.add(videoFile);
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("Video Uploaded");
+      print("Response Body: ${await response.stream.bytesToString()}");
+    } else {
+      print("Error in uploading video. Status Code: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("Exception during video upload: $e");
+  }
+}*/
 
   /// Function that calls funtions that calls API
   ///
@@ -393,6 +424,7 @@ class _AddModTaskState extends State<AddModTask> {
                               );
                             setState(() {
                               selectedVideo = pickedFile!.path;
+                             //  _video = File(selectedVideo);
 
                             });
                               if (pickedFile != null) {
