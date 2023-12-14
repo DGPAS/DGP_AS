@@ -241,6 +241,7 @@ class _StudentTaskState extends State<StudentTask> {
                   child:
                     Column(
                       children: [
+                        if (steps.isNotEmpty)
                         Text(
                           'VER\nPASOS',
                           textAlign: TextAlign.center,
