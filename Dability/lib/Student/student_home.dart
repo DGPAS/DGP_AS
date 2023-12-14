@@ -125,6 +125,7 @@ class _StudentHomeState extends State<StudentHome> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if(student['text'] == 1)
                     Text(
                       'AGENDA PERSONAL',
                       style: TextStyle(
@@ -136,7 +137,7 @@ class _StudentHomeState extends State<StudentHome> {
                         height: MediaQuery.of(context).size.height * 0.025),
                     Image.asset(
                       'assets/images/agendaLogo.png',
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      width: student['text'] == 1 ? MediaQuery.of(context).size.width * 0.15 : MediaQuery.of(context).size.width * 0.2,
                     ),
                   ],
                 ),
