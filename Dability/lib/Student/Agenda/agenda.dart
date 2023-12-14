@@ -126,7 +126,6 @@ class _AgendaState extends State<Agenda> {
                 top:  MediaQuery.of(context).size.height * 0.03,
                 bottom: MediaQuery.of(context).size.height * 0.01
             ),
-            child: Positioned.fill(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -298,7 +297,6 @@ class _AgendaState extends State<Agenda> {
                   ),
                 ],
               ),
-            ),
           ),
         ],
       ),

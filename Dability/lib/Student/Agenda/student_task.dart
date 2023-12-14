@@ -214,6 +214,7 @@ class _StudentTaskState extends State<StudentTask> {
                     ],
                   ),
                 /// Button to access to [task_steps.dart]
+                if (steps.isNotEmpty)
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.only(
@@ -241,7 +242,6 @@ class _StudentTaskState extends State<StudentTask> {
                   child:
                     Column(
                       children: [
-                        if (steps.isNotEmpty)
                         Text(
                           'VER\nPASOS',
                           textAlign: TextAlign.center,
