@@ -1,18 +1,17 @@
-import 'package:dability/Components/enum_types.dart';
+import 'package:dability/Teacher/Educator/myStudents/student_statistics.dart';
 import 'package:flutter/material.dart';
-import 'add_mod_student.dart';
 import 'package:dability/Api_Requests/student_requests.dart';
 
 
 /// # Page where admin manages students
-class StudentManagement extends StatefulWidget {
-  const StudentManagement({super.key});
+class MyStudents extends StatefulWidget {
+  const MyStudents({super.key});
 
   @override
-  State<StudentManagement> createState() => _StudentManagementState();
+  State<MyStudents> createState() => _MyStudentsState();
 }
 
-class _StudentManagementState extends State<StudentManagement> {
+class _MyStudentsState extends State<MyStudents> {
   /// Text controller for student filter
   ///
   /// If the text on the filter changes, it stores changes
@@ -72,7 +71,7 @@ class _StudentManagementState extends State<StudentManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestión estudiantes'),
+        title: Text('MIS ESTUDANTES'),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
@@ -81,38 +80,6 @@ class _StudentManagementState extends State<StudentManagement> {
           /// Column that contains a button that adds students,
           /// the students filter and the filterd list of students
           children: [
-            Container(
-              /// ADD STUDENT
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity,
-                      MediaQuery.of(context).size.height * 0.1), // inf, 70
-                  textStyle: const TextStyle(
-                    fontSize: 25,
-                    color: Colors.black,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  backgroundColor: Color(0xFF4A6987),
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                ),
-                onPressed: () {
-                  /// When pressed it goes to [add_mod_student.dart] with [AddModType.add]
-                  /// to add a new student
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add)),
-                  );
-                },
-                child: const Text(
-                  'Añadir estudiante',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
             /// SizedBox for the filter
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.152,
@@ -204,7 +171,7 @@ class _StudentManagementState extends State<StudentManagement> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModStudent(typeForm: AddModType.mod, student: displayedItems[index])),
+                                                    StudentStatistics(student: displayedItems[index])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -214,53 +181,6 @@ class _StudentManagementState extends State<StudentManagement> {
                                         ),
                                         child: Image.asset(
                                           'assets/images/EditIcon.png',
-                                          width: 30,
-                                          height: 35,
-                                        ),
-                                      ),
-                                      /// Button that deletes the current student
-                                      ///
-                                      /// It shows a dialog to confirm the action
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'Confirmar eliminación'),
-                                                content: const Text(
-                                                    '¿Estás seguro de que deseas eliminar esta tarea?'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop(); // Cierra el diálogo
-                                                    },
-                                                    child:
-                                                        const Text('Cancelar'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      deleteStudent(displayedItems[index]['id']);
-                                                      getData();
-                                                      Navigator.of(context)
-                                                          .pop(); // Cierra el diálogo
-                                                    },
-                                                    child: Text('Eliminar'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          minimumSize: Size(10, 20),
-                                          backgroundColor: Color(0xFFF5F5F5),
-                                          elevation: 0,
-                                        ),
-                                        child: Image.asset(
-                                          'assets/images/DeleteIcon.png',
                                           width: 30,
                                           height: 35,
                                         ),

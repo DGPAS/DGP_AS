@@ -1,3 +1,4 @@
+import 'package:dability/Teacher/Educator/myStudents/my_students.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/dability.dart';
 
@@ -6,10 +7,10 @@ class EducatorHome extends StatefulWidget {
   const EducatorHome({super.key});
 
   @override
-  State<EducatorHome> createState() => _AdminHomeState();
+  State<EducatorHome> createState() => _EducatorHomeState();
 }
 
-class _AdminHomeState extends State<EducatorHome> {
+class _EducatorHomeState extends State<EducatorHome> {
 
   /// Main builder of the page
   ///
@@ -77,33 +78,15 @@ class _AdminHomeState extends State<EducatorHome> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StudentManagement()),
+                  MaterialPageRoute(builder: (context) => MyStudents()),
                 );
               },
               child: Text(
-                'GESTIONAR ESTUDIANTES',
+                'ESTADÍSTICAS ESTUDIANTES',
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-          /// Button that navigates to [task_management.dart]
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(20),
-            child: ElevatedButton(
-              style: style,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskManagement()),
-                );
-              },
-              child: Text(
-                'GESTIONAR TAREAS',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
         ],
       ),
     );
