@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'taskManagement/task_management.dart';
-import 'studentManagement/student_management.dart';
-import '../dability.dart';
+import 'package:dability/dability.dart';
 
-/// # Home page of Admin
-class AdminHome extends StatefulWidget {
-  const AdminHome({super.key});
+/// # Home page of Educator
+class EducatorHome extends StatefulWidget {
+  const EducatorHome({super.key});
 
   @override
-  State<AdminHome> createState() => _AdminHomeState();
+  State<EducatorHome> createState() => _AdminHomeState();
 }
 
-class _AdminHomeState extends State<AdminHome> {
+class _AdminHomeState extends State<EducatorHome> {
 
   /// Main builder of the page
   ///

@@ -1,67 +1,64 @@
+import 'package:dability/Components/enum_types.dart';
 import 'package:flutter/material.dart';
-import '../../Api_Requests/task_requests.dart';
-import 'add_mod_task.dart';
-import '../../Components/enum_types.dart';
+import 'add_mod_student.dart';
+import 'package:dability/Api_Requests/student_requests.dart';
 
-/// # Page where admin manages tasks
-class TaskManagement extends StatefulWidget {
-  const TaskManagement({super.key});
+
+/// # Page where admin manages students
+class StudentManagement extends StatefulWidget {
+  const StudentManagement({super.key});
 
   @override
-  State<TaskManagement> createState() => _TaskManagementState();
+  State<StudentManagement> createState() => _StudentManagementState();
 }
 
-class _TaskManagementState extends State<TaskManagement> {
-  /// Text controller for task filter
+class _StudentManagementState extends State<StudentManagement> {
+  /// Text controller for student filter
   ///
   /// If the text on the filter changes, it stores changes
   /// TODO: CREO NO ES NECESARIO ESTE CONTROLLER PORQUE NO SE USA
   TextEditingController _controller = TextEditingController();
 
-  /// List that stores tasks form DataBase
-  List<dynamic> tasks = [];
+  /// List that stores students form DataBase
+  List<dynamic> students = [];
+  double widthMax = 500;
 
-  /// Maximum with of the list of tasks
-  double maxWidth = 500;
-
-  /// Filtered list of tasks
   List<dynamic> displayedItems = [];
 
   /// Init State
   ///
-  /// Initialize the list of task by calling [getData]
+  /// Initialize the list of students by calling [getData]
   @override
   void initState() {
     super.initState();
-
     getData();
   }
 
-  /// Function that calls [getTasks] who returns the DataBase tasks
+  /// Function that calls [getStudents] who returns the DataBase students
   /// and adds them to [displayedItems]
   Future<void> getData () async {
-    tasks = await getTasks();
+    students = await getStudents();
     setState(() {
       displayedItems.clear();
-      displayedItems.addAll(tasks);
+      displayedItems.addAll(students);
     });
   }
 
-  /// Function that filters the list of tasks whose name matches
+  /// Function that filters the list of students whose name matches
   /// or contains [query] by updating [displayedItems]
   ///
-  /// If they don't match, it adds all tasks to [displayedItems]
+  /// If they don't match, it adds all students to [displayedItems]
   void filterSearchResults(String query) {
     List<dynamic> searchResults = [];
 
     if (query.isNotEmpty) {
-      for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i]['taskName'].toLowerCase().contains(query.toLowerCase())) {
-          searchResults.add(tasks[i]);
+      for (var i = 0; i < students.length; i++) {
+        if (("${students[i]['firstName']} ${students[i]['lastName']}").toLowerCase().contains(query.toLowerCase())) {
+          searchResults.add(students[i]);
         }
       }
     } else {
-      searchResults.addAll(tasks);
+      searchResults.addAll(students);
     }
 
     setState(() {
@@ -75,19 +72,18 @@ class _TaskManagementState extends State<TaskManagement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gestión tareas'),
+        title: Text('Gestión estudiantes'),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
         padding: EdgeInsets.only(top: 30.0, bottom: 8.0),
-        /// Column that contains a button that adds tasks,
-        /// the task filter and the filterd list of tasks
         child: Column(
+          /// Column that contains a button that adds students,
+          /// the students filter and the filterd list of students
           children: [
             Container(
-              // width: (MediaQuery.of(context).size.width - 30).clamp(0.0, maxAnchoMaximo.toDouble()),
+              /// ADD STUDENT
               alignment: Alignment.center,
-              // padding: EdgeInsets.symmetric(horizontal: 14),
               padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -101,21 +97,18 @@ class _TaskManagementState extends State<TaskManagement> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   backgroundColor: Color(0xFF4A6987),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 40), // Margen horizontal
+                  padding: EdgeInsets.symmetric(horizontal: 40),
                 ),
                 onPressed: () {
-                  /// When pressed it goes to [add_mod_task.dart] with [AddModType.add]
-                  /// to add a new task
+                  /// When pressed it goes to [add_mod_student.dart] with [AddModType.add]
+                  /// to add a new student
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AddModTask(typeForm: AddModType.add)),
+                    MaterialPageRoute(builder: (context) => AddModStudent(typeForm: AddModType.add)),
                   );
                 },
-                child: Text(
-                  'Añadir tarea',
+                child: const Text(
+                  'Añadir estudiante',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -142,11 +135,10 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
               ),
             ),
-            /// List of tasks
+            /// List of students
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFF4A6987),
                   borderRadius: BorderRadius.circular(30),
                   gradient: LinearGradient(
                     colors: [Color(0xFF4A6987), Colors.white],
@@ -156,18 +148,17 @@ class _TaskManagementState extends State<TaskManagement> {
                 ),
                 height: 400,
                 width: (MediaQuery.of(context).size.width - 30)
-                    .clamp(0.0, maxWidth.toDouble()),
-                padding:
-                    EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
+                    .clamp(0.0, widthMax.toDouble()),
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: ListView(children: [
                   SizedBox(
                     height: 30,
                   ),
                   /// It returns a list of ElevatedButton
                   ///
-                  /// One ElevatedButton for each task in [displayedItems]
-                  /// Each item of the list contains the name of the task,
-                  /// a button for update the task and another one to delete it
+                  /// One ElevatedButton for each student in [displayedItems]
+                  /// Each item of the list contains the name of the student,
+                  /// a button for update the student and another one to delete it
                   ...List.generate(displayedItems.length, (index) {
                     return Column(
                       children: [
@@ -182,45 +173,38 @@ class _TaskManagementState extends State<TaskManagement> {
                               color: Colors.black,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  30), // Redondear los bordes del botón
+                              borderRadius: BorderRadius.circular(30),
                             ),
                             backgroundColor: Color(0xFFF5F5F5),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20), // Margen horizontal del texto
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                           ),
                           onPressed: () {
-                            // no action
+                            // acción del botón
                           },
-                          /// The content of each task
+                          /// The content of each student
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                /// Name of the task
+                                /// Name of the student
                                 Text(
-                                  displayedItems[index]['taskName'],
-                                  //textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors
-                                        .black, // Cambia el color del texto a rojo
+                                  '${displayedItems[index]['firstName']} ${displayedItems[index]['lastName']}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
                                   ),
                                 ),
-
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
-                                      /// Button that navigates to [add_mod_task.dart] with [AddModType.mod]
-                                      /// to modify the current task
+                                      /// Button that navigates to [add_mod_student.dart] with [AddModType.mod]
+                                      /// to modify the current student
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    AddModTask(
-                                                        typeForm:
-                                                            AddModType.mod, task: displayedItems[index])),
+                                                    AddModStudent(typeForm: AddModType.mod, student: displayedItems[index])),
                                           );
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -234,7 +218,7 @@ class _TaskManagementState extends State<TaskManagement> {
                                           height: 35,
                                         ),
                                       ),
-                                      /// Button that deletes the current task
+                                      /// Button that deletes the current student
                                       ///
                                       /// It shows a dialog to confirm the action
                                       ElevatedButton(
@@ -243,9 +227,9 @@ class _TaskManagementState extends State<TaskManagement> {
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: Text(
+                                                title: const Text(
                                                     'Confirmar eliminación'),
-                                                content: Text(
+                                                content: const Text(
                                                     '¿Estás seguro de que deseas eliminar esta tarea?'),
                                                 actions: [
                                                   TextButton(
@@ -253,11 +237,12 @@ class _TaskManagementState extends State<TaskManagement> {
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
-                                                    child: Text('Cancelar'),
+                                                    child:
+                                                        const Text('Cancelar'),
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      deleteTask(displayedItems[index]['idTask']);
+                                                      deleteStudent(displayedItems[index]['id']);
                                                       getData();
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
@@ -283,10 +268,9 @@ class _TaskManagementState extends State<TaskManagement> {
                                     ],
                                   ),
                                 ),
-                                /////
                               ]),
                         ),
-                        SizedBox(height: 30), //espacio entre tareas
+                        SizedBox(height: 30), // Espacio entre las tareas
                       ],
                     );
                   })
