@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Teacher/Educator/educator_home.dart';
 import 'Teacher/login/teacher_login.dart';
 import 'Student/Login/student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdminLogin()),
+                        MaterialPageRoute(builder: (context) => EducatorHome()), //AdminLogin()),
                       );
                     },
                     child: const Text(

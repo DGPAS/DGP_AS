@@ -25,7 +25,7 @@ class _EducatorHomeState extends State<EducatorHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'Inicio Admin',
+                'INICIO EDUCADOR',
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),

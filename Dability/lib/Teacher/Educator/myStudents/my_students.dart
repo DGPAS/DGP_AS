@@ -18,6 +18,8 @@ class _MyStudentsState extends State<MyStudents> {
   /// TODO: CREO NO ES NECESARIO ESTE CONTROLLER PORQUE NO SE USA
   TextEditingController _controller = TextEditingController();
 
+  String idEducator = '1';
+
   /// List that stores students form DataBase
   List<dynamic> students = [];
   double widthMax = 500;
@@ -36,7 +38,7 @@ class _MyStudentsState extends State<MyStudents> {
   /// Function that calls [getStudents] who returns the DataBase students
   /// and adds them to [displayedItems]
   Future<void> getData () async {
-    students = await getStudents();
+    students = await getEducatorStudents(idEducator);
     setState(() {
       displayedItems.clear();
       displayedItems.addAll(students);
@@ -71,7 +73,42 @@ class _MyStudentsState extends State<MyStudents> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MIS ESTUDANTES'),
+        title: Row(
+          children: [
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Expanded(
+              child: Text(
+                "MIS ESTUDIANTES",
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A6987),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/userIcon.png',
+                    width: 48,
+                    height: 48,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
@@ -180,7 +217,7 @@ class _MyStudentsState extends State<MyStudents> {
                                           elevation: 0,
                                         ),
                                         child: Image.asset(
-                                          'assets/images/EditIcon.png',
+                                          'assets/images/statisticsIcon.png',
                                           width: 30,
                                           height: 35,
                                         ),

@@ -26,7 +26,7 @@ class _AdminHomeState extends State<AdminHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'Inicio Admin',
+                'INICIO ADMIN',
                 textAlign: TextAlign.center, // Centra el texto
               ),
             ),
