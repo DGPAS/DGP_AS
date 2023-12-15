@@ -26,15 +26,16 @@ class _StudentTaskChartState extends State<StudentTaskChart> {
     for(var task in widget.tasks) {
       print (task);
       List<String> dateTaskIni = task['dateStart'].toString().split('-');
-      final DateTime ini = DateTime.utc(int.parse(dateTaskIni.elementAt(0)), int.parse(dateTaskIni.elementAt(1)), int.parse(dateTaskIni.elementAt(2))-3); /// Year - Month - Day
+      final DateTime ini = DateTime.utc(int.parse(dateTaskIni.elementAt(0)), int.parse(dateTaskIni.elementAt(1)), int.parse(dateTaskIni.elementAt(2))); /// Year - Month - Day
       print("INI ----------------- ${ini.toString()}");
 
 
       List<String> dateTaskFin = task['dateEnd'].toString().split('-');
-      final DateTime fin = DateTime.utc(int.parse(dateTaskFin.elementAt(0)), int.parse(dateTaskFin.elementAt(1)), int.parse(dateTaskFin.elementAt(2))+3);
+      final DateTime fin = DateTime.utc(int.parse(dateTaskFin.elementAt(0)), int.parse(dateTaskFin.elementAt(1)), int.parse(dateTaskFin.elementAt(2))); /// Year - Month - Day
       print("FIN ----------------- ${fin.toString()}");
 
-      if (ini.isBefore(now) && fin.isAfter(now)) {
+      /// If the dates of tasks are between the week
+      if (ini.isBefore(now) && ini.isAfter(DateTime(now.year,now.month,now.day-3)) && fin.isAfter(now) && fin.isBefore(DateTime(now.year,now.month,now.day+3))) {
         tasks.add(task);
       }
     }
