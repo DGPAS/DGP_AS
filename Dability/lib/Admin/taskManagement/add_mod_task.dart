@@ -11,6 +11,8 @@ import 'dart:io';
 import '../../Api_Requests/steps_requests.dart';
 import '../../Api_Requests/task_requests.dart';
 
+import '../../aux_functions.dart';
+
 /// # Page for add or modify a task
 ///
 /// It receives a required param [typeForm] that indicates if it is
@@ -144,13 +146,13 @@ class _AddModTaskState extends State<AddModTask> {
   /// If [typeForm] == [AddModType.add], it updates it to creating a task
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modifying a task
-  String getTitle () {
-    if (typeForm == AddModType.add) {
-      return 'Crear Tarea';
-    } else {
-      return 'Modificar tarea: $title';
-    }
-  }
+  // String getTitle () {
+  //   if (typeForm == AddModType.add) {
+  //     return 'Crear Tarea';
+  //   } else {
+  //     return 'Modificar tarea: $title';
+  //   }
+  // }
 
 
   /// Function that returns the submit button name of [BottomNavigationBar]
@@ -158,13 +160,13 @@ class _AddModTaskState extends State<AddModTask> {
   /// If [typeForm] == [AddModType.add], it updates it to create (a task)
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modify (a task)
-  String getSubmitButton () {
-    if (typeForm == AddModType.add) {
-      return 'Crear';
-    } else {
-      return 'Modificar';
-    }
-  }
+  // String getSubmitButton () {
+  //   if (typeForm == AddModType.add) {
+  //     return 'Crear';
+  //   } else {
+  //     return 'Modificar';
+  //   }
+  // }
 
 
   /// Function that returns widget of the miniature of the task by its [urlPath]
@@ -265,7 +267,7 @@ class _AddModTaskState extends State<AddModTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTitle()),
+        title: Text(getTitleTask(typeForm, title)),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
@@ -645,7 +647,7 @@ class _AddModTaskState extends State<AddModTask> {
                 },
                     child: Row(
                   children: <Widget>[
-                    Text(getSubmitButton(), style: TextStyle(color: Colors.black)),
+                    Text(getSubmitButton(typeForm), style: TextStyle(color: Colors.black)),
                     Icon(Icons.add, color: Colors.lightGreenAccent),
                   ],
                 ),

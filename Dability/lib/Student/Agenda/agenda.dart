@@ -4,6 +4,7 @@ import '../../Api_Requests/agenda_requests.dart';
 import 'student_task.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../aux_functions.dart';
 
 /// # Page where the student sees his/her tasks
 class Agenda extends StatefulWidget {
@@ -175,7 +176,7 @@ class _AgendaState extends State<Agenda> {
                                             Text(
                                               currentTasks[i]['taskName'].toString().toUpperCase(),
                                               style: TextStyle(
-                                                fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                     ? MediaQuery.of(context).size.width *0.04   /// landscape
                                                     : MediaQuery.of(context).size.width *0.04,  /// portrait
                                               ),
@@ -184,10 +185,10 @@ class _AgendaState extends State<Agenda> {
                                               width: MediaQuery.of(context).size.width * 0.075,
                                             ),
                                             Container(
-                                              width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                              width: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                 ? MediaQuery.of(context).size.width *0.20     /// landscape
                                                 : MediaQuery.of(context).size.width *0.20,    /// portrait
-                                              height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                              height: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                 ? MediaQuery.of(context).size.height *0.20     /// landscape
                                                 : MediaQuery.of(context).size.height *0.17,    /// portrait
                                               padding: const EdgeInsets.all(10),
