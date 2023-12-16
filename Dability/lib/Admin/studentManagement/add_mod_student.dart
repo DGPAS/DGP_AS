@@ -1,5 +1,4 @@
 import 'package:dability/Api_Requests/agenda_requests.dart';
-import 'package:dability/Api_Requests/task_requests.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
@@ -9,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:dability/Api_Requests/student_requests.dart';
 
-import '../../aux_functions.dart';
+import '../../Components/aux_functions.dart';
 
 /// # Page for add or modify an student
 ///

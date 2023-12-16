@@ -11,7 +11,7 @@ import 'dart:io';
 import '../../Api_Requests/steps_requests.dart';
 import '../../Api_Requests/task_requests.dart';
 
-import '../../aux_functions.dart';
+import '../../Components/aux_functions.dart';
 
 /// # Page for add or modify a task
 ///

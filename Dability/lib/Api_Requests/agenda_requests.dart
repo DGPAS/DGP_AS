@@ -3,11 +3,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-/// It saves all the student tasks that are stored on DataBase in a dynamic
-/// list [tasks]
+/// It saves all the student tasks stored on DataBase that have not been done
+/// yet in a dynamic list [tasks]
 ///
 /// Throws an [error] if the query fails
-Future<List<dynamic>> getStudentAgenda(String id) async {
+Future<List<dynamic>> getNotDoneStudentAgenda(String id) async {
   List<dynamic> tasks = [];
 
   /// Uri whose IP is on .env that calls API
@@ -27,6 +27,9 @@ Future<List<dynamic>> getStudentAgenda(String id) async {
   return tasks;
 }
 
+/// It saves all the student tasks stored on DataBase in a dynamic list [tasks]
+///
+/// Throws an [error] if the query fails
 Future<List<dynamic>> getStudentAgendaAll(String id) async {
   List<dynamic> tasks = [];
 
