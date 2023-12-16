@@ -97,3 +97,54 @@ Future<void> deleteAgendaTask (String idStudent, String idTask) async {
     print(error);
   }
 }
+
+Future<void> insertAgendaTask (String idStudent, String idTask, String dateStart, String dateEnd) async {
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/insert_agenda_task.php";
+
+  try {
+    var res=await http.post(Uri.parse(uri),body: {
+      "idTask": idTask,
+      "idStudent": idStudent,
+      "dateStart": dateStart,
+      "dateEnd": dateEnd
+    });
+
+    var response=jsonDecode(res.body);
+
+    if(response["success"]=="true"){
+      print("Tarea insertada");
+    }else{
+      print("Some issue");
+
+    }
+  } catch (error) {
+    print(error);
+  }
+}
+
+Future<void> updateAgendaTask (String idStudent, String idTask, String dateStart, String dateEnd, bool done) async {
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/update_agenda_task.php";
+
+  try {
+    var res=await http.post(Uri.parse(uri),body: {
+      "idTask": idTask,
+      "idStudent": idStudent,
+      "done": done ? '1' : '0',
+      "dateStart": dateStart,
+      "dateEnd": dateEnd
+    });
+
+    var response=jsonDecode(res.body);
+
+    if(response["success"]=="true"){
+      print("Tarea modificada");
+    }else{
+      print("Some issue");
+
+    }
+  } catch (error) {
+    print(error);
+  }
+}
