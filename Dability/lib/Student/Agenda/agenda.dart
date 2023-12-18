@@ -73,6 +73,7 @@ class _AgendaState extends State<Agenda> {
               child: Text(
                 'AGENDA',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.asset(
@@ -109,7 +110,7 @@ class _AgendaState extends State<Agenda> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () {
             Navigator.push(
               context,

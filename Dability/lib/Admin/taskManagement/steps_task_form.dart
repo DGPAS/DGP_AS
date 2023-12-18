@@ -201,7 +201,49 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Añadir un paso a la tarea"),
+        title: Row(
+          children: [
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Expanded(
+              child: Text(
+                "AÑADIR UN PASO A LA TAREA",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A6987),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/userIcon.png',
+                    width: 48,
+                    height: 48,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(

@@ -59,6 +59,7 @@ class _StudentHomeState extends State<StudentHome> {
               child: Text(
                 _getTitle(),
                 textAlign: TextAlign.center, // Centra el texto
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
@@ -87,7 +88,7 @@ class _StudentHomeState extends State<StudentHome> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () {
             Navigator.push(
               context,

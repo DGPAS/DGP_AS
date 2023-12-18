@@ -55,6 +55,7 @@ class _TaskStepsState extends State<TaskSteps> {
               child: Text(
                 task['taskName'].toString().toUpperCase(),
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
@@ -87,6 +88,12 @@ class _TaskStepsState extends State<TaskSteps> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),

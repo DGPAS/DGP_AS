@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Admin/login/admin_login.dart';
 import 'Student/Login/student_login.dart';
@@ -21,6 +22,18 @@ class DAbility extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        colorScheme: ColorScheme(
+            brightness:  Brightness.light,
+            primary: Colors.white,
+            onPrimary: Colors.black,
+            secondary: Colors.black,
+            onSecondary: Colors.black,
+            error: Colors.red,
+            onError: Colors.red,
+            background: Colors.white,
+            onBackground:  Colors.black,
+            surface:  Colors.white,
+            onSurface: Colors.black),
       ),
       home: const HomePage(title: 'D-Ability'),
     );

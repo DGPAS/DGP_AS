@@ -47,6 +47,7 @@ class _AdminLoginState extends State<AdminLogin> {
               child: Text(
                 'Login Admin',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -75,6 +76,12 @@ class _AdminLoginState extends State<AdminLogin> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
@@ -117,7 +124,8 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(labelText: 'Email'),
+                      decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.black),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Por favor, introduce tu email';
@@ -136,7 +144,8 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(labelText: 'Contraseña'),
+                      decoration: InputDecoration(labelText: 'Contraseña', labelStyle: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.black),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Por favor, introduce tu contraseña';
