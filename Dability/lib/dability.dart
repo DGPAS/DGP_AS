@@ -106,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => EducatorHome()), //AdminLogin()),
+                        MaterialPageRoute(builder: (context) => AdminLogin()), // EducatorHome()),
                       );
                     },
                     child: const Text(
