@@ -265,9 +265,10 @@ class _StudentTaskState extends State<StudentTask> {
                   },
                   child:
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'VER\nPASOS',
+                          'VER PASOS',
                           textAlign: TextAlign.center,
                           style:
                             TextStyle(
