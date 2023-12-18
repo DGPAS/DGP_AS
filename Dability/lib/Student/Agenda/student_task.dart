@@ -223,7 +223,7 @@ class _StudentTaskState extends State<StudentTask> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 /// Tutorial video task
-                if (task['video'] != "")
+                if (task['video'] != "" && task['video'] != null && widget.student['video'] == 1)
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
