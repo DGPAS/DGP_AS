@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../Api_Requests/steps_requests.dart';
 import '../../Components/list_step.dart';
 import 'task_steps.dart';
+import '../../Components/widget_video.dart';
 
 /// # Page to show a task
 class StudentTask extends StatefulWidget {
@@ -219,7 +220,7 @@ class _StudentTaskState extends State<StudentTask> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 /// Tutorial video task
-                // if (task['video'] != "" && task['video'] != null && widget.student['video'] == 1)
+                if (task['video'] != "" && task['video'] != null && widget.student['video'] == 1)
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -230,7 +231,12 @@ class _StudentTaskState extends State<StudentTask> {
                           fontSize: MediaQuery.of(context).size.height * 0.03,
                         ),
                       ),
-                      //Aquí iría el vídeo
+                      Container(
+                        width: MediaQuery.of(context).size.height * 0.2, // Ancho fijo
+                        height: MediaQuery.of(context).size.height * 0.2, // Altura fija
+                        child: VideoPlayerScreen(urlVideo: task['video'])
+                      )
+
                     ],
                   ),
                 /// Button to access to [task_steps.dart]

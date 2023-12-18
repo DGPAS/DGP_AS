@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 
 class VideoPlayerScreen extends StatefulWidget {
-  final urlVideo;
+  final String? urlVideo;
 
   VideoPlayerScreen({
     Key? key,
@@ -18,23 +19,37 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
-  String urlVideo = "";
+  String? urlVideo;
 
   @override
   void initState() {
     super.initState();
 
-    urlVideo = widget.urlVideo;
+    if(urlVideo!=null){
+      urlVideo = widget.urlVideo;
+    }
 
     // Create and store the VideoPlayerController. The VideoPlayerController
     // offers several different constructors to play videos from assets, files,
     // or the internet.
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-        // urlVideo
+        // 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+        "${dotenv.env['API_URL']}/video/$urlVideo",
       ),
     );
+
+    // _controller = VideoPlayerController.network(
+    //   "${dotenv.env['API_URL']}/video/$urlVideo",
+    // );
+
+    // Image.network("${dotenv.env['API_URL']}/images/students/$urlPath");
+
+    // _controller = VideoPlayerController.asset(
+    //     // 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+    //     'assets/videos/video.mp4',
+    //     // urlVideo
+    // );
 
     _initializeVideoPlayerFuture = _controller.initialize();
   }
@@ -49,9 +64,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Butterfly Video'),
-      ),
       // Use a FutureBuilder to display a loading spinner while waiting for the
       // VideoPlayerController to finish initializing.
       body: FutureBuilder(
