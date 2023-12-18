@@ -46,6 +46,7 @@ class _FinishTaskState extends State<FinishTask> {
               child: Text(
                 taskName.toUpperCase(),
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.network("${dotenv.env['API_URL']}/images/${widget.task['thumbnail'].toString()}",
@@ -78,6 +79,12 @@ class _FinishTaskState extends State<FinishTask> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),

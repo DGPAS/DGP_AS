@@ -61,6 +61,7 @@ class _StudentTaskState extends State<StudentTask> {
                 child: Text(
                   task['taskName'].toString().toUpperCase(),
                   textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
               Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
@@ -94,6 +95,12 @@ class _StudentTaskState extends State<StudentTask> {
               ),
             ],
           ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white,),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           backgroundColor: Color(0xFF4A6987),
         ),
         body: Container(
@@ -114,11 +121,12 @@ class _StudentTaskState extends State<StudentTask> {
                 children: [
                   /// Task title Box
                   Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: widget.student['text'] == 1 ? MediaQuery.of(context).size.width * 0.8 : MediaQuery.of(context).size.width * 0.4,
                       padding: const EdgeInsets.all(20),
                       alignment: Alignment.center,
                       decoration: ShapeDecoration(
-                        color: Color(0xFF4A6987),
+                        //color: Color(0xFF4A6987),
+                        color: Color(0xFFD9D9D9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -132,13 +140,15 @@ class _StudentTaskState extends State<StudentTask> {
                         ],
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: widget.student['text'] == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                         children: [
+                          if (widget.student['text'] == 1)
                           Text(
                             task['taskName'].toString().toUpperCase(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.white,
+                              // color: Colors.white,
+                                 color: Colors.black,
                               fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                   ? MediaQuery.of(context).size.width *0.03     /// landscape
                                   : MediaQuery.of(context).size.width *0.035,    /// portrait
@@ -170,11 +180,25 @@ class _StudentTaskState extends State<StudentTask> {
               ),
             ),
             /// Container for description task
+              if (widget.student['text'] == 1)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(color: Color(0xFFD9D9D9)),
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: ShapeDecoration(
+                      color: Color(0xFFD9D9D9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      shadows: [
+                        BoxShadow(
+                          color: Color(0x3F000000),
+                          blurRadius: 4,
+                          offset: Offset(0, 4),
+                          spreadRadius: 0,
+                        ),
+                     ],
+                  ),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
