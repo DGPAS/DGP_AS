@@ -36,7 +36,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
   /// Variables where it will be stored the data of an student
   String? id;
-  String actualStudentId = '';
+  String actualStudentId = '23';
   String title = "Añadir Estudiante";
   String? nameStudent;
   String? surnameStudent;
@@ -70,13 +70,13 @@ class _AddModStudentState extends State<AddModStudent> {
     super.initState();
     /// Local implementation (it should call a function that
     /// calls API to get student tasks from Diary table)
-    tasks.add("Tarea 1");
-    tasks.add("Tarea 2");
-    tasks.add("Tarea 3");
-    tasks.add("Tarea 4");
-    tasks.add("Tarea 5");
-    tasks.add("Tarea 6");
-    tasks.add("Tarea 7");
+    // tasks.add("Tarea 1");
+    // tasks.add("Tarea 2");
+    // tasks.add("Tarea 3");
+    // tasks.add("Tarea 4");
+    // tasks.add("Tarea 5");
+    // tasks.add("Tarea 6");
+    // tasks.add("Tarea 7");
 
     typeForm = widget.typeForm;
 
