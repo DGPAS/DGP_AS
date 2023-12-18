@@ -59,7 +59,7 @@ class _StudentTaskState extends State<StudentTask> {
               Expanded(
                 /// Task title on AppBar
                 child: Text(
-                  task['taskName'].toString().toUpperCase(),
+                  widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
@@ -228,7 +228,7 @@ class _StudentTaskState extends State<StudentTask> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'TUTORIAL',
+                        widget.student['text'] == 1 ? 'TUTORIAL' : "",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: MediaQuery.of(context).size.height * 0.03,
@@ -268,7 +268,7 @@ class _StudentTaskState extends State<StudentTask> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'VER PASOS',
+                          widget.student['text'] == 1 ? 'VER PASOS' : "",
                           textAlign: TextAlign.center,
                           style:
                             TextStyle(
@@ -278,7 +278,7 @@ class _StudentTaskState extends State<StudentTask> {
                         ),
 
                         Image.asset(
-                          'assets/images/taskImage.png',
+                          'assets/images/instrucciones.png',
                           height: MediaQuery.of(context).size.height * 0.20,
                           width: MediaQuery.of(context).size.height * 0.20,
                         ),

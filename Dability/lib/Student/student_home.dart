@@ -57,7 +57,7 @@ class _StudentHomeState extends State<StudentHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                _getTitle(),
+              student['text'] == 1 ? _getTitle() : "",
                 textAlign: TextAlign.center, // Centra el texto
                 style: TextStyle(color: Colors.white),
               ),

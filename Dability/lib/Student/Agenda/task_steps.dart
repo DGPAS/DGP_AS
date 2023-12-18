@@ -53,7 +53,7 @@ class _TaskStepsState extends State<TaskSteps> {
             /// Task title on AppBar
             Expanded(
               child: Text(
-                task['taskName'].toString().toUpperCase(),
+                widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
               ),
@@ -130,7 +130,7 @@ class _TaskStepsState extends State<TaskSteps> {
                     alignment: WrapAlignment.center,
                     children: [
                       Text(
-                        steps[index].description.toString().toUpperCase(),
+                        widget.student['text'] == 1 ? steps[index].description.toString().toUpperCase() : "",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: MediaQuery.of(context).size.height * 0.025,
@@ -164,18 +164,20 @@ class _TaskStepsState extends State<TaskSteps> {
                           ),
                           child: Row(
                             children: [
+                              if(widget.student['text'] == 1)
                               Text(
                                 'MARCAR PASO COMPLETADO',
                                 style: TextStyle(
                                   fontSize: MediaQuery.of(context).size.height * 0.030
                                 ),
                               ),
+                              if(widget.student['text'] == 1)
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.025,
                               ),
                               checkedStep[index] ?
                                 Image.asset('assets/images/checkIcon.png',
-                                    height: MediaQuery.of(context).size.height * 0.075,
+                                    height: MediaQuery.of(context).size.height * 0.1,
                                 ):
                                 Image.asset('assets/images/greyIcon.jpg',
                                   height: MediaQuery.of(context).size.height * 0.075,
@@ -254,10 +256,11 @@ class _TaskStepsState extends State<TaskSteps> {
                           ),
                           child: Container(
                             margin: const EdgeInsets.all(20),
-                            width: MediaQuery.of(context).size.width * 0.2,
+                            width: widget.student['text'] == 1 ? MediaQuery.of(context).size.width * 0.2 : MediaQuery.of(context).size.width * 0.1,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                if(widget.student['text'] == 1)
                                 const Text("TERMINAR"),
                                 Image.asset(
                                   'assets/images/checkIcon.png',
