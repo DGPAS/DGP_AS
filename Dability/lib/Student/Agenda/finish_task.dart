@@ -44,7 +44,7 @@ class _FinishTaskState extends State<FinishTask> {
             /// Task title on AppBar
             Expanded(
               child: Text(
-                taskName.toUpperCase(),
+                widget.student['text'] == 1 ? taskName.toUpperCase() : "",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
               ),
@@ -100,6 +100,10 @@ class _FinishTaskState extends State<FinishTask> {
             child: Column(
               children: [
                 SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  child: Image.asset('assets/images/terminar.png'),
+                ),
+                SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 SizedBox(
@@ -110,7 +114,7 @@ class _FinishTaskState extends State<FinishTask> {
                   alignment: WrapAlignment.center,
                   children: [
                     Text(
-                      "¿Has terminado la tarea?".toUpperCase(),
+                      widget.student['text'] == 1 ? "¿Has terminado la tarea?".toUpperCase() : "",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: MediaQuery.of(context).size.height * 0.025,
@@ -148,7 +152,7 @@ class _FinishTaskState extends State<FinishTask> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("NO"),
+                              if(widget.student['text'] == 1) const Text("NO"),
                               Text(
                                 'X',
                                 style: TextStyle(
@@ -184,7 +188,7 @@ class _FinishTaskState extends State<FinishTask> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("SI"),
+                            if (widget.student['text'] == 1) const Text("SI"),
                             Image.asset(
                               'assets/images/checkIcon.png',
                               width: MediaQuery.of(context).size.height * 0.05,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../Api_Requests/task_requests.dart';
+import 'package:dability/Api_Requests/task_requests.dart';
 import 'add_mod_task.dart';
-import '../../Components/enum_types.dart';
+import 'package:dability/Components/enum_types.dart';
 
 /// # Page where admin manages tasks
 class TaskManagement extends StatefulWidget {

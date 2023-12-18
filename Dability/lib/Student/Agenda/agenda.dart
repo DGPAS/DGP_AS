@@ -69,9 +69,9 @@ class _AgendaState extends State<Agenda> {
         title: Row(
           children: [
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
-            const Expanded(
+            Expanded(
               child: Text(
-                'AGENDA',
+              student['text'] == 1 ? 'AGENDA' : "",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
               ),
