@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:dability/Admin/admin_home.dart';
 import 'package:flutter/material.dart';
+import 'package:dability/Api_Requests/user_requests.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dability/Admin/taskManagement/task_management.dart';
+import 'package:dability/Admin/studentManagement/student_management.dart';
+import 'package:http/http.dart' as http;
 
-/// # Login page for Admin
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
 
@@ -15,34 +21,39 @@ class _AdminLoginState extends State<AdminLogin> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  /// Example credentials
-  String userEmail = "prueba@correo.es";
-  String userPassword = "123";
-
   bool loginError = false;
+  List<dynamic> adminsList = [];
+  List<dynamic> admins = [];
 
-  /// Function that checks if [email] and [password] are identical
-  /// to [userEmail] and [userPassword]
-  ///
-  /// If they are, it returns true
-  ///
-  /// Else, it returns false
-  bool authenticateUser(String email, String password){
-    if(email == userEmail && password == userPassword){
-      return true;
+  @override
+  void initState(){
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData () async {
+    adminsList = await getAdminsLogins();
+    setState(() {
+      admins = adminsList;
+    });
+  }
+
+  bool authenticateUser(String email, String password, List<dynamic> admins) {
+    for (var i = 0; i < admins.length; i++) {
+      if (admins[i]['login'] == email && admins[i]['password'] == password) {
+        return true;
+      }
     }
-
     return false;
   }
 
-  /// Main builder for the login
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/logo.jpeg', width: 48, height: 48),
             const Expanded(
               child: Text(
                 'Login Admin',
@@ -81,7 +92,6 @@ class _AdminLoginState extends State<AdminLogin> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          /// Title of the login
           Container(
             padding: const EdgeInsets.all(16.0),
             child: Container(
@@ -107,7 +117,6 @@ class _AdminLoginState extends State<AdminLogin> {
               key: _formKey,
               child: Column(
                 children: [
-                  /// Label for email
                   Container(
                     // width: MediaQuery.of(context).size.width * 0.6
                     constraints: BoxConstraints(
@@ -127,7 +136,6 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                   ),
                   SizedBox(height: 16.0),
-                  /// Label for the password
                   Container(
                     constraints: BoxConstraints(
                       maxWidth: 800.0, // Establece el ancho máximo del contenedor
@@ -150,7 +158,6 @@ class _AdminLoginState extends State<AdminLogin> {
                   ),
                   SizedBox(height: 30.0),
 
-                  /// Handler error controller
                   if (loginError)
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
@@ -160,7 +167,6 @@ class _AdminLoginState extends State<AdminLogin> {
                       ),
                     ),
 
-                  /// Submit access button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -172,14 +178,14 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        bool correctLogin = authenticateUser(
-                            _emailController.text, _passwordController.text);
+                        bool loginCorrecto = authenticateUser(
+                            _emailController.text, _passwordController.text, adminsList);
 
                         setState(() {
-                          loginError = !correctLogin;
+                          loginError = !loginCorrecto;
                         });
 
-                        if(correctLogin){ // se redirecciona
+                        if(loginCorrecto){ // se redirecciona
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AdminHome()),
@@ -193,7 +199,6 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                   ),
                   SizedBox(height: 30,),
-                  /// Register (TODO: Delete it)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children:[
@@ -225,6 +230,5 @@ class _AdminLoginState extends State<AdminLogin> {
       ),
     );
   }
-
 
 }
