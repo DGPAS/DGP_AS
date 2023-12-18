@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 /// It saves all the students that are stored on DataBase in a dynamic
 /// list [students]
 ///
@@ -17,7 +16,31 @@ Future<List<dynamic>> getStudents() async {
     var response = await http.get(Uri.parse(uri));
 
     if (response.statusCode == 200) {
-        students = json.decode(response.body);
+      students = json.decode(response.body);
+    } else {
+      print('Error en la solicitud: ${response.statusCode}');
+    }
+  } catch (error) {
+    print(error);
+  }
+
+  return students;
+}
+
+/// It saves all the students with educator [id] that are stored on DataBase
+/// in a dynamic list [students]
+///
+/// Throws an [error] if the query fails
+Future<List<dynamic>> getEducatorStudents(String id) async {
+  List<dynamic> students = [];
+
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/view_students_by_educator.php?idEducator=$id";
+  try {
+    var response = await http.get(Uri.parse(uri));
+
+    if (response.statusCode == 200) {
+      students = json.decode(response.body);
     } else {
       print('Error en la solicitud: ${response.statusCode}');
     }

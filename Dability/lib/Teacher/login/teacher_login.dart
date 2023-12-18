@@ -1,4 +1,4 @@
-import 'package:dability/Admin/admin_home.dart';
+import 'package:dability/Teacher/Admin/admin_home.dart';
 import 'package:flutter/material.dart';
 
 /// # Login page for Admin

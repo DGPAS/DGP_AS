@@ -1,5 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:dability/Admin/taskManagement/steps_task_form.dart';
+import 'package:dability/Teacher/Admin/taskManagement/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
@@ -8,8 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import '../../Api_Requests/steps_requests.dart';
-import '../../Api_Requests/task_requests.dart';
+import 'package:dability/Api_Requests/steps_requests.dart';
+import 'package:dability/Api_Requests/task_requests.dart';
 
 /// # Page for add or modify a task
 ///
