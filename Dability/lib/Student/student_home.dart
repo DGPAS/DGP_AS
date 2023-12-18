@@ -1,6 +1,7 @@
 import 'package:dability/Api_Requests/student_requests.dart';
 import 'package:dability/dability.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'Agenda/agenda.dart';
 
 /// # Home page of Student
@@ -62,7 +63,7 @@ class _StudentHomeState extends State<StudentHome> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
+            Image.asset('assets/images/casa.png', width: 46, height: 46),
             SizedBox(
               width: 50,
             ),
@@ -80,7 +81,7 @@ class _StudentHomeState extends State<StudentHome> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset('assets/images/userIcon.png', width: 48, height: 48),
+                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
                 ],
               ),
             ),

@@ -98,11 +98,7 @@ class _AgendaState extends State<Agenda> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
-                    'assets/images/userIcon.png',
-                    width: 48,
-                    height: 48,
-                  ),
+                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
                 ],
               ),
             ),

@@ -79,11 +79,7 @@ class _TaskStepsState extends State<TaskSteps> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
-                    'assets/images/userIcon.png',
-                    width: 48,
-                    height: 48,
-                  ),
+                  Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
                 ],
               ),
             ),
