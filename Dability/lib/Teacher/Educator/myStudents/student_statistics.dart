@@ -81,6 +81,7 @@ class _StudentStatisticsState extends State<StudentStatistics> {
               child: Text(
                 "GRAFICO DE TAREAS DE\n LA SEMANA DE ${student['firstName'].toString().toUpperCase()} ${student['lastName'].toString().toUpperCase()}",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -109,6 +110,12 @@ class _StudentStatisticsState extends State<StudentStatistics> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),

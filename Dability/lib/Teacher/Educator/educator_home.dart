@@ -27,6 +27,7 @@ class _EducatorHomeState extends State<EducatorHome> {
               child: Text(
                 'INICIO EDUCADOR',
                 textAlign: TextAlign.center, // Centra el texto
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
@@ -55,7 +56,7 @@ class _EducatorHomeState extends State<EducatorHome> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             // Utiliza la función personalizada para manejar la navegación hacia atrás
             Navigator.push(
