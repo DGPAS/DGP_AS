@@ -33,7 +33,7 @@ dependencies:
   file_picker: ^5.0.0
   image_picker:
   dotted_border:
-  http: ^0.13.3
+  http: ^0.13.6
   date_time_picker: ^2.1.0
   intl: ^0.17.0
   flutter_dotenv: ^5.1.0

@@ -7,7 +7,7 @@ import 'package:dability/Components/list_step.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
+import 'package:path/path.dart' as path;
 import '../../Api_Requests/steps_requests.dart';
 import '../../Api_Requests/task_requests.dart';
 
@@ -51,6 +51,7 @@ class _AddModTaskState extends State<AddModTask> {
   String? idTask;
   String? thumbnail;
   Image? thumbnailImage;
+  String? thumbnailVideo;
   String? videoUrl;
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
@@ -99,10 +100,16 @@ class _AddModTaskState extends State<AddModTask> {
     /// If the miniature exits, it initializes it
     if(widget.task?['thumbnail'] != null) {
      selectedImage = widget.task?['thumbnail'];
+     getThumbnail(thumbnail!);
+     isPressed = false;
+    }else{
+  print('Thumbnail is null');
     }
-    getThumbnail(thumbnail!);
-    isPressed = false;
+     if (widget.task?['videoThumbnail'] != null) {
+    thumbnailVideo = widget.task?['videoThumbnail'];
   }
+  }
+  
 
   /// Function that calls [getTaskSteps] who returns the DataBase tasks
   /// and adds them to [steps]
@@ -112,37 +119,10 @@ class _AddModTaskState extends State<AddModTask> {
       actualTaskId = idTask!;
     });
   }
-/*Future<void> saveVideo() async {
-  if (selectedVideo == "") {
-    print("No se ha seleccionado ningún video");
-    return;
-  }
-
-  String uri = "${dotenv.env['API_URL']}/saveVideo.php";
-
-  try {
-    var request = http.MultipartRequest('POST', Uri.parse(uri));
-
-    // Puedes agregar la lógica para seleccionar un video específico en el emulador
-    // Esto puede variar según el emulador que estés utilizando
-
-    // Simplemente usa el path del video seleccionado
-    request.fields['idTareas'] = actualTaskId;
-    var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
-    request.files.add(videoFile);
-
-    var response = await request.send();
-
-    if (response.statusCode == 200) {
-      print("Video Uploaded");
-      print("Response Body: ${await response.stream.bytesToString()}");
-    } else {
-      print("Error in uploading video. Status Code: ${response.statusCode}");
-    }
-  } catch (e) {
-    print("Exception during video upload: $e");
-  }
-}*/
+  bool isVideo(String filePath) {
+  final extension = path.extension(filePath).toLowerCase();
+  return extension == '.mp4' || extension == '.mov' || extension == '.avi';
+}
 
   /// Function that calls funtions that calls API
   ///
@@ -214,6 +194,10 @@ class _AddModTaskState extends State<AddModTask> {
       return const Image(
           image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
+      if (isVideo(urlPath)) {
+      // Si es un video, puedes mostrar un ícono de reproductor de video en lugar de la imagen
+      return const Icon(Icons.video_library, size: 50);
+    } else
       if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.task?['thumbnail'])) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       } else {
@@ -378,6 +362,50 @@ class _AddModTaskState extends State<AddModTask> {
                             ),
                           ),
                         ),
+                         
+          // Video thumbnail preview
+          if (thumbnailVideo != null)
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                margin: const EdgeInsets.all(20),
+                child: DottedBorder(
+                  color: Colors.black,
+                  strokeWidth: 1,
+                  dashPattern: [10, 6],
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(20),
+                  child: SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(45),
+                      child: Image.file(File(thumbnailVideo!)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Video preview
+if (selectedVideo != null)
+  Container(
+    margin: const EdgeInsets.all(20),
+    child: DottedBorder(
+      color: Colors.black,
+      strokeWidth: 1,
+      dashPattern: [10, 6],
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(20),
+      child: SizedBox(
+        height: 200,
+        width: 800,
+        child: const Icon(Icons.video_library, size: 50),
+      ),
+    ),
+  ),
                         /// This container adds the task miniature from camera
                         GestureDetector(
                           onTap: () async {
@@ -479,7 +507,81 @@ class _AddModTaskState extends State<AddModTask> {
                   ],
                 ),
               ),
-              
+               if(typeForm == AddModType.mod) 
+              Container(
+  decoration: _buildBoxDecoration(),
+  padding: const EdgeInsets.all(20.0),
+  margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
+  child: Column(
+    children: [
+      const Text("Añade un video para la tarea"),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () async {
+                // Lógica para seleccionar un video desde la galería
+                final picker = ImagePicker();
+                final XFile? pickedFile = await picker.pickVideo(
+                  source: ImageSource.gallery,
+                );
+
+                setState(() {
+                  selectedVideo = pickedFile!.path;
+                  //  _video = File(selectedVideo);
+                });
+
+                if (pickedFile != null) {
+                  // Puedes manejar el archivo de video seleccionado aquí
+                  print(pickedFile.path);
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                margin: const EdgeInsets.all(20),
+                child: DottedBorder(
+                  color: Colors.black,
+                  strokeWidth: 1,
+                  dashPattern: [10, 6],
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(20),
+                  child: SizedBox(
+                    height: 200,
+                    width: 800,
+                    // Widget personalizado según tus necesidades
+                     child: const Icon(Icons.video_library, size: 50),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              // Lógica para grabar un video desde la cámara
+              final picker = ImagePicker();
+              final XFile? pickedFile = await picker.pickVideo(
+                source: ImageSource.camera,
+              );
+
+              if (pickedFile != null) {
+                // Puedes manejar el archivo de video grabado aquí
+                print(pickedFile.path);
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: Icon(Icons.videocam, size: 50),
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
               /// Container to add steps
               ///
               /// It navegates to [steps_task_form.dart]

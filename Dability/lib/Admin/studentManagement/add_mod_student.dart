@@ -1,3 +1,4 @@
+import 'package:dability/Api_Requests/agenda_requests.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:dability/Api_Requests/student_requests.dart';
+
+import 'package:dability/Components/aux_functions.dart';
 
 /// # Page for add or modify an student
 ///
@@ -27,10 +30,10 @@ class AddModStudent extends StatefulWidget {
 
 class _AddModStudentState extends State<AddModStudent> {
   TextEditingController _controller = TextEditingController();
-  List<String> displayedItems = [];
+  List<dynamic> displayedItems = [];
 
   /// Array of static tasks (it should be the array of tasks from Diary in DB)
-  List<String> tasks = [];
+  List<dynamic> tasks = [];
 
   AddModType typeForm = AddModType.add;
 
@@ -70,13 +73,13 @@ class _AddModStudentState extends State<AddModStudent> {
     super.initState();
     /// Local implementation (it should call a function that
     /// calls API to get student tasks from Diary table)
-    tasks.add("Tarea 1");
-    tasks.add("Tarea 2");
-    tasks.add("Tarea 3");
-    tasks.add("Tarea 4");
-    tasks.add("Tarea 5");
-    tasks.add("Tarea 6");
-    tasks.add("Tarea 7");
+    // tasks.add("Tarea 1");
+    // tasks.add("Tarea 2");
+    // tasks.add("Tarea 3");
+    // tasks.add("Tarea 4");
+    // tasks.add("Tarea 5");
+    // tasks.add("Tarea 6");
+    // tasks.add("Tarea 7");
 
     typeForm = widget.typeForm;
 
@@ -86,7 +89,7 @@ class _AddModStudentState extends State<AddModStudent> {
       actualStudentId = id!;
     }
 
-    /// If the student exists, it get his password
+    /// If the student exists, it get his password (and his tasks)
     if (typeForm == AddModType.mod) {
       getData();
     }
@@ -135,7 +138,8 @@ class _AddModStudentState extends State<AddModStudent> {
     surnameForm.text = surnameStudent!;
 
     /// Get the AppBar title
-    getTitle();
+    // getTitle();
+    title = getTitle(typeForm, nameStudent);
 
     displayedItems.addAll(tasks);
   }
@@ -144,9 +148,11 @@ class _AddModStudentState extends State<AddModStudent> {
   /// password and adds it to [selectedPasswd] and [selectedDBPasswd]
   Future<void> getData () async {
     selectedPasswd = await getStudentPassword(actualStudentId);
+    tasks = await getStudentAgendaAll(actualStudentId); // setState?
     setState(() {
       selectedDBPasswd.clear();
       selectedDBPasswd.addAll(selectedPasswd);
+      displayedItems.addAll(tasks);
     });
     print("------------------------ $selectedDBPasswd");
   }
@@ -157,7 +163,7 @@ class _AddModStudentState extends State<AddModStudent> {
   ///
   /// If they don't match, it adds all students to [displayedItems]
   void filterSearchResults(String query) {
-    List<String> searchResults = [];
+    List<dynamic> searchResults = [];
 
     if (query.isNotEmpty) {
       for (var i = 0; i < tasks.length; i++) {
@@ -180,26 +186,26 @@ class _AddModStudentState extends State<AddModStudent> {
   /// If [typeForm] == [AddModType.add], it updates it to creating an student
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modifying an student
-  void getTitle () {
-    if (typeForm == AddModType.add) {
-      title =  'Crear Estudiante';
-    } else {
-      title = 'Modificar Estudiante: $nameStudent';
-    }
-  }
+  // void getTitle () {
+  //   if (typeForm == AddModType.add) {
+  //     title =  'Crear Estudiante';
+  //   } else {
+  //     title = 'Modificar Estudiante: $nameStudent';
+  //   }
+  // }
 
   /// Function that returns the submit button name of [BottomNavigationBar]
   ///
   /// If [typeForm] == [AddModType.add], it updates it to create (an student)
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modify (an student)
-  String getSubmitButton () {
-    if (typeForm == AddModType.add) {
-      return 'Crear';
-    } else {
-      return 'Modificar';
-    }
-  }
+  // String getSubmitButton () {
+  //   if (typeForm == AddModType.add) {
+  //     return 'Crear';
+  //   } else {
+  //     return 'Modificar';
+  //   }
+  // }
 
   /// Function that calls funtions that calls API
   ///
@@ -291,6 +297,7 @@ class _AddModStudentState extends State<AddModStudent> {
               child: Text(
                 title,
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -319,6 +326,12 @@ class _AddModStudentState extends State<AddModStudent> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
@@ -603,7 +616,7 @@ class _AddModStudentState extends State<AddModStudent> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  displayedItems[index],
+                                  displayedItems[index]['taskName'].toString().toUpperCase(),
                                   //textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors
@@ -636,7 +649,7 @@ class _AddModStudentState extends State<AddModStudent> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() {
+                                                      setState(() { // cambiarlo por función de borrar tarea de agenda
                                                         tasks.remove(
                                                             displayedItems[
                                                                 index]);
@@ -686,7 +699,6 @@ class _AddModStudentState extends State<AddModStudent> {
         color: Color(0xFF4A6987),
         height: 50,
         child: Container(
-          margin: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -730,7 +742,7 @@ class _AddModStudentState extends State<AddModStudent> {
                 },
                 child: Row(
                   children: <Widget>[
-                    Text(getSubmitButton(), style: TextStyle(color: Colors.black)),
+                    Text(getSubmitButton(typeForm), style: TextStyle(color: Colors.black)),
                     Icon(Icons.add, color: Colors.lightGreenAccent),
                   ],
                 ),

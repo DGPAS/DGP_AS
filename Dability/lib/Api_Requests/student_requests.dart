@@ -194,28 +194,39 @@ Future<void> updatePassword(String actualStudentId, List<String> selectedPasswd)
   try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
     request.fields['idStudent'] = actualStudentId;
-    var pictogram1 = await http.MultipartFile.fromPath(
-        "pictogram1", selectedPasswd[1]);
-    request.files.add(pictogram1);
-    var pictogram2 = await http.MultipartFile.fromPath(
-        "pictogram2", selectedPasswd[2]);
-    request.files.add(pictogram2);
-    var pictogram3 = await http.MultipartFile.fromPath(
-        "pictogram3", selectedPasswd[3]);
-    request.files.add(pictogram3);
+
+    // Verificar y agregar el pictograma 1 si está presente
+    if (selectedPasswd[1] != null && selectedPasswd[1].isNotEmpty) {
+      var pictogram1 = await http.MultipartFile.fromPath(
+          "pictogram1", selectedPasswd[1]);
+      request.files.add(pictogram1);
+    }
+
+    // Verificar y agregar el pictograma 2 si está presente
+    if (selectedPasswd[2] != null && selectedPasswd[2].isNotEmpty) {
+      var pictogram2 = await http.MultipartFile.fromPath(
+          "pictogram2", selectedPasswd[2]);
+      request.files.add(pictogram2);
+    }
+
+    // Verificar y agregar el pictograma 3 si está presente
+    if (selectedPasswd[3] != null && selectedPasswd[3].isNotEmpty) {
+      var pictogram3 = await http.MultipartFile.fromPath(
+          "pictogram3", selectedPasswd[3]);
+      request.files.add(pictogram3);
+    }
+
     var response = await request.send();
 
     if (response.statusCode == 200) {
       print("Password Updated");
-    }
-    else {
+    } else {
       print("Error en la subida");
     }
   } catch (error) {
     print(error);
   }
 }
-
 
 /// Function that updates an student on DataBase by calling an API function
 ///

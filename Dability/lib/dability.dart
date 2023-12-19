@@ -7,7 +7,7 @@ void main() async {
   /// Loads the environment variables from .env
   await dotenv.load();
   runApp(const DAbility());
-}
+} 
 
 class DAbility extends StatelessWidget {
   const DAbility({super.key});
