@@ -30,7 +30,6 @@ class _EducatorHomeState extends State<EducatorHome> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
             SizedBox(
               width: 50,
             ),
