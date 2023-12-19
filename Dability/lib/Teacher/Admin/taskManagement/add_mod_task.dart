@@ -195,7 +195,11 @@ class _AddModTaskState extends State<AddModTask> {
       }
     }
   }
-
+  /// Function that assigns a picked date using [showDatePicker] to [date]
+  ///
+  /// if [date] is null then the selected date will be today
+  ///
+  /// if we pick a date and it's different than the one we had picked we assign it to [date]
   Future<void> selectDate(BuildContext context, DateTime? date) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -378,6 +382,10 @@ class _AddModTaskState extends State<AddModTask> {
                 child: Column(
                   children: [
                     const Text("Selecciona la fecha de inicio de la tarea"),
+                    ElevatedButton(
+                      onPressed: () => selectDate(context, selectedStartDate),
+                      child: Text('Seleccionar Fecha'),
+                    ),
                   ],
                 ),
               ),
@@ -396,6 +404,10 @@ class _AddModTaskState extends State<AddModTask> {
                 child: Column(
                   children: [
                     const Text("Selecciona la fecha de finalización de la tarea"),
+                    ElevatedButton(
+                      onPressed: () => selectDate(context, selectedEndDate),
+                      child: Text('Seleccionar Fecha'),
+                    ),
                   ],
                 ),
               ),
