@@ -45,6 +45,7 @@ class _AddModTaskState extends State<AddModTask> {
       title: "Descripción general de la tarea",
       type: TextFormType.description);
 
+
   /// Variables where it will be stored the data of a task
   String? title;
   String? description;
@@ -52,6 +53,8 @@ class _AddModTaskState extends State<AddModTask> {
   String? thumbnail;
   Image? thumbnailImage;
   String? videoUrl;
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
   AddModType? typeForm;
@@ -190,6 +193,21 @@ class _AddModTaskState extends State<AddModTask> {
       } else {
         return Image.network("${dotenv.env['API_URL']}/images/$urlPath", fit: BoxFit.cover);
       }
+    }
+  }
+
+  Future<void> selectDate(BuildContext context, DateTime? date) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: date ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null && picked != date) {
+      setState(() {
+        date = picked;
+      });
     }
   }
 
@@ -345,6 +363,43 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
+              /// Form to introduce the [startDate] of the task
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    )),
+                padding: const EdgeInsets.all(20.0),
+                margin:
+                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+                child: Column(
+                  children: [
+                    const Text("Selecciona la fecha de inicio de la tarea"),
+                  ],
+                ),
+              ),
+              /// Form to introduce the [endDate] of the task
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1,
+                    )),
+                padding: const EdgeInsets.all(20.0),
+                margin:
+                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+                child: Column(
+                  children: [
+                    const Text("Selecciona la fecha de finalización de la tarea"),
+                  ],
+                ),
+              ),
+
               /// Container to add the [selectedImage] of the task
               Container(
                 decoration: _buildBoxDecoration(),
