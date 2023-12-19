@@ -164,6 +164,7 @@ class _FinishTaskState extends State<FinishTask> {
                     /// Yes button
                     ElevatedButton(
                       onPressed: () {
+                        print('TERMINAR --------- $id');
                         updateFinishedTask(id);
 
                         Navigator.push(
