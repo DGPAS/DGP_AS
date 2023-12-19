@@ -109,6 +109,7 @@ class _TaskStepsState extends State<TaskSteps> {
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
                   /// Step Task Image
+                  if (steps[index].image != null && steps[index].image != '')
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
