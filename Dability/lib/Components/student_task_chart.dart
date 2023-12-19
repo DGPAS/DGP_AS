@@ -23,8 +23,8 @@ class _StudentTaskChartState extends State<StudentTaskChart> {
     print("NOW ----------------- ${now.toString()}");
 
     /// It filters the tasks by the date
+    print(widget.tasks);
     for(var task in widget.tasks) {
-      print (task);
       List<String> dateTaskIni = task['dateStart'].toString().split('-');
       final DateTime ini = DateTime.utc(int.parse(dateTaskIni.elementAt(0)), int.parse(dateTaskIni.elementAt(1)), int.parse(dateTaskIni.elementAt(2))); /// Year - Month - Day
       print("INI ----------------- ${ini.toString()}");
@@ -38,6 +38,7 @@ class _StudentTaskChartState extends State<StudentTaskChart> {
       if (ini.isBefore(now) && ini.isAfter(DateTime(now.year,now.month,now.day-3)) && fin.isAfter(now) && fin.isBefore(DateTime(now.year,now.month,now.day+3))) {
         setState(() {
           tasks.add(task);
+          print(tasks);
         });
       }
     }
