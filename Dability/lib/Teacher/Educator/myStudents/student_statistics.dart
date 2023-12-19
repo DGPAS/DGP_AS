@@ -128,35 +128,35 @@ class _StudentStatisticsState extends State<StudentStatistics> {
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
-      body: Column(
-        children: [
-          if (tasks.isNotEmpty)
-            StudentTaskChart(tasks: tasks),
-          /// SizedBox for the filter
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.152,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 8.0, bottom: 15.0, left: 14, right: 14),
-              child: TextField(
-                controller: _controller,
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Buscar',
-                  hintText: 'Ingrese su búsqueda',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (tasks.isNotEmpty)
+              StudentTaskChart(tasks: tasks),
+            /// SizedBox for the filter
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.152,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 8.0, bottom: 15.0, left: 14, right: 14),
+                child: TextField(
+                  controller: _controller,
+                  onChanged: (value) {
+                    filterSearchResults(value);
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Buscar',
+                    hintText: 'Ingrese su búsqueda',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          /// List of tasks
-          Expanded(
-            child: Container(
+            /// List of tasks
+            Container(
               decoration: BoxDecoration(
                 color: Color(0xFF4A6987),
                 borderRadius: BorderRadius.circular(30),
@@ -249,8 +249,8 @@ class _StudentStatisticsState extends State<StudentStatistics> {
                 })
               ]),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
