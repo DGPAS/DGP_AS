@@ -152,6 +152,7 @@ class _AddModStudentState extends State<AddModStudent> {
     setState(() {
       selectedDBPasswd.clear();
       selectedDBPasswd.addAll(selectedPasswd);
+      displayedItems.addAll(tasks);
     });
     print("------------------------ $selectedDBPasswd");
   }
