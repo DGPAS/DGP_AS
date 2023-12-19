@@ -1,9 +1,10 @@
 import 'package:dability/Student/student_home.dart';
 import 'package:flutter/material.dart';
-import '../../Api_Requests/agenda_requests.dart';
+import 'package:dability/Api_Requests/agenda_requests.dart';
 import 'student_task.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../Components/aux_functions.dart';
 
 /// # Page where the student sees his/her tasks
 class Agenda extends StatefulWidget {
@@ -40,19 +41,14 @@ class _AgendaState extends State<Agenda> {
     print(student['text']);
   }
 
-  /// Function that calls [getStudentAgenda] who returns the DataBase student
+  /// Function that calls [getNotDoneStudentAgenda] who returns the DataBase student
   /// tasks where idStudent is [id] and adds them to [tasks]
   Future<void> getData (String id) async {
-    List<dynamic> aux = await getStudentAgenda(id);
+    List<dynamic> aux = await getNotDoneStudentAgenda(id);
     setState(() {
       tasks = aux;
       numPages = (tasks.length / numTasksPerPage).ceil();
     });
-  }
-
-  /// Function thats return the orientation of the device
-  Orientation _orientation (double width, double height) {
-    return width > height ? Orientation.landscape : Orientation.portrait;
   }
 
   @override
@@ -174,7 +170,7 @@ class _AgendaState extends State<Agenda> {
                                             Text(
                                               currentTasks[i]['taskName'].toString().toUpperCase(),
                                               style: TextStyle(
-                                                fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                     ? MediaQuery.of(context).size.width *0.04   /// landscape
                                                     : MediaQuery.of(context).size.width *0.04,  /// portrait
                                               ),
@@ -184,10 +180,10 @@ class _AgendaState extends State<Agenda> {
                                               width: MediaQuery.of(context).size.width * 0.075,
                                             ),
                                             Container(
-                                              width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                              width: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                 ? MediaQuery.of(context).size.width *0.20     /// landscape
                                                 : MediaQuery.of(context).size.width *0.20,    /// portrait
-                                              height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                              height: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                 ? MediaQuery.of(context).size.height *0.20     /// landscape
                                                 : MediaQuery.of(context).size.height *0.17,    /// portrait
                                               padding: const EdgeInsets.all(10),

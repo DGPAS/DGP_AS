@@ -80,6 +80,7 @@ class _MyStudentsState extends State<MyStudents> {
               child: Text(
                 "MIS ESTUDIANTES",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -108,6 +109,12 @@ class _MyStudentsState extends State<MyStudents> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
