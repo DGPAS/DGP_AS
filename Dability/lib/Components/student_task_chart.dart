@@ -36,7 +36,9 @@ class _StudentTaskChartState extends State<StudentTaskChart> {
 
       /// If the dates of tasks are between the week
       if (ini.isBefore(now) && ini.isAfter(DateTime(now.year,now.month,now.day-3)) && fin.isAfter(now) && fin.isBefore(DateTime(now.year,now.month,now.day+3))) {
-        tasks.add(task);
+        setState(() {
+          tasks.add(task);
+        });
       }
     }
   }

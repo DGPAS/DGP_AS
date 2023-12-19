@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:dability/Api_Requests/student_requests.dart';
 
-import '../../Components/aux_functions.dart';
+import 'package:dability/Components/aux_functions.dart';
 
 /// # Page for add or modify an student
 ///
