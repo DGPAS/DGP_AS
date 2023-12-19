@@ -296,6 +296,7 @@ class _AddModStudentState extends State<AddModStudent> {
               child: Text(
                 title,
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -324,6 +325,12 @@ class _AddModStudentState extends State<AddModStudent> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
@@ -691,7 +698,6 @@ class _AddModStudentState extends State<AddModStudent> {
         color: Color(0xFF4A6987),
         height: 50,
         child: Container(
-          margin: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[

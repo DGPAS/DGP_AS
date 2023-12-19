@@ -37,6 +37,8 @@ class _AgendaState extends State<Agenda> {
     student = widget.student;
 
     getData(student['id'].toString());
+
+    print(student['text']);
   }
 
   /// Function that calls [getNotDoneStudentAgenda] who returns the DataBase student
@@ -63,10 +65,11 @@ class _AgendaState extends State<Agenda> {
         title: Row(
           children: [
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
-            const Expanded(
+            Expanded(
               child: Text(
-                'AGENDA',
+              student['text'] == 1 ? 'AGENDA' : "",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.asset(
@@ -91,11 +94,7 @@ class _AgendaState extends State<Agenda> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
-                    'assets/images/userIcon.png',
-                    width: 48,
-                    height: 48,
-                  ),
+                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
                 ],
               ),
             ),
@@ -103,7 +102,7 @@ class _AgendaState extends State<Agenda> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () {
             Navigator.push(
               context,
@@ -122,7 +121,6 @@ class _AgendaState extends State<Agenda> {
                 top:  MediaQuery.of(context).size.height * 0.03,
                 bottom: MediaQuery.of(context).size.height * 0.01
             ),
-            child: Positioned.fill(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -139,7 +137,7 @@ class _AgendaState extends State<Agenda> {
                               children: [
                                 /// Container for each task
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  width: student['text'] == 1 ? MediaQuery.of(context).size.width * 0.8 : MediaQuery.of(context).size.width * 0.4,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       maximumSize: Size(double.infinity, MediaQuery.of(context).size.height * 0.40),
@@ -165,9 +163,10 @@ class _AgendaState extends State<Agenda> {
                                     child: Container(
                                       padding: const EdgeInsets.only(left: 15, right: 15),
                                       child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: student['text'] == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                                           children: [
                                             /// Task name
+                                            if (student['text'] == 1)
                                             Text(
                                               currentTasks[i]['taskName'].toString().toUpperCase(),
                                               style: TextStyle(
@@ -176,6 +175,7 @@ class _AgendaState extends State<Agenda> {
                                                     : MediaQuery.of(context).size.width *0.04,  /// portrait
                                               ),
                                             ),
+                                            if (student['text'] == 1)
                                             SizedBox(
                                               width: MediaQuery.of(context).size.width * 0.075,
                                             ),
@@ -294,7 +294,6 @@ class _AgendaState extends State<Agenda> {
                   ),
                 ],
               ),
-            ),
           ),
         ],
       ),

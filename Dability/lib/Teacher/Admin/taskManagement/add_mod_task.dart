@@ -1,5 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:dability/Admin/taskManagement/steps_task_form.dart';
+import 'package:dability/Teacher/Admin/taskManagement/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
@@ -8,10 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-import '../../Api_Requests/steps_requests.dart';
-import '../../Api_Requests/task_requests.dart';
-
-import '../../Components/aux_functions.dart';
+import 'package:dability/Api_Requests/steps_requests.dart';
+import 'package:dability/Api_Requests/task_requests.dart';
 
 /// # Page for add or modify a task
 ///
@@ -77,11 +75,13 @@ class _AddModTaskState extends State<AddModTask> {
     super.initState();
 
     typeForm = widget.typeForm;
-    title = widget.task?['taskName'];
-    description = widget.task?['description'];
-    idTask = widget.task?['idTask'];
-    thumbnail = widget.task?['thumbnail'];
-    videoUrl = widget.task?['video'];
+    if (typeForm == AddModType.mod) {
+      title = widget.task?['taskName'];
+      description = widget.task?['description'];
+      idTask = widget.task?['idTask'];
+      thumbnail = widget.task?['thumbnail'];
+      videoUrl = widget.task?['video'];
+    }
     /// If title or description are null it means that we are adding a task,
     /// not modifying it, so the values are initialized by the controllers
     title ??= titleForm.getText();
@@ -100,8 +100,8 @@ class _AddModTaskState extends State<AddModTask> {
     /// If the miniature exits, it initializes it
     if(widget.task?['thumbnail'] != null) {
      selectedImage = widget.task?['thumbnail'];
+     getThumbnail(thumbnail!);
     }
-    getThumbnail(thumbnail!);
     isPressed = false;
   }
 
@@ -146,13 +146,13 @@ class _AddModTaskState extends State<AddModTask> {
   /// If [typeForm] == [AddModType.add], it updates it to creating a task
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modifying a task
-  // String getTitle () {
-  //   if (typeForm == AddModType.add) {
-  //     return 'Crear Tarea';
-  //   } else {
-  //     return 'Modificar tarea: $title';
-  //   }
-  // }
+  String getTitle () {
+    if (typeForm == AddModType.add) {
+      return 'Crear Tarea';
+    } else {
+      return 'Modificar tarea: $title';
+    }
+  }
 
 
   /// Function that returns the submit button name of [BottomNavigationBar]
@@ -160,13 +160,13 @@ class _AddModTaskState extends State<AddModTask> {
   /// If [typeForm] == [AddModType.add], it updates it to create (a task)
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modify (a task)
-  // String getSubmitButton () {
-  //   if (typeForm == AddModType.add) {
-  //     return 'Crear';
-  //   } else {
-  //     return 'Modificar';
-  //   }
-  // }
+  String getSubmitButton () {
+    if (typeForm == AddModType.add) {
+      return 'Crear';
+    } else {
+      return 'Modificar';
+    }
+  }
 
 
   /// Function that returns widget of the miniature of the task by its [urlPath]
@@ -267,7 +267,49 @@ class _AddModTaskState extends State<AddModTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTitleTask(typeForm, title)),
+        title: Row(
+          children: [
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Expanded(
+              child: Text(
+                getTitle(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A6987),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/userIcon.png',
+                    width: 48,
+                    height: 48,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
@@ -603,7 +645,6 @@ class _AddModTaskState extends State<AddModTask> {
         color: Color(0xFF4A6987),
         height: 50,
         child: Container(
-          margin: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -647,7 +688,7 @@ class _AddModTaskState extends State<AddModTask> {
                 },
                     child: Row(
                   children: <Widget>[
-                    Text(getSubmitButton(typeForm), style: TextStyle(color: Colors.black)),
+                    Text(getSubmitButton(), style: TextStyle(color: Colors.black)),
                     Icon(Icons.add, color: Colors.lightGreenAccent),
                   ],
                 ),

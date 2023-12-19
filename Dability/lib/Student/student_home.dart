@@ -1,6 +1,7 @@
 import 'package:dability/Api_Requests/student_requests.dart';
 import 'package:dability/dability.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'Agenda/agenda.dart';
 
 /// # Home page of Student
@@ -57,11 +58,12 @@ class _StudentHomeState extends State<StudentHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                _getTitle(),
+              student['text'] == 1 ? _getTitle() : "",
                 textAlign: TextAlign.center, // Centra el texto
+                style: TextStyle(color: Colors.white),
               ),
             ),
-            Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
+            Image.asset('assets/images/casa.png', width: 46, height: 46),
             SizedBox(
               width: 50,
             ),
@@ -79,7 +81,7 @@ class _StudentHomeState extends State<StudentHome> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset('assets/images/userIcon.png', width: 48, height: 48),
+                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
                 ],
               ),
             ),
@@ -87,7 +89,7 @@ class _StudentHomeState extends State<StudentHome> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () {
             Navigator.push(
               context,
@@ -125,6 +127,7 @@ class _StudentHomeState extends State<StudentHome> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if(student['text'] == 1)
                     Text(
                       'AGENDA PERSONAL',
                       style: TextStyle(
@@ -136,7 +139,7 @@ class _StudentHomeState extends State<StudentHome> {
                         height: MediaQuery.of(context).size.height * 0.025),
                     Image.asset(
                       'assets/images/agendaLogo.png',
-                      width: MediaQuery.of(context).size.width * 0.1,
+                      width: student['text'] == 1 ? MediaQuery.of(context).size.width * 0.15 : MediaQuery.of(context).size.width * 0.2,
                     ),
                   ],
                 ),
