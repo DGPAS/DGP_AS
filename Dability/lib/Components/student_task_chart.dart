@@ -1,3 +1,4 @@
+import 'package:dability/Components/aux_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -5,7 +6,7 @@ class StudentTaskChart extends StatefulWidget {
 
   final List<dynamic> tasks;
 
-  const StudentTaskChart({
+  StudentTaskChart({
     Key? key,
     required this.tasks,
   }) :super(key: key);
@@ -15,40 +16,85 @@ class StudentTaskChart extends StatefulWidget {
 }
 
 class _StudentTaskChartState extends State<StudentTaskChart> {
-  List<dynamic> tasks = [];
+  /// List that stores, from 0 to 6, the number of done tasks
+  List<int> numTaskPerDay = [];
+
+  List<ChartSeries> data = [];
+
+  List <charts.Series> series = [];
 
   @override
   void initState() {
     final DateTime now = DateTime.now();
-    print("NOW ----------------- ${now.toString()}");
+
+    /// The last seven days done tasks
+    data = [
+      ChartSeries(0, now.day-3),
+      ChartSeries(0, now.day-2),
+      ChartSeries(0, now.day-1),
+      ChartSeries(0, now.day),
+      ChartSeries(0, now.day+1),
+      ChartSeries(0, now.day+2),
+      ChartSeries(0, now.day+3),
+    ];
 
     /// It filters the tasks by the date
-    print(widget.tasks);
     for(var task in widget.tasks) {
-      List<String> dateTaskIni = task['dateStart'].toString().split('-');
-      final DateTime ini = DateTime.utc(int.parse(dateTaskIni.elementAt(0)), int.parse(dateTaskIni.elementAt(1)), int.parse(dateTaskIni.elementAt(2))); /// Year - Month - Day
-      print("INI ----------------- ${ini.toString()}");
-
-
-      List<String> dateTaskFin = task['dateEnd'].toString().split('-');
-      final DateTime fin = DateTime.utc(int.parse(dateTaskFin.elementAt(0)), int.parse(dateTaskFin.elementAt(1)), int.parse(dateTaskFin.elementAt(2))); /// Year - Month - Day
-      print("FIN ----------------- ${fin.toString()}");
-
-      /// If the dates of tasks are between the week
-      if (ini.isBefore(now) && ini.isAfter(DateTime(now.year,now.month,now.day-3)) && fin.isAfter(now) && fin.isBefore(DateTime(now.year,now.month,now.day+3))) {
-        setState(() {
-          tasks.add(task);
-          print(tasks);
-        });
-      }
+      setState(() {
+        print(task['dateDone']);
+        if ( task['dateDone'] != null) {
+          List<String> dateDoneString = task['dateDone'].toString().split('-');
+          for (var dat in data) {
+            print(dateDoneString.elementAt(2));
+            if (dat.days.toString() == dateDoneString.elementAt(2)) {
+              dat.numTasks++;
+            }
+          }
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
 
-    return Text(tasks.toString());
-    // TODO: Mostrar gráfica ---- Eje x = dias de la semana ||| Eje y = numero de tareas completadas por dia
+    List<charts.Series<ChartSeries, String>> series = [
+      charts.Series(
+        id: "Días",
+        data: data,
+        domainFn: (ChartSeries series, _) =>
+            series.days.toString(),
+        measureFn: (ChartSeries series, _) =>
+        series.numTasks,
+        seriesColor: charts.ColorUtil.fromDartColor(Colors.lightGreen),
+      )
+    ];
+
+    return Center(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Número de\ntareas completadas"),
+              SizedBox(
+                height:MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: charts.BarChart(series, animate: false),
+              ),
+            ],
+          ),
+          const Text("Días de la semana")
+        ],
+      ),
+    );
     // TODO: Mostrar lista de tareas del alumno con filtro nombre | dia y checkbox tareas completadas | no completadas
   }
+}
+
+class ChartSeries {
+  int numTasks;
+  int days;
+
+  ChartSeries(@required this.numTasks, @required this.days);
 }
