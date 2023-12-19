@@ -47,7 +47,7 @@ class _StudentStatisticsState extends State<StudentStatistics> {
   /// Function that calls [getStudentAgenda] who returns the DataBase students
   /// and adds them to [filteredTasks]
   Future<void> getData () async {
-    List<dynamic> aux = await getStudentAgenda(student['id'].toString());
+    List<dynamic> aux = await getStudentAgendaAll(student['id'].toString());
     setState(() {
       tasks = aux;
       filteredTasks.clear();
