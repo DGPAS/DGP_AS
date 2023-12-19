@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:video_player/video_player.dart';
@@ -25,7 +26,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
 
-    if(urlVideo!=null){
+    if (urlVideo!=null) {
       urlVideo = widget.urlVideo;
     }
 
@@ -34,21 +35,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     // or the internet.
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(
-        // 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-        "${dotenv.env['API_URL']}/video/$urlVideo",
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+        // "${dotenv.env['API_URL']}/video/$urlVideo",
       ),
     );
 
-    // _controller = VideoPlayerController.network(
-    //   "${dotenv.env['API_URL']}/video/$urlVideo",
-    // );
-
-    // Image.network("${dotenv.env['API_URL']}/images/students/$urlPath");
-
     // _controller = VideoPlayerController.asset(
-    //     // 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    //     'assets/videos/video.mp4',
-    //     // urlVideo
+    //   "assets/video/VID-20230615-WA0009.mp4",
     // );
 
     _initializeVideoPlayerFuture = _controller.initialize();
@@ -62,6 +55,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Use a FutureBuilder to display a loading spinner while waiting for the

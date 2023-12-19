@@ -51,36 +51,3 @@ String getSubmitButton (AddModType? typeForm) {
 Orientation orientation (double width, double height) {
   return width > height ? Orientation.landscape : Orientation.portrait;
 }
-
-// add_mod_student
-// Widget _getImage(AddModType typeForm, String? urlPath) {
-//   if (urlPath == null || urlPath == '') {
-//     return const Image(
-//         image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
-//   } else {
-//     if (typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.student?['picture'])) {
-//       return Image.file(File(urlPath), fit: BoxFit.cover);
-//     }
-//     else {
-//       return Image.network("${dotenv.env['API_URL']}/images/students/$urlPath");
-//     }
-//   }
-// }
-
-// Widget _getPasswd(AddModType typeForm, String? urlPath, int numImage) {
-//   if (urlPath == null || urlPath == '') {
-//     print("getPasswd -------- Cargo del asset");
-//     return const Image(
-//         image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
-//   } else {
-//     if (typeForm == AddModType.add || (typeForm == AddModType.mod && (urlPath != selectedDBPasswd[numImage]))) {
-//       //print("$urlPath == ${selectedDBPasswd[numImage]}");
-//       print("getPasswd -------- Cargo del file (add)");
-//       return Image.file(File(urlPath), fit: BoxFit.cover);
-//     }
-//     else {
-//       print("getPasswd -------- Cargo de network (else)");
-//       return Image.network("${dotenv.env['API_URL']}/images/students/passwords/$urlPath");
-//     }
-//   }
-// }
