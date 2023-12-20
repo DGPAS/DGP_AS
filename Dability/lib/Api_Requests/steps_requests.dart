@@ -75,7 +75,7 @@ Future<void> uploadImageSteps(String idTask, String selectedImage) async {
 
  try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
-    request.fields['idTask'] = idTask;
+    request.fields['id'] = idTask;
     var picture = await http.MultipartFile.fromPath("image", selectedImage);
     request.files.add(picture);
     var response = await request.send();

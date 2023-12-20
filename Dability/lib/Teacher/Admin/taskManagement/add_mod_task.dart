@@ -148,6 +148,10 @@ class _AddModTaskState extends State<AddModTask> {
       await uploadImage(id, selectedImage);
       await saveVideo(id, selectedVideo);
       await updateSteps(id,steps);
+      for (int i = 0; i < steps.length; i++) {
+        await insertStepsData(actualTaskId, steps[i]);
+        await uploadImageSteps(actualTaskId, steps[i].image);
+      }
     }
   }
 
@@ -207,6 +211,24 @@ class _AddModTaskState extends State<AddModTask> {
       }
     }
   }
+  Widget _getImageSteps(String? urlPath) {
+    if (urlPath == null || urlPath == '') {
+      return const Image(
+          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
+    } else {
+      if (isVideo(urlPath)) {
+      // Si es un video, puedes mostrar un ícono de reproductor de video en lugar de la imagen
+      return const Icon(Icons.video_library, size: 50);
+    } else
+      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.task?['thumbnail'])) {
+        return Image.file(File(urlPath), fit: BoxFit.cover);
+      } else {
+        return Image.network("${dotenv.env['API_URL']}/images/steps/$urlPath", fit: BoxFit.cover);
+      }
+    }
+  }
+
+
 
 
   /// Function that returns a Column of [steps]
@@ -251,7 +273,7 @@ class _AddModTaskState extends State<AddModTask> {
                   alignment: Alignment.topLeft,
                   child: const Text('Imagen'),
                 ),
-                Image(image: AssetImage(step.image), fit: BoxFit.contain),
+                _getImageSteps(step.image),
               ],
             ),
           /// It only shows the step description when it is not null
