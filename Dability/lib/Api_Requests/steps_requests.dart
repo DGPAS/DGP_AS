@@ -55,7 +55,6 @@ Future<void> insertStepsData(String actualTaskId, ListStep step) async {
       "numStep": step.numStep.toString(),
       "idTask": actualTaskId,
       "description": step.description,
-      "image": step.image
     });
 
     var response = jsonDecode(res.body);
@@ -69,7 +68,7 @@ Future<void> insertStepsData(String actualTaskId, ListStep step) async {
   }
 }
 
-Future<void> uploadImageSteps(String idTask, String selectedImage) async {
+Future<void> uploadImageSteps(String idTask, String selectedImage, String numStep) async {
   /// Uri whose IP is on .env that calls API
   String uri = "${dotenv.env['API_URL']}/upload_image_step.php";
 
@@ -78,6 +77,7 @@ Future<void> uploadImageSteps(String idTask, String selectedImage) async {
     request.fields['id'] = idTask;
     var picture = await http.MultipartFile.fromPath("image", selectedImage);
     request.files.add(picture);
+    request.fields['numStep'] = numStep;
     var response = await request.send();
 
     if (response.statusCode == 200) {

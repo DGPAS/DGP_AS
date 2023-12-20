@@ -141,7 +141,7 @@ class _AddModTaskState extends State<AddModTask> {
       print ("Id obtenido: $actualTaskId");
       for (int i = 0; i < steps.length; i++) {
         await insertStepsData(actualTaskId, steps[i]);
-        await uploadImageSteps(actualTaskId, steps[i].image);
+        await uploadImageSteps(actualTaskId, steps[i].image, steps[i].numStep.toString());
       }
     } else {
       await updateData(id!, title!, description!);
@@ -150,7 +150,7 @@ class _AddModTaskState extends State<AddModTask> {
       await updateSteps(id,steps);
       for (int i = 0; i < steps.length; i++) {
         await insertStepsData(actualTaskId, steps[i]);
-        await uploadImageSteps(actualTaskId, steps[i].image);
+        await uploadImageSteps(actualTaskId, steps[i].image, steps[i].numStep.toString());
       }
     }
   }
