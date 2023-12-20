@@ -156,6 +156,7 @@ class _AddModStudentState extends State<AddModStudent> {
     setState(() {
       selectedDBPasswd.clear();
       selectedDBPasswd.addAll(selectedPasswd);
+      displayedItems.clear();
       displayedItems.addAll(tasks);
     });
     print("------------------------ $selectedDBPasswd");
@@ -710,14 +711,8 @@ class _AddModStudentState extends State<AddModStudent> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() { // cambiarlo por función de borrar tarea de agenda
-                                                        tasks.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                        displayedItems.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                      });
+                                                      deleteAgendaTask(id.toString(),displayedItems[index]['idTask'].toString());
+                                                      getData();
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
