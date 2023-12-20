@@ -54,8 +54,8 @@ class _AddModTaskState extends State<AddModTask> {
   String? thumbnail;
   Image? thumbnailImage;
   String? videoUrl;
-  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);    //Eliminar al cambiarlo a add_mod_student
+  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);   //Eliminar al cambiarlo a add_mod_student
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
   AddModType? typeForm;

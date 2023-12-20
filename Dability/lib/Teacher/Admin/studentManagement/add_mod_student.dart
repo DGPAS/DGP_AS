@@ -48,6 +48,8 @@ class _AddModStudentState extends State<AddModStudent> {
   bool? readCheck = false;
   bool? videoCheck = false;
   bool? soundCheck = false;
+  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   /// Lists that store and manage the password of an student
   List<String> selectedPasswd = ['','','',''];
