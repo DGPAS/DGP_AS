@@ -348,7 +348,7 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
-              
+
               /// Container to add the [selectedImage] of the task
               Container(
                 decoration: _buildBoxDecoration(),
