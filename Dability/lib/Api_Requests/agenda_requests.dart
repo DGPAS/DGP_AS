@@ -136,7 +136,8 @@ Future<void> updateAgendaTask (String idStudent, String idTask, String dateStart
       "idStudent": idStudent,
       "done": done ? '1' : '0',
       "dateStart": dateStart,
-      "dateEnd": dateEnd
+      "dateEnd": dateEnd,
+      "doneDate": null
     });
 
     var response=jsonDecode(res.body);
