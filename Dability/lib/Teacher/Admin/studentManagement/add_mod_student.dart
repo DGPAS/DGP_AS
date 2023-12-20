@@ -636,16 +636,19 @@ class _AddModStudentState extends State<AddModStudent> {
                                             builder: (BuildContext context) {
                                               return AlertDialog(
                                                 title: Text(
-                                                    'Confirmar eliminación'),
+                                                    'Confirmar eliminación',
+                                                  style: TextStyle(color: Colors.black),),
                                                 content: Text(
-                                                    '¿Estás seguro de que deseas eliminar esta tarea?'),
+                                                    '¿Estás seguro de que deseas eliminar esta tarea?',
+                                                style: TextStyle(color: Colors.black),),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
-                                                    child: Text('Cancelar'),
+                                                    child: Text('Cancelar',
+                                                      style: TextStyle(color: Colors.black),),
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
@@ -660,7 +663,8 @@ class _AddModStudentState extends State<AddModStudent> {
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
-                                                    child: Text('Eliminar'),
+                                                    child: Text('Eliminar',
+                                                      style: TextStyle(color: Colors.black),),
                                                   ),
                                                 ],
                                               );
