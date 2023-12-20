@@ -196,32 +196,7 @@ class _AddModTaskState extends State<AddModTask> {
       }
     }
   }
-  /// Function that assigns a picked date using [showDatePicker] to [date]
-  ///
-  /// if [date] is null then the selected date will be today
-  ///
-  /// if we pick a date and it's different than the one we had picked we assign it to [date]
-  Future<void> selectDate(BuildContext context, DateTime? date, bool isStartDate) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-      firstDate: isStartDate ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day) : startDate!,
-      lastDate: DateTime(2101),
-    );
 
-    if (picked != null && picked != date) {
-      setState(() {
-        if (isStartDate){
-          startDate = picked;
-          date = picked;
-        }
-        else{
-          endDate = picked;
-          date = picked;
-        }
-      });
-    }
-  }
 
   /// Function that returns a Column of [steps]
   List<Widget> getSteps() {
@@ -408,15 +383,18 @@ class _AddModTaskState extends State<AddModTask> {
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
                           context: context,
-                          initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-                          firstDate: startDate!,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
                           lastDate: DateTime(2101),
                         );
 
-                        setState(() {
-                          startDate = picked;
-                        });
-                        Navigator.pop(context);
+                        if (picked != null){
+                          setState(() {
+                            startDate = picked;
+                            endDate = picked;
+                          });
+                        }
+                        //Navigator.pop(context);
                       },
                       child: Icon(
                         Icons.calendar_today,
@@ -458,15 +436,18 @@ class _AddModTaskState extends State<AddModTask> {
                       onTap: () async {
                         final DateTime? picked = await showDatePicker(
                           context: context,
-                          initialDate: endDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                          initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
                           firstDate: startDate!,
                           lastDate: DateTime(2101),
                         );
 
-                        setState(() {
-                          endDate = picked;
-                        });
-                        Navigator.pop(context);
+
+                        if (picked != null){
+                          setState(() {
+                            endDate = picked;
+                          });
+                        }
+                        //Navigator.pop(context);
                       },
                       child: Icon(
                         Icons.calendar_today,
