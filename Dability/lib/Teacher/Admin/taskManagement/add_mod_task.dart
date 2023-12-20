@@ -213,11 +213,11 @@ class _AddModTaskState extends State<AddModTask> {
       setState(() {
         if (isStartDate){
           startDate = picked;
-          //date = picked;
+          date = picked;
         }
         else{
           endDate = picked;
-          //date = picked;
+          date = picked;
         }
       });
     }
@@ -391,9 +391,37 @@ class _AddModTaskState extends State<AddModTask> {
                   children: [
                     const Text("Selecciona la fecha de inicio de la tarea"),
                     Text(DateFormat('yyyy-MM-dd').format(startDate!)),
-                    ElevatedButton(
+                    /*ElevatedButton(
                       onPressed: () => selectDate(context, startDate, true),
-                      child: Text('Seleccionar Fecha'),
+
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                        elevation: 0,
+                      ),
+                      child: Icon(
+                        Icons.calendar_today,
+                        size: 100,
+                      ),
+                    ),*/
+
+                    GestureDetector(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                          firstDate: startDate!,
+                          lastDate: DateTime(2101),
+                        );
+
+                        setState(() {
+                          startDate = picked;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.calendar_today,
+                        size: 100,
+                      ),
                     ),
                   ],
                 ),
@@ -414,9 +442,36 @@ class _AddModTaskState extends State<AddModTask> {
                   children: [
                     const Text("Selecciona la fecha de finalización de la tarea"),
                     Text(DateFormat('yyyy-MM-dd').format(endDate!)),
-                    ElevatedButton(
+                    /*ElevatedButton(
                       onPressed: () => selectDate(context, endDate, false),
-                      child: Text('Seleccionar Fecha'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey[300],
+                        elevation: 0,
+                      ),
+                      child: Icon(
+                        Icons.calendar_today,
+                        size: 100,
+                      ),
+                    ),*/
+
+                    GestureDetector(
+                      onTap: () async {
+                        final DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: endDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                          firstDate: startDate!,
+                          lastDate: DateTime(2101),
+                        );
+
+                        setState(() {
+                          endDate = picked;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.calendar_today,
+                        size: 100,
+                      ),
                     ),
                   ],
                 ),
