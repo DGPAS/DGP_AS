@@ -205,7 +205,7 @@ class _AddModTaskState extends State<AddModTask> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-      firstDate: DateTime(2000),
+      firstDate: isStartDate ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day) : startDate!,
       lastDate: DateTime(2101),
     );
 
@@ -375,7 +375,7 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
-              /// Form to introduce the [startDate] of the task
+              /// Container to introduce the [startDate] of the task
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
@@ -398,7 +398,7 @@ class _AddModTaskState extends State<AddModTask> {
                   ],
                 ),
               ),
-              /// Form to introduce the [endDate] of the task
+              /// Container to introduce the [endDate] of the task
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
