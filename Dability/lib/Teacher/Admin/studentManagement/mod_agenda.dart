@@ -18,11 +18,11 @@ import 'package:dability/Api_Requests/agenda_requests.dart';
 class ModAgendaTask extends StatefulWidget {
   ModAgendaTask(
       {Key? key,
-        this.task
+        required this.task
       })
       : super(key: key);
 
-  final Map<String, dynamic>? task;
+  final Map<String, dynamic> task;
 
   @override
   State<ModAgendaTask> createState() => _ModAgendaTaskState();
@@ -33,9 +33,8 @@ class _ModAgendaTaskState extends State<ModAgendaTask> {
   _ModAgendaTaskState();
 
   /// Variables where it will be stored the data of a task
-  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime? doneDate = null;
+  DateTime startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   /// Variables to manage the task data
   String actualTaskId = '';
   String actualStudentId = '';
@@ -48,11 +47,12 @@ class _ModAgendaTaskState extends State<ModAgendaTask> {
   @override
   void initState() {
     super.initState();
-
-    startDate = widget.task?['dateStart'];
-    endDate = widget.task?['dateEnd'];
-    actualTaskId = widget.task?['id'];
-    actualStudentId = widget.task?['idStudent'];
+    List<String> splitedDate = widget.task['dateStart'].toString().split("-");
+    startDate = DateTime(int.parse(splitedDate[0]), int.parse(splitedDate[1]), int.parse(splitedDate[2]));
+    List<String> splitedDateEnd = widget.task['dateEnd'].toString().split("-");
+    endDate = DateTime(int.parse(splitedDateEnd[0]), int.parse(splitedDateEnd[1]), int.parse(splitedDateEnd[2]));
+    actualTaskId = widget.task['idTask'].toString();
+    actualStudentId = widget.task['idStudent'].toString();
   }
 
 
@@ -66,7 +66,7 @@ class _ModAgendaTaskState extends State<ModAgendaTask> {
   /// its id [id], it updates the miniature and
   /// it updates its steps
   Future<void> submitForm (String? id) async {
-    await(updateAgendaTask(actualStudentId, actualTaskId, startDate.toString(), endDate.toString(), false));
+    await(updateAgendaTask(actualStudentId, actualTaskId, startDate.toString(), endDate.toString()));
   }
 
 
@@ -147,111 +147,94 @@ class _ModAgendaTaskState extends State<ModAgendaTask> {
             children: <Widget>[
               
               /// Container to introduce the [startDate] of the task
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    )),
-                padding: const EdgeInsets.all(20.0),
-                margin:
-                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-                child: Column(
-                  children: [
-                    const Text("Selecciona la fecha de inicio de la tarea"),
-                    Text(DateFormat('yyyy-MM-dd').format(startDate!)),
-                    /*ElevatedButton(
-                      onPressed: () => selectDate(context, startDate, true),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1,
+                        )),
+                    padding: const EdgeInsets.all(20.0),
+                    margin:
+                    const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+                    child: Column(
+                      children: [
+                        const Text("Selecciona la fecha de inicio de la tarea"),
+                        GestureDetector(
+                          onTap: () async {
+                            final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2101),
+                            );
 
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
-                        elevation: 0,
-                      ),
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),*/
-
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2101),
-                        );
-
-                        if (picked != null){
-                          setState(() {
-                            startDate = picked;
-                            endDate = picked;
-                          });
-                        }
-                        //Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
+                            if (picked != null){
+                              setState(() {
+                                startDate = picked;
+                                endDate = picked;
+                              });
+                            }
+                            //Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.calendar_today,
+                            size: 40,
+                          ),
+                        ),
+                        Text(DateFormat('yyyy-MM-dd').format(startDate!)),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              /// Container to introduce the [endDate] of the task
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    )),
-                padding: const EdgeInsets.all(20.0),
-                margin:
-                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-                child: Column(
-                  children: [
-                    const Text("Selecciona la fecha de finalización de la tarea"),
-                    Text(DateFormat('yyyy-MM-dd').format(endDate!)),
-                    /*ElevatedButton(
-                      onPressed: () => selectDate(context, endDate, false),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey[300],
-                        elevation: 0,
-                      ),
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),*/
+                  ),
 
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-                          firstDate: startDate!,
-                          lastDate: DateTime(2101),
-                        );
+                  /// Container to introduce the [endDate] of the task
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(
+                          color: Colors.grey,
+                          width: 1,
+                        )),
+                    padding: const EdgeInsets.all(20.0),
+                    margin:
+                    const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+                    child: Column(
+                      children: [
+                        const Text("Selecciona la fecha de finalización de la tarea"),
+                        GestureDetector(
+                          onTap: () async {
+                            final DateTime? picked = await showDatePicker(
+                              context: context,
+                              initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                              firstDate: startDate!,
+                              lastDate: DateTime(2101),
+                            );
 
 
-                        if (picked != null){
-                          setState(() {
-                            endDate = picked;
-                          });
-                        }
-                        //Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
+                            if (picked != null){
+                              setState(() {
+                                endDate = picked;
+                              });
+                            }
+                            //Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.calendar_today,
+                            size: 40,
+                          ),
+                        ),
+                        Text(DateFormat('yyyy-MM-dd').format(endDate!)),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -126,7 +126,7 @@ Future<void> insertAgendaTask (String idStudent, String idTask, String dateStart
   }
 }
 
-Future<void> updateAgendaTask (String idStudent, String idTask, String dateStart, String dateEnd, bool done) async {
+Future<void> updateAgendaTask (String idStudent, String idTask, String dateStart, String dateEnd) async {
   /// Uri whose IP is on .env that calls API
   String uri = "${dotenv.env['API_URL']}/update_agenda_task.php";
 
@@ -134,10 +134,9 @@ Future<void> updateAgendaTask (String idStudent, String idTask, String dateStart
     var res=await http.post(Uri.parse(uri),body: {
       "idTask": idTask,
       "idStudent": idStudent,
-      "done": done ? '1' : '0',
+      "done": '0',
       "dateStart": dateStart,
       "dateEnd": dateEnd,
-      "doneDate": null
     });
 
     var response=jsonDecode(res.body);
