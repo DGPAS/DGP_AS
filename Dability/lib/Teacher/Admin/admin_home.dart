@@ -86,6 +86,7 @@ class _AdminHomeState extends State<AdminHome> {
               child: Text(
                 'GESTIONAR ESTUDIANTES',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -104,6 +105,7 @@ class _AdminHomeState extends State<AdminHome> {
               child: Text(
                 'GESTIONAR TAREAS',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
           )

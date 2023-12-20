@@ -7,6 +7,7 @@ import 'package:dability/Components/list_step.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:dability/Api_Requests/steps_requests.dart';
 import 'package:dability/Api_Requests/task_requests.dart';
@@ -44,6 +45,7 @@ class _AddModTaskState extends State<AddModTask> {
       requiredField: false,
       title: "Descripción general de la tarea",
       type: TextFormType.description);
+
 
   /// Variables where it will be stored the data of a task
   String? title;
@@ -192,6 +194,7 @@ class _AddModTaskState extends State<AddModTask> {
       }
     }
   }
+
 
   /// Function that returns a Column of [steps]
   List<Widget> getSteps() {
@@ -345,6 +348,7 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
+
               /// Container to add the [selectedImage] of the task
               Container(
                 decoration: _buildBoxDecoration(),
@@ -572,7 +576,8 @@ class _AddModTaskState extends State<AddModTask> {
                               steps = copy;
                             });
                           },
-                          child: const Text('Añadir un paso'),
+                          child: const Text('Añadir un paso',
+                          style: TextStyle(color: Colors.white),),
                         ),
                       ),
                     ],
@@ -602,7 +607,8 @@ class _AddModTaskState extends State<AddModTask> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF4A6987),
                         ),
-                        child: const Text('Refrescar'),
+                        child: const Text('Refrescar',
+                          style: TextStyle(color: Colors.white),),
                         onPressed: () {
                           setState(() {
                             title = titleForm.getText();

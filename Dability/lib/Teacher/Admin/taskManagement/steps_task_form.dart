@@ -327,7 +327,8 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                     Navigator.of(context).pop(steps);
                   }
                 },
-                child: const Text('Añadir paso'),
+                child: const Text('Añadir paso',
+                  style: TextStyle(color: Colors.white),),
               ),
             ),
           ],
