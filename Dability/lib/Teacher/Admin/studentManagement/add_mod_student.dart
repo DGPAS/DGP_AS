@@ -1,4 +1,5 @@
 import 'package:dability/Api_Requests/agenda_requests.dart';
+import 'package:dability/Teacher/Admin/studentManagement/mod_agenda.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
@@ -631,6 +632,26 @@ class _AddModStudentState extends State<AddModStudent> {
                                   alignment: Alignment.centerRight,
                                   child: Row(
                                     children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>  ModAgendaTask(task: displayedItems[index])
+                                          ),
+                                        );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(10, 20),
+                                          backgroundColor: Color(0xFFF5F5F5),
+                                          elevation: 0,
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/EditIcon.png',
+                                          width: 30,
+                                          height: 35,
+                                        ),
+                                      ),
+
                                       ElevatedButton(
                                         onPressed: () {
                                           showDialog(

@@ -54,8 +54,6 @@ class _AddModTaskState extends State<AddModTask> {
   String? thumbnail;
   Image? thumbnailImage;
   String? videoUrl;
-  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);    //Eliminar al cambiarlo a add_mod_student
-  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);   //Eliminar al cambiarlo a add_mod_student
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
   AddModType? typeForm;
@@ -350,114 +348,7 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
-              /// Container to introduce the [startDate] of the task
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    )),
-                padding: const EdgeInsets.all(20.0),
-                margin:
-                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-                child: Column(
-                  children: [
-                    const Text("Selecciona la fecha de inicio de la tarea"),
-                    Text(DateFormat('yyyy-MM-dd').format(startDate!)),
-                    /*ElevatedButton(
-                      onPressed: () => selectDate(context, startDate, true),
-
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
-                        elevation: 0,
-                      ),
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),*/
-
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2101),
-                        );
-
-                        if (picked != null){
-                          setState(() {
-                            startDate = picked;
-                            endDate = picked;
-                          });
-                        }
-                        //Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              /// Container to introduce the [endDate] of the task
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    )),
-                padding: const EdgeInsets.all(20.0),
-                margin:
-                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-                child: Column(
-                  children: [
-                    const Text("Selecciona la fecha de finalización de la tarea"),
-                    Text(DateFormat('yyyy-MM-dd').format(endDate!)),
-                    /*ElevatedButton(
-                      onPressed: () => selectDate(context, endDate, false),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey[300],
-                        elevation: 0,
-                      ),
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),*/
-
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-                          firstDate: startDate!,
-                          lastDate: DateTime(2101),
-                        );
-
-
-                        if (picked != null){
-                          setState(() {
-                            endDate = picked;
-                          });
-                        }
-                        //Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
+              
               /// Container to add the [selectedImage] of the task
               Container(
                 decoration: _buildBoxDecoration(),
