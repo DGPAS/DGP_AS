@@ -40,13 +40,16 @@ class _FinishTaskState extends State<FinishTask> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Semantics(label: 'Logo de la aplicación', readOnly: true,
+              child: Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),),
             /// Task title on AppBar
             Expanded(
-              child: Text(
-                widget.student['text'] == 1 ? taskName.toUpperCase() : "",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
+              child: Semantics(label: 'Estás en, finalizar la tarea ', readOnly: true,
+                child: Text(
+                  widget.student['text'] == 1 ? taskName.toUpperCase() : "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
             Image.network("${dotenv.env['API_URL']}/images/${widget.task['thumbnail'].toString()}",
@@ -67,17 +70,20 @@ class _FinishTaskState extends State<FinishTask> {
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
-                ],
+              child: Semantics(label: 'Perfil, se ve tu cara', readOnly: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          icon: Semantics(label: 'Atrás para ver los pasos de la tarea', readOnly: false,
+              child: Icon(Icons.arrow_back, color: Colors.white,)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -109,11 +115,13 @@ class _FinishTaskState extends State<FinishTask> {
                 Wrap(
                   alignment: WrapAlignment.center,
                   children: [
-                    Text(
-                      widget.student['text'] == 1 ? "¿Has terminado la tarea?".toUpperCase() : "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
+                    Semantics(label: '¿Estás seguro de que ', readOnly: true,
+                      child: Text(
+                        widget.student['text'] == 1 ? "¿Has terminado la tarea?".toUpperCase() : "",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.height * 0.025,
+                        ),
                       ),
                     ),
                   ],
@@ -148,7 +156,8 @@ class _FinishTaskState extends State<FinishTask> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if(widget.student['text'] == 1) const Text("NO"),
+                              if(widget.student['text'] == 1) const Text("NO",
+                                  style: TextStyle(color: Colors.white),),
                               Text(
                                 'X',
                                 style: TextStyle(
@@ -185,7 +194,8 @@ class _FinishTaskState extends State<FinishTask> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (widget.student['text'] == 1) const Text("SI"),
+                            if (widget.student['text'] == 1) const Text("SI",
+                                style: TextStyle(color: Colors.white),),
                             Image.asset(
                               'assets/images/checkIcon.png',
                               width: MediaQuery.of(context).size.height * 0.05,

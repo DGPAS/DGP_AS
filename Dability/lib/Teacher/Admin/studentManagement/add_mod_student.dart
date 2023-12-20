@@ -1,4 +1,6 @@
 import 'package:dability/Api_Requests/agenda_requests.dart';
+import 'package:dability/Teacher/Admin/studentManagement/mod_agenda.dart';
+import 'package:dability/Teacher/Admin/studentManagement/add_agenda.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
@@ -49,6 +51,9 @@ class _AddModStudentState extends State<AddModStudent> {
   bool? videoCheck = false;
   bool? soundCheck = false;
   int _selectedPictogramIndex = -1;
+  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
   /// Lists that store and manage the password of an student
   List<String> selectedPasswd = ['','','',''];
   List<String> selectedDBPasswd = [];
@@ -152,6 +157,7 @@ class _AddModStudentState extends State<AddModStudent> {
     setState(() {
       selectedDBPasswd.clear();
       selectedDBPasswd.addAll(selectedPasswd);
+      displayedItems.clear();
       displayedItems.addAll(tasks);
     });
     print("------------------------ $selectedDBPasswd");
@@ -562,6 +568,40 @@ class _AddModStudentState extends State<AddModStudent> {
 
               /// Student tasks filter
               if (typeForm == AddModType.mod)
+              Container(
+                /// ADD AGENDA
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(left: 14, right: 14, bottom: 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity,
+                        MediaQuery.of(context).size.height * 0.1), // inf, 70
+                    textStyle: const TextStyle(
+                      fontSize: 25,
+                      color: Colors.black,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    backgroundColor: Color(0xFF4A6987),
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                  ),
+                  onPressed: () {
+                    /// When pressed it goes to [add_mod_student.dart] with [AddModType.add]
+                    /// to add a new student
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddAgendaTask(student: widget.student)),
+                    );
+                  },
+                  child: const Text(
+                    'Añadir tarea',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              if (typeForm == AddModType.mod)
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.152,
                 child: Padding(
@@ -621,7 +661,7 @@ class _AddModStudentState extends State<AddModStudent> {
                               borderRadius: BorderRadius.circular(
                                   30), // Redondear los bordes del botón
                             ),
-                            backgroundColor: Color(0xFFF5F5F5),
+                            backgroundColor: Colors.white,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 20), // Margen horizontal del texto
                           ),
@@ -647,36 +687,54 @@ class _AddModStudentState extends State<AddModStudent> {
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>  ModAgendaTask(task: displayedItems[index])
+                                          ),
+                                        );
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          minimumSize: Size(10, 20),
+                                          backgroundColor: Color(0xFFF5F5F5),
+                                          elevation: 0,
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/EditIcon.png',
+                                          width: 30,
+                                          height: 35,
+                                        ),
+                                      ),
+
+                                      ElevatedButton(
+                                        onPressed: () {
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
                                                 title: Text(
-                                                    'Confirmar eliminación'),
+                                                    'Confirmar eliminación',
+                                                  style: TextStyle(color: Colors.black),),
                                                 content: Text(
-                                                    '¿Estás seguro de que deseas eliminar esta tarea?'),
+                                                    '¿Estás seguro de que deseas eliminar esta tarea?',
+                                                style: TextStyle(color: Colors.black),),
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
-                                                    child: Text('Cancelar'),
+                                                    child: Text('Cancelar',
+                                                      style: TextStyle(color: Colors.black),),
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(() { // cambiarlo por función de borrar tarea de agenda
-                                                        tasks.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                        displayedItems.remove(
-                                                            displayedItems[
-                                                                index]);
-                                                      });
+                                                      deleteAgendaTask(id.toString(),displayedItems[index]['idTask'].toString());
+                                                      getData();
                                                       Navigator.of(context)
                                                           .pop(); // Cierra el diálogo
                                                     },
-                                                    child: Text('Eliminar'),
+                                                    child: Text('Eliminar',
+                                                      style: TextStyle(color: Colors.black),),
                                                   ),
                                                 ],
                                               );

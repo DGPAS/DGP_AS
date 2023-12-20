@@ -8,6 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:intl/intl.dart';
+
 import 'package:dability/Api_Requests/steps_requests.dart';
 import 'package:dability/Api_Requests/task_requests.dart';
 /// # Page for add or modify a task
@@ -43,6 +45,7 @@ class _AddModTaskState extends State<AddModTask> {
       requiredField: false,
       title: "Descripción general de la tarea",
       type: TextFormType.description);
+
 
   /// Variables where it will be stored the data of a task
   String? title;
@@ -205,6 +208,7 @@ class _AddModTaskState extends State<AddModTask> {
     }
   }
 
+
   /// Function that returns a Column of [steps]
   List<Widget> getSteps() {
     return steps.map((step) {
@@ -357,6 +361,7 @@ class _AddModTaskState extends State<AddModTask> {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
+
               /// Container to add the [selectedImage] of the task
               Container(
                 decoration: _buildBoxDecoration(),
@@ -676,13 +681,14 @@ if (selectedVideo != null)
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => StepsTaskForm(
-                                      requiredField: false, steps: steps),
+                                      requiredField: false, steps: steps, idTask: actualTaskId),
                                 ));
                             setState(() {
                               steps = copy;
                             });
                           },
-                          child: const Text('Añadir un paso'),
+                          child: const Text('Añadir un paso',
+                          style: TextStyle(color: Colors.white),),
                         ),
                       ),
                     ],
@@ -712,7 +718,8 @@ if (selectedVideo != null)
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF4A6987),
                         ),
-                        child: const Text('Refrescar'),
+                        child: const Text('Refrescar',
+                          style: TextStyle(color: Colors.white),),
                         onPressed: () {
                           setState(() {
                             title = titleForm.getText();

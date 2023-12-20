@@ -25,8 +25,8 @@ class DAbility extends StatelessWidget {
         primarySwatch: Colors.blue,
         colorScheme: ColorScheme(
             brightness:  Brightness.light,
-            primary: Colors.white,
-            onPrimary: Colors.black,
+            primary: Colors.black,
+            onPrimary: Colors.white,
             secondary: Colors.black,
             onSecondary: Colors.black,
             error: Colors.red,
@@ -112,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                     child: const Text(
                       'Acceso para profesorado',
                       textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
@@ -138,6 +139,7 @@ class _HomePageState extends State<HomePage> {
                     child: const Text(
                       'Acceder como Estudiante',
                       textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),

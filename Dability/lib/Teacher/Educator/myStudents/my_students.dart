@@ -186,7 +186,7 @@ class _MyStudentsState extends State<MyStudents> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            backgroundColor: Color(0xFFF5F5F5),
+                            backgroundColor: Colors.white,
                             padding: EdgeInsets.symmetric(horizontal: 20),
                           ),
                           onPressed: () {

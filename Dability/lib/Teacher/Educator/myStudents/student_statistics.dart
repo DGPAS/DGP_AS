@@ -197,7 +197,7 @@ class _StudentStatisticsState extends State<StudentStatistics> {
                             borderRadius: BorderRadius.circular(
                                 30), // Redondear los bordes del botón
                           ),
-                          backgroundColor: Color(0xFFF5F5F5),
+                          backgroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 20), // Margen horizontal del texto
                         ),
@@ -217,11 +217,144 @@ class _StudentStatisticsState extends State<StudentStatistics> {
                                       .black, // Cambia el color del texto a rojo
                                 ),
                               ),
-
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: Row(
                                   children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                  'Información de la tarea',
+                                                style: TextStyle(color: Colors.black),),
+                                              content: SizedBox(
+                                                width: MediaQuery.of(context).size.width * 0.35,
+                                                height: MediaQuery.of(context).size.height * 0.4,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(bottom: 20),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'Nombre: ',
+                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                            Text(
+                                                              filteredTasks[index]['taskName'] ?? '-',
+                                                              style: TextStyle(color: Colors.black),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Text(
+                                                              'Fecha inicio: ',
+                                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                          Text(
+                                                            filteredTasks[index]['dateStart'],
+                                                            style: TextStyle(color: Colors.black),),
+                                                        ],
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(bottom: 10),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'Fecha fin: ',
+                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                            Text(
+                                                              filteredTasks[index]['dateEnd'],
+                                                              style: TextStyle(color: Colors.black),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(bottom: 20),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'Fecha finalizada: ',
+                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                            Text(
+                                                              filteredTasks[index]['dateDone'] ?? '-',
+                                                              style: TextStyle(color: Colors.black),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
+                                                          Text(
+                                                            'Descripción:',
+                                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                        ],
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(bottom: 20),
+                                                        child: Text(
+                                                          filteredTasks[index]['description'] ?? '-',
+                                                          style: TextStyle(color: Colors.black),),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            'Tiene miniatura: ',
+                                                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                          Text(
+                                                            filteredTasks[index]['thumbnail'] == null ? 'NO' : 'SI',
+                                                            style: TextStyle(color: Colors.black),),
+                                                        ],
+                                                      ),
+                                                      Container(
+                                                        margin: EdgeInsets.only(bottom: 10),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              'Tiene video: ',
+                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                                            Text(
+                                                              filteredTasks[index]['video'] == null ? 'NO' : 'SI',
+                                                              style: TextStyle(color: Colors.black),),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(); // Cierra el diálogo
+                                                  },
+                                                  child: Text('Cerrar',
+                                                    style: TextStyle(color: Colors.black),),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        minimumSize: Size(10, 20),
+                                        backgroundColor: Color(0xFFF5F5F5),
+                                        elevation: 0,
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/info.png',
+                                        width: 30,
+                                        height: 35,
+                                      ),
+                                    ),
                                     const Text("Realizada: ", style: TextStyle(color: Colors.grey, fontSize: 14)),
                                     /// Image that represents if the task has been
                                     /// done or not
