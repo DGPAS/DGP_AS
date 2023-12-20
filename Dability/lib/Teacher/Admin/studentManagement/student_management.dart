@@ -152,6 +152,7 @@ class _StudentManagementState extends State<StudentManagement> {
                 child: const Text(
                   'Añadir estudiante',
                   textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -217,7 +218,7 @@ class _StudentManagementState extends State<StudentManagement> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            backgroundColor: Color(0xFFF5F5F5),
+                            backgroundColor: Colors.white,
                             padding: EdgeInsets.symmetric(horizontal: 20),
                           ),
                           onPressed: () {

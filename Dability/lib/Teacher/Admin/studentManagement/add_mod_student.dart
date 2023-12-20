@@ -579,9 +579,11 @@ class _AddModStudentState extends State<AddModStudent> {
                   child: const Text(
                     'Añadir tarea',
                     textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
+              if (typeForm == AddModType.mod)
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.152,
                 child: Padding(
@@ -641,7 +643,7 @@ class _AddModStudentState extends State<AddModStudent> {
                               borderRadius: BorderRadius.circular(
                                   30), // Redondear los bordes del botón
                             ),
-                            backgroundColor: Color(0xFFF5F5F5),
+                            backgroundColor: Colors.white,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 20), // Margen horizontal del texto
                           ),

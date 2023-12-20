@@ -576,7 +576,8 @@ class _AddModTaskState extends State<AddModTask> {
                               steps = copy;
                             });
                           },
-                          child: const Text('Añadir un paso'),
+                          child: const Text('Añadir un paso',
+                          style: TextStyle(color: Colors.white),),
                         ),
                       ),
                     ],
@@ -606,7 +607,8 @@ class _AddModTaskState extends State<AddModTask> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF4A6987),
                         ),
-                        child: const Text('Refrescar'),
+                        child: const Text('Refrescar',
+                          style: TextStyle(color: Colors.white),),
                         onPressed: () {
                           setState(() {
                             title = titleForm.getText();

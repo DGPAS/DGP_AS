@@ -84,6 +84,7 @@ class _EducatorHomeState extends State<EducatorHome> {
               child: Text(
                 'ESTADÍSTICAS ESTUDIANTES',
                 textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
               ),
             ),
           ),

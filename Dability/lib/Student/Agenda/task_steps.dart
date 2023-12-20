@@ -165,6 +165,7 @@ class _TaskStepsState extends State<TaskSteps> {
                               Text(
                                 'MARCAR PASO COMPLETADO',
                                 style: TextStyle(
+                                  color: Colors.white,
                                   fontSize: MediaQuery.of(context).size.height * 0.030
                                 ),
                               ),
@@ -258,7 +259,8 @@ class _TaskStepsState extends State<TaskSteps> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 if(widget.student['text'] == 1)
-                                const Text("TERMINAR"),
+                                const Text("TERMINAR",
+                                  style: TextStyle(color: Colors.white),),
                                 Image.asset(
                                   'assets/images/checkIcon.png',
                                   width: MediaQuery.of(context).size.height * 0.05,

@@ -268,6 +268,7 @@ class _StudentTaskState extends State<StudentTask> {
                           textAlign: TextAlign.center,
                           style:
                             TextStyle(
+                              color: Colors.white,
                               fontSize: MediaQuery.of(context).size.height * 0.025,
                               fontWeight: FontWeight.bold,
                             ),

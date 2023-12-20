@@ -1,15 +1,7 @@
 import 'package:dability/Api_Requests/task_requests.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:dability/Teacher/Admin/taskManagement/steps_task_form.dart';
 import 'package:flutter/material.dart';
-import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
-import 'package:dability/Components/list_step.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:intl/intl.dart';
-
 import 'package:dability/Api_Requests/agenda_requests.dart';
 
 /// # Page for add or modify a task
@@ -34,6 +26,9 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
   _AddAgendaTaskState();
   List<dynamic> tasks = [];
   double widthMax = 500;
+  int selected = -1;
+  Color notSelectedColor = Colors.white;
+  Color selectedColor = Color(0xFF6cd587);
 
   List<dynamic> displayedItems = [];
 
@@ -54,6 +49,8 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
   void initState() {
     super.initState();
     actualStudentId = widget.student?['id'];
+
+    getData();
   }
 
 
@@ -75,6 +72,7 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
   Future<void> getData () async {
     tasks = await getTasks();
     setState(() {
+      print(tasks);
       displayedItems.clear();
       displayedItems.addAll(tasks);
     });
@@ -96,7 +94,7 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
   ///
   /// If [typeForm] == [AddModType.mod], it updates it to modify (a task)
   String getSubmitButton () {
-    return 'Modificar';
+    return 'Añadir';
   }
 
   /// Main builder of the page
@@ -152,157 +150,170 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(
-              bottom: 30.0, top: 30.0, left: 10.0, right: 10.0),
+              bottom: 30.0, top: 10.0, left: 10.0, right: 10.0),
           child: Column(
             children: <Widget>[
 
               /// Container to introduce the [startDate] of the task
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    )),
-                padding: const EdgeInsets.all(20.0),
-                margin:
-                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-                child: Column(
+                margin: const EdgeInsets.only(bottom: 50.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text("Selecciona la fecha de inicio de la tarea"),
-                    Text(DateFormat('yyyy-MM-dd').format(startDate!)),
-                    /*ElevatedButton(
-                      onPressed: () => selectDate(context, startDate, true),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(20.0),
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          )),
+                      padding: const EdgeInsets.all(20.0),
+                      margin:
+                      const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+                      child: Column(
+                        children: [
+                          const Text("Fecha de inicio de la tarea"),
+                          GestureDetector(
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2101),
+                              );
 
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
-                        elevation: 0,
-                      ),
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),*/
-
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2101),
-                        );
-
-                        if (picked != null){
-                          setState(() {
-                            startDate = picked;
-                            endDate = picked;
-                          });
-                        }
-                        //Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
+                              if (picked != null){
+                                setState(() {
+                                  startDate = picked;
+                                  endDate = picked;
+                                });
+                              }
+                              //Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.calendar_today,
+                              size: 40,
+                            ),
+                          ),
+                          Text(DateFormat('yyyy-MM-dd').format(startDate!)),
+                        ],
                       ),
                     ),
+                /// Container to introduce the [endDate] of the task
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1,
+                      )),
+                  padding: const EdgeInsets.all(20.0),
+                  margin:
+                  const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
+                  child: Column(
+                    children: [
+                      const Text("Fecha de finalización de la tarea"),
+                      GestureDetector(
+                        onTap: () async {
+                          final DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+                            firstDate: startDate!,
+                            lastDate: DateTime(2101),
+                          );
+
+
+                          if (picked != null){
+                            setState(() {
+                              endDate = picked;
+                            });
+                          }
+                          //Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.calendar_today,
+                          size: 40,
+                        ),
+                      ),
+                      Text(DateFormat('yyyy-MM-dd').format(endDate!)),
+                    ],
+                  ),
+                ),
                   ],
                 ),
               ),
-              /// Container to introduce the [endDate] of the task
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: const Text('Seleccione la tarea a añadir',
+                  style: TextStyle(color: Colors.black),),
+              ),
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    )),
-                padding: const EdgeInsets.all(20.0),
-                margin:
-                const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
-                child: Column(
-                  children: [
-                    const Text("Selecciona la fecha de finalización de la tarea"),
-                    Text(DateFormat('yyyy-MM-dd').format(endDate!)),
-                    /*ElevatedButton(
-                      onPressed: () => selectDate(context, endDate, false),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey[300],
-                        elevation: 0,
-                      ),
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),*/
-
-                    GestureDetector(
-                      onTap: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: startDate ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-                          firstDate: startDate!,
-                          lastDate: DateTime(2101),
-                        );
-
-
-                        if (picked != null){
-                          setState(() {
-                            endDate = picked;
-                          });
-                        }
-                        //Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.calendar_today,
-                        size: 100,
-                      ),
-                    ),
+                  color: Color(0xFF4A6987),
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: LinearGradient(
+                  colors: [Color(0xFF4A6987), Colors.white],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  ),
+                ),
+                height: 400,
+                width: (MediaQuery.of(context).size.width - 30).clamp(0.0, 500.0),
+                padding: EdgeInsets.symmetric(horizontal: 30), // Margen horizontal
+                child: ListView(children: [
+                  SizedBox(
+                  height: 30,
+                  ),
+                  ...List.generate(displayedItems.length, (index) {
+                    return Column(
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(
+                                double.infinity,
+                                MediaQuery.of(context).size.height *
+                                    0.1), // inf, 80
+                            textStyle: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            backgroundColor: selected == index ? selectedColor : notSelectedColor,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              selected = index;
+                            });
+                            //submitForm(displayedItems[index]['idTask']);
+                            //Navigator.pop(context);
+                          },
+                          /// The content of each student
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                /// Task info
+                                Text(
+                                  '${displayedItems[index]['taskName']}',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                        SizedBox(height: 30), // Espacio entre las tareas
+                      ],
+                    );
+                  }),
                   ],
                 ),
               ),
-              ...List.generate(displayedItems.length, (index) {
-                return Column(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(
-                            double.infinity,
-                            MediaQuery.of(context).size.height *
-                                0.1), // inf, 80
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        backgroundColor: Color(0xFFF5F5F5),
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                      ),
-                      onPressed: () {
-                        submitForm(displayedItems[index]['idTask']);
-                        Navigator.pop(context);
-                      },
-                      /// The content of each student
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            /// Task info
-                            Text(
-                              '${displayedItems[index]['taskName']}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                          ]),
-                    ),
-                    SizedBox(height: 30), // Espacio entre las tareas
-                  ],
-                );
-              }),
             ],
           ),
         ),
@@ -343,7 +354,7 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
                     backgroundColor:
                     MaterialStatePropertyAll<Color>(Colors.white)),
                 onPressed: () {
-                  submitForm(actualTaskId);
+                  submitForm(displayedItems[selected]['idTask']);
                   Navigator.of(context).pop();
                 },
                 child: Row(

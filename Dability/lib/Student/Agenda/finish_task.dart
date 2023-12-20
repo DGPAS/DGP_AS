@@ -148,7 +148,8 @@ class _FinishTaskState extends State<FinishTask> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if(widget.student['text'] == 1) const Text("NO"),
+                              if(widget.student['text'] == 1) const Text("NO",
+                                  style: TextStyle(color: Colors.white),),
                               Text(
                                 'X',
                                 style: TextStyle(
@@ -185,7 +186,8 @@ class _FinishTaskState extends State<FinishTask> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (widget.student['text'] == 1) const Text("SI"),
+                            if (widget.student['text'] == 1) const Text("SI",
+                                style: TextStyle(color: Colors.white),),
                             Image.asset(
                               'assets/images/checkIcon.png',
                               width: MediaQuery.of(context).size.height * 0.05,

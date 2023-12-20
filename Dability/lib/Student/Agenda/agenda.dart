@@ -170,6 +170,7 @@ class _AgendaState extends State<Agenda> {
                                             Text(
                                               currentTasks[i]['taskName'].toString().toUpperCase(),
                                               style: TextStyle(
+                                                color: Colors.white,
                                                 fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                     ? MediaQuery.of(context).size.width *0.04   /// landscape
                                                     : MediaQuery.of(context).size.width *0.04,  /// portrait

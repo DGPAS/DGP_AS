@@ -132,6 +132,7 @@ class _StudentHomeState extends State<StudentHome> {
                       'AGENDA PERSONAL',
                       style: TextStyle(
                         fontSize: 20,
+                        color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
