@@ -7,6 +7,7 @@ import 'package:dability/Components/list_step.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:dability/Api_Requests/steps_requests.dart';
 import 'package:dability/Api_Requests/task_requests.dart';
@@ -53,8 +54,8 @@ class _AddModTaskState extends State<AddModTask> {
   String? thumbnail;
   Image? thumbnailImage;
   String? videoUrl;
-  DateTime? selectedStartDate;
-  DateTime? selectedEndDate;
+  DateTime? startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
   AddModType? typeForm;
@@ -200,17 +201,24 @@ class _AddModTaskState extends State<AddModTask> {
   /// if [date] is null then the selected date will be today
   ///
   /// if we pick a date and it's different than the one we had picked we assign it to [date]
-  Future<void> selectDate(BuildContext context, DateTime? date) async {
+  Future<void> selectDate(BuildContext context, DateTime? date, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: date ?? DateTime.now(),
+      initialDate: date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
 
     if (picked != null && picked != date) {
       setState(() {
-        date = picked;
+        if (isStartDate){
+          startDate = picked;
+          //date = picked;
+        }
+        else{
+          endDate = picked;
+          //date = picked;
+        }
       });
     }
   }
@@ -382,8 +390,9 @@ class _AddModTaskState extends State<AddModTask> {
                 child: Column(
                   children: [
                     const Text("Selecciona la fecha de inicio de la tarea"),
+                    Text(DateFormat('yyyy-MM-dd').format(startDate!)),
                     ElevatedButton(
-                      onPressed: () => selectDate(context, selectedStartDate),
+                      onPressed: () => selectDate(context, startDate, true),
                       child: Text('Seleccionar Fecha'),
                     ),
                   ],
@@ -404,8 +413,9 @@ class _AddModTaskState extends State<AddModTask> {
                 child: Column(
                   children: [
                     const Text("Selecciona la fecha de finalización de la tarea"),
+                    Text(DateFormat('yyyy-MM-dd').format(endDate!)),
                     ElevatedButton(
-                      onPressed: () => selectDate(context, selectedEndDate),
+                      onPressed: () => selectDate(context, endDate, false),
                       child: Text('Seleccionar Fecha'),
                     ),
                   ],
