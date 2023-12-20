@@ -1,17 +1,16 @@
+import 'package:dability/Teacher/Educator/myStudents/my_students.dart';
 import 'package:flutter/material.dart';
-import 'taskManagement/task_management.dart';
-import 'studentManagement/student_management.dart';
-import '../dability.dart';
+import 'package:dability/dability.dart';
 
-/// # Home page of Admin
-class AdminHome extends StatefulWidget {
-  const AdminHome({super.key});
+/// # Home page of Educator
+class EducatorHome extends StatefulWidget {
+  const EducatorHome({super.key});
 
   @override
-  State<AdminHome> createState() => _AdminHomeState();
+  State<EducatorHome> createState() => _EducatorHomeState();
 }
 
-class _AdminHomeState extends State<AdminHome> {
+class _EducatorHomeState extends State<EducatorHome> {
 
   /// Main builder of the page
   ///
@@ -26,11 +25,11 @@ class _AdminHomeState extends State<AdminHome> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'Inicio Admin',
+                'INICIO EDUCADOR',
                 textAlign: TextAlign.center, // Centra el texto
+                style: TextStyle(color: Colors.white),
               ),
             ),
-            Image.asset('assets/images/currentPageIcon.png', width: 46, height: 46),
             SizedBox(
               width: 50,
             ),
@@ -56,7 +55,7 @@ class _AdminHomeState extends State<AdminHome> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             // Utiliza la función personalizada para manejar la navegación hacia atrás
             Navigator.push(
@@ -79,33 +78,15 @@ class _AdminHomeState extends State<AdminHome> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StudentManagement()),
+                  MaterialPageRoute(builder: (context) => MyStudents()),
                 );
               },
               child: Text(
-                'GESTIONAR ESTUDIANTES',
+                'ESTADÍSTICAS ESTUDIANTES',
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-          /// Button that navigates to [task_management.dart]
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(20),
-            child: ElevatedButton(
-              style: style,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TaskManagement()),
-                );
-              },
-              child: Text(
-                'GESTIONAR TAREAS',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
         ],
       ),
     );

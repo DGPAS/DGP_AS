@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 /// It saves all the students that are stored on DataBase in a dynamic
 /// list [students]
 ///
@@ -17,7 +16,31 @@ Future<List<dynamic>> getStudents() async {
     var response = await http.get(Uri.parse(uri));
 
     if (response.statusCode == 200) {
-        students = json.decode(response.body);
+      students = json.decode(response.body);
+    } else {
+      print('Error en la solicitud: ${response.statusCode}');
+    }
+  } catch (error) {
+    print(error);
+  }
+
+  return students;
+}
+
+/// It saves all the students with educator [id] that are stored on DataBase
+/// in a dynamic list [students]
+///
+/// Throws an [error] if the query fails
+Future<List<dynamic>> getEducatorStudents(String id) async {
+  List<dynamic> students = [];
+
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/view_students_by_educator.php?idEducator=$id";
+  try {
+    var response = await http.get(Uri.parse(uri));
+
+    if (response.statusCode == 200) {
+      students = json.decode(response.body);
     } else {
       print('Error en la solicitud: ${response.statusCode}');
     }
@@ -156,26 +179,33 @@ Future<void> uploadPhoto(String actualStudentId, File photo) async {
 /// It uploads it with [selectedPasswd] by [actualStudentId]
 ///
 /// Throws an [error] if the query fails
-Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd) async {
+Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd, int updatedPictogramIndex) async {
   String uri = "${dotenv.env['API_URL']}/upload_password.php";
+
   try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
     request.fields['idStudent'] = actualStudentId;
-    var pictogram1 = await http.MultipartFile.fromPath(
-        "pictogram1", selectedPasswd[1]);
-    request.files.add(pictogram1);
-    var pictogram2 = await http.MultipartFile.fromPath(
-        "pictogram2", selectedPasswd[2]);
-    request.files.add(pictogram2);
-    var pictogram3 = await http.MultipartFile.fromPath(
-        "pictogram3", selectedPasswd[3]);
-    request.files.add(pictogram3);
+
+    if (updatedPictogramIndex == 1 && selectedPasswd[1] != null && selectedPasswd[1].isNotEmpty) {
+      var pictogram1 = await http.MultipartFile.fromPath("pictogram1", selectedPasswd[1]);
+      request.files.add(pictogram1);
+    }
+
+    if (updatedPictogramIndex == 2 && selectedPasswd[2] != null && selectedPasswd[2].isNotEmpty) {
+      var pictogram2 = await http.MultipartFile.fromPath("pictogram2", selectedPasswd[2]);
+      request.files.add(pictogram2);
+    }
+
+    if (updatedPictogramIndex == 3 && selectedPasswd[3] != null && selectedPasswd[3].isNotEmpty) {
+      var pictogram3 = await http.MultipartFile.fromPath("pictogram3", selectedPasswd[3]);
+      request.files.add(pictogram3);
+    }
+
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      print("Image Uploaded");
-    }
-    else {
+      print("Password Updated");
+    } else {
       print("Error en la subida");
     }
   } catch (error) {
@@ -189,28 +219,28 @@ Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd)
 /// It updates it with [selectedPasswd] by [actualStudentId]
 ///
 /// Throws an [error] if the query fails
-Future<void> updatePassword(String actualStudentId, List<String> selectedPasswd) async {
+Future<void> updatePassword(String actualStudentId, List<String> selectedPasswd, int pictogramIndex) async {
   String uri = "${dotenv.env['API_URL']}/update_password.php";
   try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
     request.fields['idStudent'] = actualStudentId;
 
     // Verificar y agregar el pictograma 1 si está presente
-    if (selectedPasswd[1] != null && selectedPasswd[1].isNotEmpty) {
+    if (pictogramIndex == 1 && selectedPasswd[1] != null && selectedPasswd[1].isNotEmpty) {
       var pictogram1 = await http.MultipartFile.fromPath(
           "pictogram1", selectedPasswd[1]);
       request.files.add(pictogram1);
     }
 
     // Verificar y agregar el pictograma 2 si está presente
-    if (selectedPasswd[2] != null && selectedPasswd[2].isNotEmpty) {
+    if (pictogramIndex == 2 && selectedPasswd[2] != null && selectedPasswd[2].isNotEmpty) {
       var pictogram2 = await http.MultipartFile.fromPath(
           "pictogram2", selectedPasswd[2]);
       request.files.add(pictogram2);
     }
 
     // Verificar y agregar el pictograma 3 si está presente
-    if (selectedPasswd[3] != null && selectedPasswd[3].isNotEmpty) {
+    if (pictogramIndex == 3 && selectedPasswd[3] != null && selectedPasswd[3].isNotEmpty) {
       var pictogram3 = await http.MultipartFile.fromPath(
           "pictogram3", selectedPasswd[3]);
       request.files.add(pictogram3);

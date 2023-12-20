@@ -48,7 +48,7 @@ class _AddModStudentState extends State<AddModStudent> {
   bool? readCheck = false;
   bool? videoCheck = false;
   bool? soundCheck = false;
-
+  int _selectedPictogramIndex = -1;
   /// Lists that store and manage the password of an student
   List<String> selectedPasswd = ['','','',''];
   List<String> selectedDBPasswd = [];
@@ -215,21 +215,34 @@ class _AddModStudentState extends State<AddModStudent> {
   /// If it is modifying an student, it updates him/her by
   /// its id [idStudent], it updates the photo and
   /// it updates the password
-  Future<void> submitForm (String idStudent) async {
-    if (typeForm == AddModType.add) {
-      actualStudentId = await insertStudent(nameStudent!, surnameStudent!,
-                            readCheck!, soundCheck!, videoCheck!);
-      if (_photo != null) {
-        await uploadPhoto(actualStudentId, _photo!);
-      }
-      await uploadPassword(actualStudentId, selectedPasswd);
-    } else {
-      await updateStudent(idStudent, nameStudent!, surnameStudent!,
-          readCheck!, soundCheck!, videoCheck!);
+  Future<void> submitForm(String idStudent) async {
+  if (typeForm == AddModType.add) {
+    actualStudentId = await insertStudent(
+      nameStudent!,
+      surnameStudent!,
+      readCheck!,
+      soundCheck!,
+      videoCheck!,
+    );
+    if (_photo != null) {
       await uploadPhoto(actualStudentId, _photo!);
-      await updatePassword(actualStudentId, selectedPasswd);
     }
+    await uploadPassword(actualStudentId, selectedPasswd, _selectedPictogramIndex);
+  } else {
+    await updateStudent(
+      idStudent,
+      nameStudent!,
+      surnameStudent!,
+      readCheck!,
+      soundCheck!,
+      videoCheck!,
+    );
+ if (_photo != null) {
+      await uploadPhoto(actualStudentId, _photo!);
+    }    
+    await updatePassword(actualStudentId, selectedPasswd, _selectedPictogramIndex);
   }
+}
 
   /// Function that returns widget of the photo of the task by its [urlPath]
   ///
@@ -411,6 +424,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
                         setState(() {
                           selectedPasswd[1] = pickedFile!.path;
+                          _selectedPictogramIndex = 1;
                         });
                       },
                       child: Container(
@@ -445,6 +459,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
                         setState(() {
                           selectedPasswd[2] = pickedFile!.path;
+                          _selectedPictogramIndex = 2;
                         });
                       },
                       child: Container(
@@ -479,6 +494,7 @@ class _AddModStudentState extends State<AddModStudent> {
 
                         setState(() {
                           selectedPasswd[3] = pickedFile!.path;
+                          _selectedPictogramIndex = 3;
                         });
                       },
                       child: Container(

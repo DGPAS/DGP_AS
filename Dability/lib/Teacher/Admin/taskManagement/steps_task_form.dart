@@ -1,3 +1,4 @@
+import 'package:dability/Api_Requests/steps_requests.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/enum_types.dart';
@@ -17,10 +18,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class StepsTaskForm extends StatefulWidget {
   final bool requiredField;
   final List<ListStep> steps;
+  final String idTask;
 
   StepsTaskForm({
     Key? key,
     required this.requiredField,
+    required this.idTask,
     required this.steps,
   }) : super(key: key);
 
@@ -33,13 +36,14 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
 
   String requiredField = "* Campo requerido";
   bool isRequiredField = false;
+  Image? thumbnailImage;
 
   List<ListStep> steps = [];
 
   String selectedImage = "";
   String selectedVideo = "";
   String actualDescription = "";
-
+  String idTask = "";
   final descriptionController = TextEditingController();
   final TextEditingController _numStep = TextEditingController();
   TextForm textForm = TextForm(
@@ -48,12 +52,50 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
       type: TextFormType.description);
   bool error = false;
   
-
   /// Function that updates de [actualDescription] with
   /// the controller [descriptionController]
   void _getLastDescriptionValue() {
     actualDescription = descriptionController.text;
   }
+
+ void saveImageToStep(String path) async {
+  final url = Uri.parse("${dotenv.env['API_URL']}/images/steps/$path");
+  final request = http.MultipartRequest('POST', url);
+  request.files.add(await http.MultipartFile.fromPath('file', path));
+
+  try {
+    final res = await request.send();
+    if (res.statusCode == 200) {
+      // Obtén solo el nombre del archivo
+      final respStr = await res.stream.bytesToString();
+      final fileName = respStr.split('/').last;
+
+      // Almacena solo el nombre del archivo en selectedImage
+      setState(() {
+        selectedImage = fileName;
+      });
+    } else {
+      print("Error al subir la imagen al servidor: ${res.statusCode}");
+      // Manejar el error según sea necesario
+    }
+  } catch (e) {
+    print("Error al subir la imagen al servidor: $e");
+    // Manejar el error según sea necesario
+  }
+}
+
+ Widget _getImage(String? imageName) {
+  if (imageName == null || imageName.isEmpty) {
+  return const Image(
+    image: AssetImage('assets/images/no_image.png'),
+    fit: BoxFit.contain,
+  );
+} else {
+  return Image.file(File(imageName), fit: BoxFit.cover);
+  
+}
+}
+
 
   @override
   void initState() {
@@ -61,10 +103,11 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
 
     isRequiredField = widget.requiredField;
     steps = widget.steps;
-
+    idTask = widget.idTask;
     /// Start listening to changes
     descriptionController.addListener(_getLastDescriptionValue);
     error = false;
+   
   }
 
   /// Cleans up the [descriptionController] when the widget is removed from the
@@ -74,75 +117,85 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
     descriptionController.dispose();
     super.dispose();
   }
+  
 
   /// Function that returns a Column Widget with two forms content:
   ///
   /// An image for the step, it can be added from gallery or by taking a photo
   /// And a description for the step
   Widget _getForm() {
-    return Column(
-      children: [
-        /// The container to add an image
-        Container(
-          decoration: _buildBoxDecoration(),
-          padding: EdgeInsets.only(top: 30, bottom: 30),
-          margin: EdgeInsets.only(bottom: 50),
-          child: Column(
-            children: [
-              const Text("Añade una imagen"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  /// It adds the image from the gallery
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final picker = ImagePicker();
-                        final XFile? pickedFile = await picker.pickImage(
-                            source: ImageSource.gallery, imageQuality: 100);
-
-                        setState(() {
-                          selectedImage = pickedFile!.path;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        margin: const EdgeInsets.all(20),
-                        child: DottedBorder(
-                          color: Colors.black,
-                          strokeWidth: 1,
-                          dashPattern: [10, 6],
-                          borderType: BorderType.RRect,
-                          radius: const Radius.circular(20),
-                          child: SizedBox(
-                            height: 200,
-                            width: 800,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(45),
-                                child: _getImage(null)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  /// It adds the image from camera
-                  GestureDetector(
+  return Column(
+    children: [
+      /// The container to add an image
+      Container(
+        decoration: _buildBoxDecoration(),
+        padding: EdgeInsets.only(top: 30, bottom: 30),
+        margin: EdgeInsets.only(bottom: 50),
+        child: Column(
+          children: [
+            const Text("Añade una imagen"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                /// It adds the image from the gallery
+                Expanded(
+                  child: GestureDetector(
                     onTap: () async {
                       final picker = ImagePicker();
                       final XFile? pickedFile = await picker.pickImage(
-                          source: ImageSource.camera, imageQuality: 100);
+                        source: ImageSource.gallery,
+                        imageQuality: 100,
+                      );
+                     
+                                 setState(() {
+                                selectedImage = pickedFile!.path;
 
-                      setState(() {
-                        selectedImage = pickedFile!.path;
-                      });
+                              });
+                    
                     },
                     child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
                       margin: const EdgeInsets.all(20),
-                      child: Icon(Icons.photo_camera, size: 50,),
+                      child: DottedBorder(
+  color: Colors.black,
+  strokeWidth: 1,
+  dashPattern: [10, 6],
+  borderType: BorderType.RRect,
+  radius: const Radius.circular(20),
+  child: SizedBox(
+    height: 200,
+    width: 800,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(45),
+      child: _getImage(selectedImage), // Mueve esta línea aquí
+    ),
+  ),
+),
                     ),
+                  ),
+                ),
+                /// It adds the image from camera
+                GestureDetector(
+                  onTap: () async {
+                    final picker = ImagePicker();
+                    final XFile? pickedFile = await picker.pickImage(
+                      source: ImageSource.camera,
+                      imageQuality: 100,
+                    );
+                    if (pickedFile != null) {
+                      saveImageToStep(pickedFile.path);
+                    }
+                    setState(() {
+                      selectedImage = pickedFile!.path;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Icon(Icons.photo_camera, size: 50,),
+                  ),
                   ),
                 ],
               ),
@@ -191,21 +244,57 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
   ///
   /// if [urlPath] is not null it means that an image has been added
   /// so we show it with [Image.file]
-  Widget _getImage(String? urlPath) {
-    if (urlPath == null) {
-      return const Image(
-          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
-    } else {
-      return Image.file(File(urlPath), fit: BoxFit.cover);
-    }
-  }
+ 
 
   /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Añadir un paso a la tarea"),
+        title: Row(
+          children: [
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Expanded(
+              child: Text(
+                "AÑADIR UN PASO A LA TAREA",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+              
+                // Acción al presionar el botón
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A6987),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/userIcon.png',
+                    width: 48,
+                    height: 48,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
@@ -284,7 +373,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                   if (numStep > 0) {
                     /// It sorts the list [steps]
                     steps.sort((a, b) => a.numStep.compareTo(b.numStep));
-
+                      
                     /// It pops to the previous page with the updated [steps]
                     Navigator.of(context).pop(steps);
                   }
@@ -309,3 +398,4 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
         ));
   }
 }
+

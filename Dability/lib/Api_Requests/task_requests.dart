@@ -145,6 +145,7 @@ Future<void> uploadImage(String actualTaskId, String selectedImage) async {
 }
 
 
+
 /// Function that uploads the video of a task on API directory
 /// by calling an API function
 ///

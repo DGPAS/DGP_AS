@@ -1,94 +1,90 @@
-import 'dart:convert';
-
 import 'package:dotted_border/dotted_border.dart';
-import 'package:dability/Components/steps_task_form.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:dability/Teacher/Admin/taskManagement/steps_task_form.dart';
 import 'package:flutter/material.dart';
 import 'package:dability/Components/text_form.dart';
 import 'package:dability/Components/enum_types.dart';
 import 'package:dability/Components/list_step.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
-
-
-
-
+import 'package:path/path.dart' as path;
+import 'package:dability/Api_Requests/steps_requests.dart';
+import 'package:dability/Api_Requests/task_requests.dart';
+/// # Page for add or modify a task
+///
+/// It receives a required param [typeForm] that indicates if it is
+/// for add a task or modify the given one with [task]
 class AddModTask extends StatefulWidget {
   AddModTask(
       {Key? key,
       required this.typeForm,
-      this.title,
-      this.description,
-      this.idTareas,
-      this.miniatura,
-      this.videoUrl})
+      this.task
+      })
       : super(key: key);
 
-  AddModType typeForm;
-  String? title;
-  String? description;
-  String? idTareas;
-  String? miniatura;
-  String? videoUrl;
+  final AddModType typeForm;
+  final Map<String, dynamic>? task;
 
   @override
-  State<AddModTask> createState() => _AddModTaskState(
-      typeForm: typeForm,
-      title: title,
-      description: description,
-      idTareas: idTareas,
-      miniatura: miniatura,
-      videoUrl: videoUrl,
-  );
+  State<AddModTask> createState() => _AddModTaskState();
 }
 
 
-
-
 class _AddModTaskState extends State<AddModTask> {
-  _AddModTaskState(
-      {required this.typeForm, this.title, this.description, this.idTareas, this.miniatura, this.videoUrl});
+  _AddModTaskState();
 
-  // Formulario para el titulo de la tarea
+  /// Form that contains the name of the task to add or modify
   TextForm titleForm = TextForm(
       requiredField: true,
       title: "Nombre de la tarea",
       type: TextFormType.title);
-  // Formulario para la descripción de la tarea
+  /// Form that contains the description of the task to add or modify
   TextForm descriptionForm = TextForm(
       requiredField: false,
       title: "Descripción general de la tarea",
       type: TextFormType.description);
 
-  // Variables donde se almacenará el valor del titulo y la descripcion
+  /// Variables where it will be stored the data of a task
   String? title;
   String? description;
-  String? idTareas;
-  String? miniatura;
-  Image? miniaturaImage;
+  String? idTask;
+  String? thumbnail;
+  Image? thumbnailImage;
+  String? thumbnailVideo;
   String? videoUrl;
-  // isPressed: variable para la ayuda de añadir pasos
+  /// Variable to show or hidde the help of the add steps action from [steps_task_form.dart]
   bool isPressed = false;
-  AddModType typeForm;
+  AddModType? typeForm;
 
+  /// Lists that store and manage the steps of a task
   List<ListStep> steps = [];
   List<ListStep> copy = [];
   List<ListStep> auxSteps = [];
+  /// Variables to manage the task data
+  /// File? video;
   String actualTaskId = '';
-  File? _image;
-  File? _video;
   String selectedImage = "";
   String selectedVideo = "";
-  
+
+
+  /// Init State
+  ///
+  /// Initialize the task data and its steps, if it has,
+  /// by calling [getTaskSteps]
   @override
   void initState() {
     super.initState();
-    // Si title o description es nulo
-    // (es decir, si lo que se quiere es añadir una tarea y no modificarla)
-    // se inicializan segun el valor del controlador
+
+    typeForm = widget.typeForm;
+    if (typeForm == AddModType.mod) {
+      title = widget.task?['taskName'];
+      description = widget.task?['description'];
+      idTask = widget.task?['idTask'];
+      thumbnail = widget.task?['thumbnail'];
+      videoUrl = widget.task?['video'];
+    }
+    /// If title or description are null it means that we are adding a task,
+    /// not modifying it, so the values are initialized by the controllers
     title ??= titleForm.getText();
     description ??= descriptionForm.getText();
 
@@ -97,239 +93,67 @@ class _AddModTaskState extends State<AddModTask> {
     descriptionForm.originalText = description;
     descriptionForm.text = description!;
 
-    if (idTareas != null) {
-      getInitialSteps();
-      actualTaskId = idTareas!;
+    /// If the task exists, it calls [getTaskSteps] and get the actualTaskId
+    if (idTask != null) {
+      getData();
     }
 
-    if(widget.miniatura != null) {
-     selectedImage = widget.miniatura!;
+    /// If the miniature exits, it initializes it
+    if(widget.task?['thumbnail'] != null) {
+     selectedImage = widget.task?['thumbnail'];
+     getThumbnail(thumbnail!);
     }
-    getMiniature();
-    isPressed = false;
+     isPressed = false;
   }
-
-
-  // Funcion que devuelve los pasos la tarea, si existe, guardados en la base de datos
-  Future<void> getInitialSteps() async {
-    // La direccion ip debe ser la de red del portatil para conectar con
-    // la tablet ó 10.0.2.2 para conectar con emuladores
-    String uri = "${dotenv.env['API_URL']}/view_steps.php?idTarea=$idTareas";
-    try {
-      print(idTareas!);
-      var response = await http.get(
-        Uri.parse(uri),
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-      );
-
-      if (response.statusCode == 200) {
-        List<dynamic> responseData = json.decode(response.body);
-        List<ListStep> loadedSteps = [];
-
-        // Convertir cada elemento en responseData a ListStep y agregarlo a loadedSteps
-        for (var stepData in responseData) {
-          loadedSteps.add(ListStep(
-            stepData['numPaso'],
-            stepData['imagen'],
-            stepData['descripcion'],
-          ));
-        }
-
-        setState(() {
-          steps = loadedSteps;
-        });
-      } else {
-        print('Error en la solicitud: ${response.statusCode}');
-      }
-    } catch (e) {
-      print(e);
-    }
+   
+   
+  /// Function that calls [getTaskSteps] who returns the DataBase tasks
+  /// and adds them to [steps]
+  Future<void> getData () async {
+    steps = await getTaskSteps(idTask!);
+    setState(() {
+      actualTaskId = idTask!;
+    });
   }
-
-  Future<void> submitForm (String? idTareas) async {
-    if (typeForm == AddModType.add) {
-      await insertTaskData();
-      await uploadImage();
-      await saveVideo();
-      print ("Id obtenido: $actualTaskId");
-      for (int i = 0; i < steps.length; i++) {
-        await insertStepsData(steps[i]);
-      }
-    } else {
-      await updateData(idTareas);
-      await uploadImage();
-      await updateSteps();
-
-      
-
-    }
-  }
-
-  Future<void> insertTaskData() async {
-    try {
-        String uri = "${dotenv.env['API_URL']}/insert_task.php";
-
-        var res = await http.post(Uri.parse(uri), body: {
-          "nombre": title?.trim(),
-          "descripcion": description?.trim(),
-          "miniatura": '',
-          "video": '',
-        });
-
-        var response = jsonDecode(res.body);
-        if (response["success"] == "true") {
-          print("Datos insertados");
-
-          int newTaskId = response["idTareas"];
-          print("Nuevo idTareas: $newTaskId");
-          setState(() {
-            actualTaskId = newTaskId.toString();
-          });
-        } else {
-          print("Datos no insertados");
-        }
-      } catch (e) {
-        print(e);
-      }
-  }
-
-  Future<void> insertStepsData(ListStep step) async {
-    try {
-      String uri = "${dotenv.env['API_URL']}/insert_steps.php";
-
-      print('Datos a enviar: numPaso: ${step.numStep}, idTarea: $actualTaskId, description: ${step.description}, imagen: ${step.image}');
-
-      var res = await http.post(Uri.parse(uri), body: {
-        "numPaso": step.numStep.toString(),
-        "idTarea": actualTaskId,
-        "descripcion": step.description,
-        "imagen": step.image
-      });
-
-      var response = jsonDecode(res.body);
-      if (response["success"] == "true") {
-        print("Datos insertados");
-      } else {
-        print("Datos no insertados");
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> updateData (String? idTareas) async {
-    String uri = "${dotenv.env['API_URL']}/update_data.php";
-
-    try {
-      print("Datos a modificar: ${title}, ${description}");
-
-      var res=await http.post(Uri.parse(uri),body: {
-        "idTareas": idTareas,
-        "nombre": title?.trim(),
-        "descripcion": description?.trim(),
-      });
-
-      var response=jsonDecode(res.body);
-
-      if(response["success"]=="true"){
-        print("Datos actualizados");
-      }else{
-        print("Some issue");
-
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> updateSteps () async {
-    String uri = "${dotenv.env['API_URL']}/update_steps.php";
-
-    try {
-      var res=await http.post(Uri.parse(uri),body: {
-        "steps": jsonEncode(steps.map((step) => step.toJson()).toList()),
-        "idTarea": idTareas,
-      });
-
-      var response=jsonDecode(res.body);
-
-      if(response["success"]=="true"){
-        print("Steps actualizados");
-      }else{
-        print("Some issue");
-
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> uploadImage() async {
-    String uri = "${dotenv.env['API_URL']}/upload_image.php";
-
-    try {
-
-      var request = http.MultipartRequest('POST', Uri.parse(uri));
-      request.fields['idTareas'] = actualTaskId;
-      var picture = await http.MultipartFile.fromPath("image", selectedImage);
-      request.files.add(picture);
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print ("Image Uploaded");
-      }
-      else {
-        print("Error en la subida");
-      }
-
-    } catch (e) {
-      print(e);
-    }
-  }
-
- Future<void> saveVideo() async {
-  if (selectedVideo == "") {
-    print("No se ha seleccionado ningún video");
-    return;
-  }
-
-  String uri = "${dotenv.env['API_URL']}/saveVideo.php";
-
-  try {
-    var request = http.MultipartRequest('POST', Uri.parse(uri));
-
-    // Puedes agregar la lógica para seleccionar un video específico en el emulador
-    // Esto puede variar según el emulador que estés utilizando
-
-    // Simplemente usa el path del video seleccionado
-    request.fields['idTareas'] = actualTaskId;
-    var videoFile = await http.MultipartFile.fromPath("video", selectedVideo);
-    request.files.add(videoFile);
-
-    var response = await request.send();
-
-    if (response.statusCode == 200) {
-      print("Video Uploaded");
-      print("Response Body: ${await response.stream.bytesToString()}");
-    } else {
-      print("Error in uploading video. Status Code: ${response.statusCode}");
-    }
-  } catch (e) {
-    print("Exception during video upload: $e");
-  }
+  bool isVideo(String filePath) {
+  final extension = path.extension(filePath).toLowerCase();
+  return extension == '.mp4' || extension == '.mov' || extension == '.avi';
 }
 
 
-
-void getMiniature() {
-    setState(() {
-      miniaturaImage = Image.network("${dotenv.env['API_URL']}/images/$miniatura");
-    });
+  /// Function that calls funtions that calls API
+  ///
+  /// If it is adding a task, it insert the task data,
+  /// it uploads the miniature, the video and, for
+  /// each step in [steps], it adds each one
+  ///
+  /// If it is modifying a task, it updates the task by
+  /// its id [id], it updates the miniature and
+  /// it updates its steps
+  Future<void> submitForm (String? id) async {
+    if (typeForm == AddModType.add) {
+      actualTaskId = await insertTaskData(title!, description!);
+      await uploadImage(actualTaskId, selectedImage);
+      await saveVideo(actualTaskId, selectedVideo);
+      print ("Id obtenido: $actualTaskId");
+      for (int i = 0; i < steps.length; i++) {
+        await insertStepsData(actualTaskId, steps[i]);
+        await uploadImageSteps(actualTaskId, steps[i].image);
+      }
+    } else {
+      await updateData(id!, title!, description!);
+      await uploadImage(id, selectedImage);
+      await saveVideo(id, selectedVideo);
+      await updateSteps(id,steps);
+    }
   }
 
-  // Función para cambiar el titulo de la barra segun sea crear o modificar
+
+  /// Function that returns the title of [AppBar]
+  ///
+  /// If [typeForm] == [AddModType.add], it updates it to creating a task
+  ///
+  /// If [typeForm] == [AddModType.mod], it updates it to modifying a task
   String getTitle () {
     if (typeForm == AddModType.add) {
       return 'Crear Tarea';
@@ -338,6 +162,12 @@ void getMiniature() {
     }
   }
 
+
+  /// Function that returns the submit button name of [BottomNavigationBar]
+  ///
+  /// If [typeForm] == [AddModType.add], it updates it to create (a task)
+  ///
+  /// If [typeForm] == [AddModType.mod], it updates it to modify (a task)
   String getSubmitButton () {
     if (typeForm == AddModType.add) {
       return 'Crear';
@@ -346,12 +176,28 @@ void getMiniature() {
     }
   }
 
+
+  /// Function that returns widget of the miniature of the task by its [urlPath]
+  ///
+  /// If [urlPath] is null, it returns the default image with [AssetImage]
+  ///
+  /// if [urlPath] is not null and it is an adding task or it is a modifying task
+  /// and the [urlPath] it is not the same has the miniature given at first,
+  /// it means that the original miniature of the task has been modified
+  /// so we show it with [Image.file]
+  ///
+  /// If [urlPath] its the original miniature from the DataBase task that we are
+  /// modifying, we show it with [Image.network]
   Widget _getImage(String? urlPath) {
     if (urlPath == null || urlPath == '') {
       return const Image(
-          image: AssetImage('images/no_image.png'), fit: BoxFit.contain);
+          image: AssetImage('assets/images/no_image.png'), fit: BoxFit.contain);
     } else {
-      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.miniatura)) {
+      if (isVideo(urlPath)) {
+      // Si es un video, puedes mostrar un ícono de reproductor de video en lugar de la imagen
+      return const Icon(Icons.video_library, size: 50);
+    } else
+      if(typeForm == AddModType.add || (typeForm == AddModType.mod && urlPath != widget.task?['thumbnail'])) {
         return Image.file(File(urlPath), fit: BoxFit.cover);
       } else {
         return Image.network("${dotenv.env['API_URL']}/images/$urlPath", fit: BoxFit.cover);
@@ -359,7 +205,7 @@ void getMiniature() {
     }
   }
 
-  // Función que devuelve en columna todos los pasos añadidos
+  /// Function that returns a Column of [steps]
   List<Widget> getSteps() {
     return steps.map((step) {
       return Column(
@@ -373,28 +219,27 @@ void getMiniature() {
                 Text('Paso ${step.numStep}, formatos:',
                     style: const TextStyle(fontWeight: FontWeight.bold)),
 
-                // Botón para eliminar el paso
-                Container(
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll<Color>(Colors.red),
-                    ),
-                    child: const Text('Eliminar Paso'),
-                    onPressed: () {
-                      auxSteps = steps;
-                      auxSteps.removeWhere((stepToDelete) =>
-                          stepToDelete.numStep == step.numStep);
-                      setState(() {
-                        steps = auxSteps;
-                      });
-                    },
+                /// Button to delete [step] from [steps]
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.red),
                   ),
+                  child: const Text('Eliminar Paso'),
+                  onPressed: () {
+                    auxSteps = steps;
+                    auxSteps.removeWhere((stepToDelete) =>
+                        stepToDelete.numStep == step.numStep);
+                    setState(() {
+                      steps = auxSteps;
+                    });
+                  },
                 ),
               ],
             ),
           ),
-          if (step.image != '' && step.image != null)
+          /// It only shows the step image when it is not null
+          if (step.image != '')
             Column(
               children: [
                 Container(
@@ -405,6 +250,7 @@ void getMiniature() {
                 Image(image: AssetImage(step.image), fit: BoxFit.contain),
               ],
             ),
+          /// It only shows the step description when it is not null
           if (step.description != '')
             Column(
               children: [
@@ -428,11 +274,54 @@ void getMiniature() {
     }).toList();
   }
 
+  /// Main builder of the page
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTitle()),
+        title: Row(
+          children: [
+            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Expanded(
+              child: Text(
+                getTitle(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(
+              width: 50,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Acción al presionar el botón
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF4A6987),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/userIcon.png',
+                    width: 48,
+                    height: 48,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: SingleChildScrollView(
@@ -441,7 +330,7 @@ void getMiniature() {
               bottom: 30.0, top: 30.0, left: 10.0, right: 10.0),
           child: Column(
             children: <Widget>[
-              // Contenedor para introducir el título de la tarea en el formulario
+              /// Form to introduce the [title] of the task
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
@@ -454,7 +343,7 @@ void getMiniature() {
                 margin: const EdgeInsets.only(left: 10.0, right: 20.0),
                 child: titleForm,
               ),
-              // Contenedor para introducir la descripción de la tarea en el formulario
+              /// Form to introduce the [description] of the task
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
@@ -468,7 +357,7 @@ void getMiniature() {
                     const EdgeInsets.only(left: 10.0, top: 30.0, right: 20.0),
                 child: descriptionForm,
               ),
-              // Contenedor para añadir una miniatura a la tarea
+              /// Container to add the [selectedImage] of the task
               Container(
                 decoration: _buildBoxDecoration(),
                 padding: const EdgeInsets.all(20.0),
@@ -479,6 +368,7 @@ void getMiniature() {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        /// This container adds the task miniature from gallery
                         Expanded(
                           child: GestureDetector(
                             onTap: () async {
@@ -488,7 +378,6 @@ void getMiniature() {
 
                               setState(() {
                                 selectedImage = pickedFile!.path;
-                                _image = File(selectedImage);
                               });
                             },
                             child: Container(
@@ -503,9 +392,9 @@ void getMiniature() {
                                 dashPattern: [10, 6],
                                 borderType: BorderType.RRect,
                                 radius: const Radius.circular(20),
-                                child: Container(
+                                child: SizedBox(
                                   height: 200,
-                                  width: 800,
+                                  width: 200,
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(45),
                                       child: _getImage(selectedImage)),
@@ -514,6 +403,26 @@ void getMiniature() {
                             ),
                           ),
                         ),
+                         
+          // Video thumbnail preview
+       
+if (selectedVideo != null)
+  Container(
+    margin: const EdgeInsets.all(20),
+    child: DottedBorder(
+      color: Colors.black,
+      strokeWidth: 1,
+      dashPattern: [10, 6],
+      borderType: BorderType.RRect,
+      radius: const Radius.circular(20),
+      child: SizedBox(
+        height: 200,
+        width: 800,
+        child: const Icon(Icons.video_library, size: 50),
+      ),
+    ),
+  ),
+                        /// This container adds the task miniature from camera
                         GestureDetector(
                           onTap: () async {
                             final picker = ImagePicker();
@@ -522,7 +431,6 @@ void getMiniature() {
 
                             setState(() {
                               selectedImage = pickedFile!.path;
-                              _image = File(selectedImage);
                             });
                           },
                           child: Container(
@@ -536,87 +444,167 @@ void getMiniature() {
                 ),
               ),
               
-              //Contenedor para añadir videos
+              /// Containers to add a video to task
               if(typeForm == AddModType.add) 
               Container(
-    decoration: _buildBoxDecoration(),
-    padding: const EdgeInsets.all(20.0),
-    margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
-    child: Column(
-      children: [
-        const Text("Añade un video para la tarea"),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  // Aquí puedes agregar la lógica para grabar un video
-                  // Puedes usar el paquete camera o el que prefieras
-                  // En este ejemplo, estoy utilizando el paquete image_picker
-                  final picker = ImagePicker();
-                  final XFile? pickedFile = await picker.pickVideo(
-                    source: ImageSource.gallery,
-                  );
-                setState(() {
-                  selectedVideo = pickedFile!.path;
-                  _video = File(selectedVideo);
+                decoration: _buildBoxDecoration(),
+                padding: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
+                child: Column(
+                  children: [
+                    const Text("Añade un video para la tarea"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              // Aquí puedes agregar la lógica para grabar un video
+                              // Puedes usar el paquete camera o el que prefieras
+                              // En este ejemplo, estoy utilizando el paquete image_picker
+                              final picker = ImagePicker();
+                              final XFile? pickedFile = await picker.pickVideo(
+                                source: ImageSource.gallery,
+                              );
+                            setState(() {
+                              selectedVideo = pickedFile!.path;
+                             //  _video = File(selectedVideo);
 
-                });
-                  if (pickedFile != null) {
-                    // Puedes manejar el archivo de video grabado aquí
-                    print(pickedFile.path);
-                  }
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  margin: const EdgeInsets.all(20),
-                  child: DottedBorder(
-                    color: Colors.black,
-                    strokeWidth: 1,
-                    dashPattern: [10, 6],
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(20),
-                    child: Container(
-                      height: 200,
-                      width: 800,
-                      // Puedes personalizar este widget según tu necesidad
-                      child: const Icon(Icons.video_library, size: 50),
+                            });
+                              if (pickedFile != null) {
+                                // Puedes manejar el archivo de video grabado aquí
+                                print(pickedFile.path);
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              margin: const EdgeInsets.all(20),
+                              child: DottedBorder(
+                                color: Colors.black,
+                                strokeWidth: 1,
+                                dashPattern: [10, 6],
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(20),
+                                child: SizedBox(
+                                  height: 200,
+                                  width: 800,
+                                  // Puedes personalizar este widget según tu necesidad
+                                  child: const Icon(Icons.video_library, size: 50),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            // Aquí puedes agregar la lógica para grabar un video
+                            // Puedes usar el paquete camera o el que prefieras
+                            // En este ejemplo, estoy utilizando el paquete image_picker
+                            final picker = ImagePicker();
+                            final XFile? pickedFile = await picker.pickVideo(
+                              source: ImageSource.camera,
+                            );
+
+                            if (pickedFile != null) {
+                              // Puedes manejar el archivo de video grabado aquí
+                              print(pickedFile.path);
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(20),
+                            child: Icon(Icons.videocam, size: 50),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ),
-            GestureDetector(
+               if(typeForm == AddModType.mod) 
+              Container(
+  decoration: _buildBoxDecoration(),
+  padding: const EdgeInsets.all(20.0),
+  margin: const EdgeInsets.only(top: 30.0, left: 10.0, right: 20.0),
+  child: Column(
+    children: [
+      const Text("Añade un video para la tarea"),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: GestureDetector(
               onTap: () async {
-                // Aquí puedes agregar la lógica para grabar un video
-                // Puedes usar el paquete camera o el que prefieras
-                // En este ejemplo, estoy utilizando el paquete image_picker
+                // Lógica para seleccionar un video desde la galería
                 final picker = ImagePicker();
                 final XFile? pickedFile = await picker.pickVideo(
-                  source: ImageSource.camera,
+                  source: ImageSource.gallery,
                 );
 
+                setState(() {
+                  selectedVideo = pickedFile!.path;
+                  //  _video = File(selectedVideo);
+                });
+
                 if (pickedFile != null) {
-                  // Puedes manejar el archivo de video grabado aquí
+                   setState(() {
+    selectedVideo = pickedFile.path;
+                   });
+    //  _video = File(selectedVideo);
+                  // Puedes manejar el archivo de video seleccionado aquí
                   print(pickedFile.path);
                 }
               },
               child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
                 margin: const EdgeInsets.all(20),
-                child: Icon(Icons.videocam, size: 50),
+                child: DottedBorder(
+                  color: Colors.black,
+                  strokeWidth: 1,
+                  dashPattern: [10, 6],
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(20),
+                  child: SizedBox(
+                    height: 200,
+                    width: 800,
+                    // Widget personalizado según tus necesidades
+                     child: const Icon(Icons.video_library, size: 50),
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
-      ],
-    ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              // Lógica para grabar un video desde la cámara
+              final picker = ImagePicker();
+              final XFile? pickedFile = await picker.pickVideo(
+                source: ImageSource.camera,
+              );
+
+              if (pickedFile != null) {
+                // Puedes manejar el archivo de video grabado aquí
+                print(pickedFile.path);
+              }
+            },
+            child: Container(
+              margin: const EdgeInsets.all(20),
+              child: Icon(Icons.videocam, size: 50),
+            ),
+          ),
+        ],
+      ),
+    ],
   ),
-              
-              // Contenedor con para añadir los pasos
+),
+              /// Container to add steps
+              ///
+              /// It navegates to [steps_task_form.dart]
               Container(
                 decoration: BoxDecoration(
                     color: Colors.grey[300],
@@ -629,31 +617,27 @@ void getMiniature() {
                 margin: const EdgeInsets.only(
                     left: 10.0, top: 30.0, right: 20.0, bottom: 20.0),
 
-                // Columna que muestra instrucciones en forma de texto y una serie de botones
-                // que llevan a las páginas para añadir pasos de la tarea en diferente formato
-                child: Container(
+                /// Container that shows the helper adding steps
+                /// and the button to add them
+                child: SizedBox(
                   width: 1000,
                   child: Column(
                     children: <Widget>[
                       Row(
                         children: [
                           const Text('Puede añadir pasos a la tarea.'),
-                          Container(
-                            child: GestureDetector(
-                              onTapDown: (_) {
-                                setState(() {
-                                  isPressed = true;
-                                });
-                              },
-                              onTapUp: (_) {
-                                setState(() {
-                                  isPressed = false;
-                                });
-                              },
-                              child: Container(
-                                child: const Icon(Icons.help),
-                              ),
-                            ),
+                          GestureDetector(
+                            onTapDown: (_) {
+                              setState(() {
+                                isPressed = true;
+                              });
+                            },
+                            onTapUp: (_) {
+                              setState(() {
+                                isPressed = false;
+                              });
+                            },
+                            child: const Icon(Icons.help),
                           ),
                         ],
                       ),
@@ -706,7 +690,7 @@ void getMiniature() {
                 ),
               ),
 
-              // Container para mostrar los pasos añadidos
+              /// Container to preview the data task and steps
               const Text('Previsualización de la tarea en creación:'),
               Container(
                 width: 1000,
@@ -766,15 +750,15 @@ void getMiniature() {
         ),
       ),
 
-      // Botones "Cancelar y Crear"
+      /// BottomAppBar to submit or cancel the action
       bottomNavigationBar: BottomAppBar(
         color: Color(0xFF4A6987),
         height: 50,
         child: Container(
-          margin: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              /// Cancel button
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
@@ -790,6 +774,12 @@ void getMiniature() {
                   ],
                 ),
               ),
+
+              /// Submit button
+              ///
+              /// On pressed, it updates data task and check if they are not
+              /// null. After that, it calls [submitForm] with [id] and
+              /// pops to previous page
               ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor:
@@ -800,8 +790,9 @@ void getMiniature() {
                   if ((title == '' || title == null) ||
                   (description == '' || description == null)) {
                   print("Los campos titulo y descripción son obligatorios");
-                  } else {
-                    submitForm(idTareas);
+                  }
+                  else {
+                    submitForm(idTask);
                     Navigator.of(context).pop();
                   }
                 },
@@ -819,6 +810,7 @@ void getMiniature() {
     );
   }
 
+  /// Predefined style for some containers
   BoxDecoration _buildBoxDecoration() {
     return BoxDecoration(
         color: Colors.grey[300],

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'Admin/login/admin_login.dart';
+import 'Teacher/Educator/educator_home.dart';
+import 'Teacher/login/teacher_login.dart';
 import 'Student/Login/student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -21,6 +23,18 @@ class DAbility extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        colorScheme: ColorScheme(
+            brightness:  Brightness.light,
+            primary: Colors.white,
+            onPrimary: Colors.black,
+            secondary: Colors.black,
+            onSecondary: Colors.black,
+            error: Colors.red,
+            onError: Colors.red,
+            background: Colors.white,
+            onBackground:  Colors.black,
+            surface:  Colors.white,
+            onSurface: Colors.black),
       ),
       home: const HomePage(title: 'D-Ability'),
     );
@@ -92,11 +106,11 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AdminLogin()),
+                        MaterialPageRoute(builder: (context) =>  AdminLogin()),
                       );
                     },
                     child: const Text(
-                      'Acceder como Administrador',
+                      'Acceso para profesorado',
                       textAlign: TextAlign.center,
                     ),
                   ),

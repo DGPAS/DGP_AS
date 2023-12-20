@@ -69,7 +69,28 @@ Future<void> insertStepsData(String actualTaskId, ListStep step) async {
   }
 }
 
+Future<void> uploadImageSteps(String idTask, String selectedImage) async {
+  /// Uri whose IP is on .env that calls API
+  String uri = "${dotenv.env['API_URL']}/upload_image_step.php";
 
+ try {
+    var request = http.MultipartRequest('POST', Uri.parse(uri));
+    request.fields['idTask'] = idTask;
+    var picture = await http.MultipartFile.fromPath("image", selectedImage);
+    request.files.add(picture);
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print ("Image Uploaded");
+    }
+    else {
+      print("Error en la subida");
+    }
+
+  } catch (error) {
+    print(error);
+  }
+}
 /// Function that updates the steps of a task on DataBase by calling an API function
 ///
 /// It updates them with [steps] by [id]

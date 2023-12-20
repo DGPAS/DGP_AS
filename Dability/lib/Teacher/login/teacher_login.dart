@@ -1,4 +1,5 @@
-import 'package:dability/Admin/admin_home.dart';
+import 'package:dability/Teacher/Admin/admin_home.dart';
+import 'package:dability/Teacher/Educator/educator_home.dart';
 import 'package:flutter/material.dart';
 
 /// # Login page for Admin
@@ -18,21 +19,27 @@ class _AdminLoginState extends State<AdminLogin> {
   /// Example credentials
   String userEmail = "prueba@correo.es";
   String userPassword = "123";
+  String educatorEmail = "educador@correo.es";
+  String educatorPassword = "123";
 
   bool loginError = false;
 
   /// Function that checks if [email] and [password] are identical
-  /// to [userEmail] and [userPassword]
+  /// to [userEmail] and [userPassword] or to [educatorEmail] and [educatorPassword]
   ///
-  /// If they are, it returns true
+  /// If they are, it returns 1 or 2
   ///
-  /// Else, it returns false
-  bool authenticateUser(String email, String password){
+  /// Else, it returns 0
+  int authenticateUser(String email, String password){
+    int rol = 0;
     if(email == userEmail && password == userPassword){
-      return true;
+      rol = 1;
+    }
+    else if (email == educatorEmail && password == educatorPassword) {
+      rol = 2;
     }
 
-    return false;
+    return rol;
   }
 
   /// Main builder for the login
@@ -47,6 +54,7 @@ class _AdminLoginState extends State<AdminLogin> {
               child: Text(
                 'Login Admin',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -75,6 +83,12 @@ class _AdminLoginState extends State<AdminLogin> {
               ),
             ),
           ],
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Color(0xFF4A6987),
       ),
@@ -117,7 +131,8 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(labelText: 'Email'),
+                      decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.black),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Por favor, introduce tu email';
@@ -136,7 +151,8 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(labelText: 'Contraseña'),
+                      decoration: InputDecoration(labelText: 'Contraseña', labelStyle: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.black),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Por favor, introduce tu contraseña';
@@ -172,17 +188,25 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        bool correctLogin = authenticateUser(
+                        int rol = authenticateUser(
                             _emailController.text, _passwordController.text);
 
                         setState(() {
-                          loginError = !correctLogin;
+                          if (rol == 0) {
+                            loginError = !loginError;
+                          }
                         });
 
-                        if(correctLogin){ // se redirecciona
+                        if(rol == 1){  /// It goes to admin
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AdminHome()),
+                          );
+                        }
+                        if(rol == 2){  /// It goes to educator
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => EducatorHome()),
                           );
                         }
                       }

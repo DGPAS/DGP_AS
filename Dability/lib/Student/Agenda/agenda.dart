@@ -1,9 +1,10 @@
 import 'package:dability/Student/student_home.dart';
 import 'package:flutter/material.dart';
-import '../../Api_Requests/agenda_requests.dart';
+import 'package:dability/Api_Requests/agenda_requests.dart';
 import 'student_task.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../../Components/aux_functions.dart';
 
 /// # Page where the student sees his/her tasks
 class Agenda extends StatefulWidget {
@@ -36,21 +37,18 @@ class _AgendaState extends State<Agenda> {
     student = widget.student;
 
     getData(student['id'].toString());
+
+    print(student['text']);
   }
 
-  /// Function that calls [getStudentAgenda] who returns the DataBase student
+  /// Function that calls [getNotDoneStudentAgenda] who returns the DataBase student
   /// tasks where idStudent is [id] and adds them to [tasks]
   Future<void> getData (String id) async {
-    List<dynamic> aux = await getStudentAgenda(id);
+    List<dynamic> aux = await getNotDoneStudentAgenda(id);
     setState(() {
       tasks = aux;
       numPages = (tasks.length / numTasksPerPage).ceil();
     });
-  }
-
-  /// Function thats return the orientation of the device
-  Orientation _orientation (double width, double height) {
-    return width > height ? Orientation.landscape : Orientation.portrait;
   }
 
   @override
@@ -67,10 +65,11 @@ class _AgendaState extends State<Agenda> {
         title: Row(
           children: [
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
-            const Expanded(
+            Expanded(
               child: Text(
-                'AGENDA',
+              student['text'] == 1 ? 'AGENDA' : "",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             Image.asset(
@@ -95,11 +94,7 @@ class _AgendaState extends State<Agenda> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
-                    'assets/images/userIcon.png',
-                    width: 48,
-                    height: 48,
-                  ),
+                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
                 ],
               ),
             ),
@@ -107,7 +102,7 @@ class _AgendaState extends State<Agenda> {
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () {
             Navigator.push(
               context,
@@ -126,7 +121,6 @@ class _AgendaState extends State<Agenda> {
                 top:  MediaQuery.of(context).size.height * 0.03,
                 bottom: MediaQuery.of(context).size.height * 0.01
             ),
-            child: Positioned.fill(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -143,7 +137,7 @@ class _AgendaState extends State<Agenda> {
                               children: [
                                 /// Container for each task
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.8,
+                                  width: student['text'] == 1 ? MediaQuery.of(context).size.width * 0.8 : MediaQuery.of(context).size.width * 0.4,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       maximumSize: Size(double.infinity, MediaQuery.of(context).size.height * 0.40),
@@ -169,25 +163,27 @@ class _AgendaState extends State<Agenda> {
                                     child: Container(
                                       padding: const EdgeInsets.only(left: 15, right: 15),
                                       child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: student['text'] == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
                                           children: [
                                             /// Task name
+                                            if (student['text'] == 1)
                                             Text(
                                               currentTasks[i]['taskName'].toString().toUpperCase(),
                                               style: TextStyle(
-                                                fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                     ? MediaQuery.of(context).size.width *0.04   /// landscape
                                                     : MediaQuery.of(context).size.width *0.04,  /// portrait
                                               ),
                                             ),
+                                            if (student['text'] == 1)
                                             SizedBox(
                                               width: MediaQuery.of(context).size.width * 0.075,
                                             ),
                                             Container(
-                                              width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                              width: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                 ? MediaQuery.of(context).size.width *0.20     /// landscape
                                                 : MediaQuery.of(context).size.width *0.20,    /// portrait
-                                              height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                              height: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
                                                 ? MediaQuery.of(context).size.height *0.20     /// landscape
                                                 : MediaQuery.of(context).size.height *0.17,    /// portrait
                                               padding: const EdgeInsets.all(10),
@@ -298,7 +294,6 @@ class _AgendaState extends State<Agenda> {
                   ),
                 ],
               ),
-            ),
           ),
         ],
       ),
