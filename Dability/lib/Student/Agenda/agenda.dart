@@ -64,18 +64,23 @@ class _AgendaState extends State<Agenda> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Semantics(label: 'Logo de la aplicación', readOnly: true,
+              child: Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),),
             Expanded(
-              child: Text(
-              student['text'] == 1 ? 'AGENDA' : "",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
+              child: Semantics(label: 'Estás en, ', readOnly: true,
+                child: Text(
+                student['text'] == 1 ? 'AGENDA' : "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-            Image.asset(
-              'assets/images/agendaLogo.png',
-              width: 46,
-              height: 46,
+            Semantics(label: 'agenda', readOnly: true,
+              child: Image.asset(
+                'assets/images/agendaLogo.png',
+                width: 46,
+                height: 46,
+              ),
             ),
             const SizedBox(
               width: 50,
@@ -91,18 +96,21 @@ class _AgendaState extends State<Agenda> {
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
-                ],
+              child: Semantics(label: 'Perfil, se ve tu cara', readOnly: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          icon: Semantics(label: 'Atrás para ir a inicio', readOnly: false,
+              child: Icon(Icons.arrow_back, color: Colors.white,)),
           onPressed: () {
             Navigator.push(
               context,
@@ -167,12 +175,14 @@ class _AgendaState extends State<Agenda> {
                                           children: [
                                             /// Task name
                                             if (student['text'] == 1)
-                                            Text(
-                                              currentTasks[i]['taskName'].toString().toUpperCase(),
-                                              style: TextStyle(
-                                                fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
-                                                    ? MediaQuery.of(context).size.width *0.04   /// landscape
-                                                    : MediaQuery.of(context).size.width *0.04,  /// portrait
+                                            Semantics(label: 'Tarea ${i + 1}', readOnly: false,
+                                              child: Text(
+                                                currentTasks[i]['taskName'].toString().toUpperCase(),
+                                                style: TextStyle(
+                                                  fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                                      ? MediaQuery.of(context).size.width *0.04   /// landscape
+                                                      : MediaQuery.of(context).size.width *0.04,  /// portrait
+                                                ),
                                               ),
                                             ),
                                             if (student['text'] == 1)
