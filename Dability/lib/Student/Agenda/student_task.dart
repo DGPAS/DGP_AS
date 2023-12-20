@@ -55,13 +55,16 @@ class _StudentTaskState extends State<StudentTask> {
         appBar: AppBar(
           title: Row(
             children: [
-              Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+              Semantics(label: 'Logo de la aplicación', readOnly: true,
+                child: Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),),
               Expanded(
                 /// Task title on AppBar
-                child: Text(
-                  widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white),
+                child: Semantics(label: 'Estás en, ', readOnly: true,
+                  child: Text(
+                    widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
@@ -82,17 +85,20 @@ class _StudentTaskState extends State<StudentTask> {
                     borderRadius: BorderRadius.circular(0),
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
-                  ],
+                child: Semantics(label: 'Perfil, se ve tu cara', readOnly: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white,),
+            icon: Semantics(label: 'Atrás para ir a agenda', readOnly: false,
+                child: Icon(Icons.arrow_back, color: Colors.white,)),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -116,12 +122,77 @@ class _StudentTaskState extends State<StudentTask> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   /// Task title Box
-                  Container(
-                      width: widget.student['text'] == 1 ? MediaQuery.of(context).size.width * 0.8 : MediaQuery.of(context).size.width * 0.4,
-                      padding: const EdgeInsets.all(20),
-                      alignment: Alignment.center,
-                      decoration: ShapeDecoration(
-                        //color: Color(0xFF4A6987),
+                  Semantics(label: 'Título de la tarea, ', readOnly: true,
+                    child: Container(
+                        width: widget.student['text'] == 1 ? MediaQuery.of(context).size.width * 0.8 : MediaQuery.of(context).size.width * 0.4,
+                        padding: const EdgeInsets.all(20),
+                        alignment: Alignment.center,
+                        decoration: ShapeDecoration(
+                          //color: Color(0xFF4A6987),
+                          color: Color(0xFFD9D9D9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          shadows: [
+                            BoxShadow(
+                              color: Color(0x3F000000),
+                              blurRadius: 4,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: widget.student['text'] == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                          children: [
+                            if (widget.student['text'] == 1)
+                            Text(
+                              task['taskName'].toString().toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                // color: Colors.white,
+                                   color: Colors.black,
+                                fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                    ? MediaQuery.of(context).size.width *0.03     /// landscape
+                                    : MediaQuery.of(context).size.width *0.035,    /// portrait
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                height: 0,
+                              ),
+                            ),
+                            Container(
+                              width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                  ? MediaQuery.of(context).size.width *0.20     /// landscape
+                                  : MediaQuery.of(context).size.width *0.15,    /// portrait
+                              height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
+                                  ? MediaQuery.of(context).size.height *0.20     /// landscape
+                                  : MediaQuery.of(context).size.height *0.15,    /// portrait
+                              margin: const EdgeInsets.only(top: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Semantics(label: '', readOnly: true,
+                                child: Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
+                                  fit: BoxFit.scaleDown,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            /// Container for description task
+              if (widget.student['text'] == 1)
+            Semantics(label: 'Descripción general de la tarea ', readOnly: true,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: ShapeDecoration(
                         color: Color(0xFFD9D9D9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -133,87 +204,28 @@ class _StudentTaskState extends State<StudentTask> {
                             offset: Offset(0, 4),
                             spreadRadius: 0,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: widget.student['text'] == 1 ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                       ],
+                    ),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (widget.student['text'] == 1)
                           Text(
-                            task['taskName'].toString().toUpperCase(),
-                            textAlign: TextAlign.center,
+                            'DESCRIPCIÓN',
                             style: TextStyle(
-                              // color: Colors.white,
-                                 color: Colors.black,
-                              fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
-                                  ? MediaQuery.of(context).size.width *0.03     /// landscape
-                                  : MediaQuery.of(context).size.width *0.035,    /// portrait
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w700,
-                              height: 0,
+                              fontSize: MediaQuery.of(context).size.height * 0.03,
+                              fontWeight: FontWeight.bold,
                             ),
+                            textAlign: TextAlign.left,
                           ),
-                          Container(
-                            width: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
-                                ? MediaQuery.of(context).size.width *0.20     /// landscape
-                                : MediaQuery.of(context).size.width *0.15,    /// portrait
-                            height: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
-                                ? MediaQuery.of(context).size.height *0.20     /// landscape
-                                : MediaQuery.of(context).size.height *0.15,    /// portrait
-                            margin: const EdgeInsets.only(top: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
+                          Text(
+                            task['description'].toString().toUpperCase(),
+                            style: TextStyle(
+                              fontSize: MediaQuery.of(context).size.height * 0.02,
                             ),
-                            child: Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
-                              fit: BoxFit.scaleDown,
-                            ),
-                          ),
-                        ],
-                      )
-                  ),
-                ],
+                            textAlign: TextAlign.justify,
+                          )
+                        ])),
               ),
-            ),
-            /// Container for description task
-              if (widget.student['text'] == 1)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                  padding: const EdgeInsets.all(20.0),
-                  decoration: ShapeDecoration(
-                      color: Color(0xFFD9D9D9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      shadows: [
-                        BoxShadow(
-                          color: Color(0x3F000000),
-                          blurRadius: 4,
-                          offset: Offset(0, 4),
-                          spreadRadius: 0,
-                        ),
-                     ],
-                  ),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'DESCRIPCIÓN',
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.03,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                        Text(
-                          task['description'].toString().toUpperCase(),
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.02,
-                          ),
-                          textAlign: TextAlign.justify,
-                        )
-                      ])),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

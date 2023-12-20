@@ -55,15 +55,19 @@ class _StudentHomeState extends State<StudentHome> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Semantics(label: 'Logo de la aplicación', readOnly: true,
+              child: Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),),
             Expanded(
-              child: Text(
-              student['text'] == 1 ? _getTitle() : "",
-                textAlign: TextAlign.center, // Centra el texto
-                style: TextStyle(color: Colors.white),
+              child: Semantics(label: 'Estás en, ', readOnly: true,
+                child: Text(
+                student['text'] == 1 ? _getTitle() : "",
+                  textAlign: TextAlign.center, // Centra el texto
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-            Image.asset('assets/images/casa.png', width: 46, height: 46),
+            Semantics(label: 'Colegio', readOnly: true,
+                child: Image.asset('assets/images/casa.png', width: 46, height: 46)),
             SizedBox(
               width: 50,
             ),
@@ -78,18 +82,21 @@ class _StudentHomeState extends State<StudentHome> {
                     borderRadius:
                         BorderRadius.circular(0), // Elimina los bordes
                   )),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
-                ],
+              child: Semantics(label: 'Perfil, se ve tu cara', readOnly: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.network("${dotenv.env['API_URL']}/images/students/${student['picture'].toString()}", width: 48, height: 48),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         backgroundColor: Color(0xFF4A6987),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          icon: Semantics(label: 'Atrás para salir', readOnly: false,
+              child: Icon(Icons.arrow_back, color: Colors.white,)),
           onPressed: () {
             Navigator.push(
               context,

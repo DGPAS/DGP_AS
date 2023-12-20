@@ -49,13 +49,16 @@ class _TaskStepsState extends State<TaskSteps> {
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Semantics(label: 'Logo de la aplicación', readOnly: true,
+              child: Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),),
             /// Task title on AppBar
             Expanded(
-              child: Text(
-                widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
+              child: Semantics(label: 'Estás en, paso ${index+1} de la tarea , ', readOnly: true,
+                child: Text(
+                  widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
             Image.network("${dotenv.env['API_URL']}/images/${task['thumbnail'].toString()}",
@@ -76,17 +79,20 @@ class _TaskStepsState extends State<TaskSteps> {
                   borderRadius: BorderRadius.circular(0),
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
-                ],
+              child: Semantics(label: 'Perfil, se ve tu cara', readOnly: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.network("${dotenv.env['API_URL']}/images/students/${widget.student['picture'].toString()}", width: 48, height: 48),
+                  ],
+                ),
               ),
             ),
           ],
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
+          icon: Semantics(label: 'Atrás para salir de los pasos de la tarea', readOnly: false,
+              child: Icon(Icons.arrow_back, color: Colors.white,)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -113,9 +119,11 @@ class _TaskStepsState extends State<TaskSteps> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.network("${dotenv.env['API_URL']}/images/steps/${steps[index].image.toString()}",
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        width: MediaQuery.of(context).size.width * 0.75,
+                      Semantics(label: 'Imagen que describe el paso ${index + 1}', readOnly: true,
+                        child: Image.network("${dotenv.env['API_URL']}/images/steps/${steps[index].image.toString()}",
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                        ),
                       ),
                     ],
                   ),
@@ -126,12 +134,14 @@ class _TaskStepsState extends State<TaskSteps> {
                   Wrap(
                     alignment: WrapAlignment.center,
                     children: [
-                      Text(
-                        widget.student['text'] == 1 ? steps[index].description.toString().toUpperCase() : "",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: MediaQuery.of(context).size.height * 0.025,
-                          ),
+                      Semantics(label: 'Descripción del paso ${index+1},', readOnly: true,
+                        child: Text(
+                          widget.student['text'] == 1 ? steps[index].description.toString().toUpperCase() : "",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: MediaQuery.of(context).size.height * 0.025,
+                            ),
+                        ),
                       ),
                     ],
                   ),
@@ -174,11 +184,15 @@ class _TaskStepsState extends State<TaskSteps> {
                                 width: MediaQuery.of(context).size.width * 0.025,
                               ),
                               checkedStep[index] ?
-                                Image.asset('assets/images/checkIcon.png',
-                                    height: MediaQuery.of(context).size.height * 0.1,
+                                Semantics(label: 'Estado actual, paso completado', readOnly: true,
+                                  child: Image.asset('assets/images/checkIcon.png',
+                                      height: MediaQuery.of(context).size.height * 0.1,
+                                  ),
                                 ):
-                                Image.asset('assets/images/greyIcon.jpg',
-                                  height: MediaQuery.of(context).size.height * 0.075,
+                                Semantics(label: 'Estado actual, paso NO completado', readOnly: true,
+                                  child: Image.asset('assets/images/greyIcon.jpg',
+                                    height: MediaQuery.of(context).size.height * 0.075,
+                                  ),
                                 ) ,
                             ],
                           ),
@@ -211,9 +225,11 @@ class _TaskStepsState extends State<TaskSteps> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: Image.asset(
-                              'assets/images/formerPageArrow.png',
-                              width: MediaQuery.of(context).size.height * 0.1,
+                          child: Semantics(label: 'Flecha para ir al paso anterior', readOnly: false,
+                            child: Image.asset(
+                                'assets/images/formerPageArrow.png',
+                                width: MediaQuery.of(context).size.height * 0.1,
+                            ),
                           ),
                         ),
                       /// Next button
@@ -231,9 +247,11 @@ class _TaskStepsState extends State<TaskSteps> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: Image.asset(
-                              'assets/images/nextPageArrow.png',
-                              width: MediaQuery.of(context).size.height * 0.1,
+                          child: Semantics(label: 'Flecha para ir al paso siguiente', readOnly: false,
+                            child: Image.asset(
+                                'assets/images/nextPageArrow.png',
+                                width: MediaQuery.of(context).size.height * 0.1,
+                            ),
                           ),
                         ),
                       if (index == numberOfSteps-1 && checkedStep[index] == true)

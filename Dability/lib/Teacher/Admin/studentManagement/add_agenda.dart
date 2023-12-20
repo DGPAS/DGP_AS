@@ -370,15 +370,4 @@ class _AddAgendaTaskState extends State<AddAgendaTask> {
       ),
     );
   }
-
-  /// Predefined style for some containers
-  BoxDecoration _buildBoxDecoration() {
-    return BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(20.0),
-        border: Border.all(
-          color: Colors.grey,
-          width: 1,
-        ));
-  }
 }
