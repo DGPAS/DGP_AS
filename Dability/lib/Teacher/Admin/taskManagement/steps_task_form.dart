@@ -360,7 +360,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       orElse: () => ListStep(numStep, '', 'null'));
                   /// If it exists ir modifies it
                   if ('null' != existingStep.description) {
-                    if (selectedImage != '') existingStep.image = selectedImage;
+                    if (selectedImage != '') existingStep.selectedImage = selectedImage;
                     if (actualDescription != '') {
                       existingStep.description = actualDescription;
                     }

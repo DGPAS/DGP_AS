@@ -4,10 +4,15 @@ import 'Teacher/Educator/educator_home.dart';
 import 'Teacher/login/teacher_login.dart';
 import 'Student/Login/student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/services.dart';
+
 
 void main() async {
   /// Loads the environment variables from .env
   await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  
   runApp(const DAbility());
 } 
 

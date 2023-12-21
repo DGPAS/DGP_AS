@@ -1,14 +1,14 @@
 class ListStep {
   int numStep;
-  String image;
+  String selectedImage;
   String description;
 
-  ListStep(this.numStep, this.image, this.description);
+  ListStep(this.numStep, this.selectedImage, this.description);
 
   Map<String, dynamic> toJson() {
     return {
       'numStep': numStep,
-      'image': image,
+      'image': selectedImage,
       'description': description,
     };
   }

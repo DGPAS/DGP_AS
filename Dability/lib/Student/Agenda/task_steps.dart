@@ -115,12 +115,12 @@ class _TaskStepsState extends State<TaskSteps> {
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
                   /// Step Task Image
-                  if (steps[index].image != null && steps[index].image != '')
+                  if (steps[index].selectedImage != null && steps[index].selectedImage != '')
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Semantics(label: 'Imagen que describe el paso ${index + 1}', readOnly: true,
-                        child: Image.network("${dotenv.env['API_URL']}/images/steps/${steps[index].image.toString()}",
+                        child: Image.network("${dotenv.env['API_URL']}/images/steps/${steps[index].selectedImage.toString()}",
                           height: MediaQuery.of(context).size.height * 0.25,
                           width: MediaQuery.of(context).size.width * 0.75,
                         ),

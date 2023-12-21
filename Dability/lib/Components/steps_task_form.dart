@@ -242,7 +242,7 @@ class _StepsTaskFormState extends State<StepsTaskForm> {
                       orElse: () => ListStep(numStep, '', 'null'));
                   // Si se ha encontrado:
                   if ('null' != existingStep.description) {
-                    if (selectedImage != '') existingStep.image = selectedImage;
+                    if (selectedImage != '') existingStep.selectedImage = selectedImage;
                     if (actualDescription != '') {
                       existingStep.description = actualDescription;
                     }

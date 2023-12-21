@@ -55,7 +55,7 @@ Future<void> insertStepsData(String actualTaskId, ListStep step) async {
       "numStep": step.numStep.toString(),
       "idTask": actualTaskId,
       "description": step.description,
-      "image": step.image
+      
     });
 
     var response = jsonDecode(res.body);
