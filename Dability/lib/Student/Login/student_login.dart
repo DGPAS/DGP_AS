@@ -93,34 +93,34 @@ class _StudentLoginState extends State<StudentLogin> {
           itemBuilder: (context, int index) {
             return Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Color(0xFF4A6987)
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Color(0xFF4A6987)
               ),
               // color: Colors.blue,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF4A6987),
-                  elevation: 0
+                    backgroundColor: Color(0xFF4A6987),
+                    elevation: 0
                 ),
                 onPressed: () {
                   /// On pressed, it goes to the [student_pictologin.dart]
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StudentPictoLogin(idStudent: "23")), /// Pasar el id del alumno correspondiente o un Map<String, dynamic> student completo
+                    MaterialPageRoute(builder: (context) => StudentPictoLogin(id_student: 23)), /// Pasar el id del alumno correspondiente o un Map<String, dynamic> student completo
                   );
                 },
                 child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/student_image.png',
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.width * 0.35,
-                    ),
-                    Text(
-                      students[index],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ]
+                    children: [
+                      Image.asset(
+                        'assets/images/student_image.png',
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        height: MediaQuery.of(context).size.width * 0.35,
+                      ),
+                      Text(
+                        students[index],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ]
                 ),
               ),
             );

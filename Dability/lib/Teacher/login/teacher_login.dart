@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:dability/Teacher/Admin/admin_home.dart';
 import 'package:dability/Teacher/Educator/educator_home.dart';
 import 'package:flutter/material.dart';
+import 'package:dability/Api_Requests/user_requests.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
-/// # Login page for Admin
 class AdminLogin extends StatefulWidget {
   const AdminLogin({super.key});
 
@@ -16,45 +20,53 @@ class _AdminLoginState extends State<AdminLogin> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  /// Example credentials
-  String userEmail = "prueba@correo.es";
-  String userPassword = "123";
-  String educatorEmail = "educador@correo.es";
-  String educatorPassword = "123";
-
   bool loginError = false;
+  List<dynamic> adminsList = [];
+  List<dynamic> admins = [];
+  List<dynamic> teachersList = [];
+  List<dynamic> teachers = [];
 
-  /// Function that checks if [email] and [password] are identical
-  /// to [userEmail] and [userPassword] or to [educatorEmail] and [educatorPassword]
-  ///
-  /// If they are, it returns 1 or 2
-  ///
-  /// Else, it returns 0
-  int authenticateUser(String email, String password){
-    int rol = 0;
-    if(email == userEmail && password == userPassword){
-      rol = 1;
-    }
-    else if (email == educatorEmail && password == educatorPassword) {
-      rol = 2;
-    }
-
-    return rol;
+  @override
+  void initState(){
+    super.initState();
+    getData();
   }
 
-  /// Main builder for the login
+  Future<void> getData () async {
+    adminsList = await getAdminsLogins();
+    setState(() {
+      admins = adminsList;
+    });
+
+    teachersList = await getTeachersLogins();
+    setState(() {
+      teachers = teachersList;
+    });
+  }
+
+  int authenticateUser(String email, String password, List<dynamic> admins, List<dynamic> teachers) {
+    for (var i = 0; i < admins.length; i++) {
+      if (admins[i]['login'] == email && admins[i]['password'] == password) {
+        return 0;
+      }
+      if (teachers[i]['login'] == email && teachers[i]['password'] == password) {
+        return 1;
+      }
+    }
+    return -1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
+            Image.asset('assets/images/logo.jpeg', width: 48, height: 48),
             const Expanded(
               child: Text(
                 'Login Admin',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -84,31 +96,24 @@ class _AdminLoginState extends State<AdminLogin> {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          /// Title of the login
           Container(
             padding: const EdgeInsets.all(16.0),
             child: Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Color(0xFF4A6987)
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Color(0xFF4A6987)
               ),
               child: Text(
                 'ACCESO ADMINISTRADORES Y EDUCADORES',
                 style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white
+                    fontSize: 25,
+                    color: Colors.white
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -121,7 +126,6 @@ class _AdminLoginState extends State<AdminLogin> {
               key: _formKey,
               child: Column(
                 children: [
-                  /// Label for email
                   Container(
                     // width: MediaQuery.of(context).size.width * 0.6
                     constraints: BoxConstraints(
@@ -131,8 +135,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.black)),
-                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(labelText: 'Email'),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Por favor, introduce tu email';
@@ -142,7 +145,6 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                   ),
                   SizedBox(height: 16.0),
-                  /// Label for the password
                   Container(
                     constraints: BoxConstraints(
                       maxWidth: 800.0, // Establece el ancho máximo del contenedor
@@ -151,8 +153,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     child: TextFormField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(labelText: 'Contraseña', labelStyle: TextStyle(color: Colors.black)),
-                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(labelText: 'Contraseña'),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Por favor, introduce tu contraseña';
@@ -166,7 +167,6 @@ class _AdminLoginState extends State<AdminLogin> {
                   ),
                   SizedBox(height: 30.0),
 
-                  /// Handler error controller
                   if (loginError)
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
@@ -176,34 +176,39 @@ class _AdminLoginState extends State<AdminLogin> {
                       ),
                     ),
 
-                  /// Submit access button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      backgroundColor: Color(0xFF4A6987),
-                      // padding: EdgeInsets.symmetric(horizontal: 100),
-                      minimumSize: Size(180, 60)
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        backgroundColor: Color(0xFF4A6987),
+                        // padding: EdgeInsets.symmetric(horizontal: 100),
+                        minimumSize: Size(180, 60)
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        int rol = authenticateUser(
-                            _emailController.text, _passwordController.text);
+                        int loginCorrecto = authenticateUser(
+                            _emailController.text, _passwordController.text, adminsList, teachersList);
 
-                        setState(() {
-                          if (rol == 0) {
-                            loginError = !loginError;
-                          }
-                        });
+                        if(loginCorrecto == 0 || loginCorrecto == 1){
+                          setState(() {
+                            loginError = false;
+                          });
+                        }
+                        else{
+                          setState(() {
+                            loginError = true;
+                          });
+                        }
 
-                        if(rol == 1){  /// It goes to admin
+
+                        if(loginCorrecto == 0){ // se redirecciona
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AdminHome()),
                           );
                         }
-                        if(rol == 2){  /// It goes to educator
+                        else if(loginCorrecto == 1){
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => EducatorHome()),
@@ -217,28 +222,27 @@ class _AdminLoginState extends State<AdminLogin> {
                     ),
                   ),
                   SizedBox(height: 30,),
-                  /// Register (TODO: Delete it)
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:[
-                      Text('¿No tienes cuenta?'),
-                      SizedBox(width: 12,),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF4A6987),
-                        ),
-                        onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => SignUpPage()),
-                          // );
-                        },
-                        child: Text(
-                          'Registrate',
-                          style: TextStyle(color: Colors.white),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        Text('¿No tienes cuenta?'),
+                        SizedBox(width: 12,),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF4A6987),
+                            ),
+                            onPressed: () {
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(builder: (context) => SignUpPage()),
+                              // );
+                            },
+                            child: Text(
+                              'Registrate',
+                              style: TextStyle(color: Colors.white),
+                            )
                         )
-                      )
-                    ]
+                      ]
                   ),
                   // Text('¿No tienes cuenta? Regístrate')
                 ],
@@ -249,6 +253,5 @@ class _AdminLoginState extends State<AdminLogin> {
       ),
     );
   }
-
 
 }

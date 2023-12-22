@@ -1,60 +1,52 @@
+import 'dart:convert';
+
 import 'package:dability/Student/student_home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:dability/Api_Requests/student_login_requests.dart';
 
-/// # Student pictologin to access with his/her credentials
-///
-/// It shows 6 pictures on top and the student can select 3 of them,
-/// which will appear on bottom
 class StudentPictoLogin extends StatefulWidget {
-  final String idStudent;
+  final int id_student;
 
-  const StudentPictoLogin({Key? key, required this.idStudent})
+  const StudentPictoLogin({Key? key, required this.id_student})
       : super(key: key);
 
   @override
-  State<StudentPictoLogin> createState() => _StudentPictoLoginState();
+  State<StudentPictoLogin> createState() =>
+      _StudentPictoLoginState(id_student: this.id_student);
 }
 
 class _StudentPictoLoginState extends State<StudentPictoLogin> {
-  String idStudent = "-1";
+  final int id_student;
 
-  _StudentPictoLoginState();
+  _StudentPictoLoginState({required this.id_student});
 
-  List<String> elements = [];
-  String student = "JUAN";
-  List<String> students = [];
-  /// It stores the pictures selected by the student
-  List<String> displayedItems = [];
-  List<String> password = [];
+  List<dynamic> psswd = [];
+  List<dynamic> psd = [];
+  List<dynamic> displayedItems = [];
+  List<int> intro = [];
+  String secuencia = "451";
 
   bool showError = false;
 
   @override
   void initState() {
     super.initState();
+    print('Init');
+    getData();
+    secuencia = psswd[6];
+  }
 
-    idStudent = widget.idStudent;
-
+  Future<void> getData() async{
+    psd = await getPswd(id_student);
     setState(() {
-      elements.add("Spiderman");
-      elements.add("Batman");
-      elements.add("Superman");
-      elements.add("Pantera");
-      elements.add("Luffy");
-      elements.add("Goku");
-
-      students.add("JOAQUIN");
-      students.add("MANUEL");
-      students.add("SARA");
-      students.add("RUBEN");
-      students.add("JUAN");
-      students.add("ALICIA");
-
-      student = students[0];
-
-      password = ["Spiderman", "Batman", "Superman"];
+      psswd = psd;
+      secuencia = psswd[6];
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +57,8 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
             Image.asset('assets/images/DabilityLogo.png', width: 48, height: 48),
             Expanded(
               child: Text(
-                'PictoLogin $student',
+                'PictoLogin ',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -97,12 +88,6 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Padding(
@@ -110,7 +95,6 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
         child: Column(
           children: [
             Expanded(
-              /// Grid that shows all the picto-password
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
@@ -119,21 +103,21 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 ),
                 itemCount: 6,
                 itemBuilder: (context, int index) {
-                  String imagePath = "";
-
+                  String imagePath = 'images/';
                   if (index == 0) {
-                    imagePath = 'assets/images/spiderman.png';
+                    imagePath = imagePath + psswd[0];
                   } else if (index == 1) {
-                    imagePath = 'assets/images/batman.jpeg';
+                    imagePath = imagePath + psswd[1];
                   } else if (index == 2) {
-                    imagePath = 'assets/images/superman.jpg';
+                    imagePath = imagePath + psswd[2];
                   } else if (index == 3) {
-                    imagePath = 'assets/images/pantera.jfif';
+                    imagePath = imagePath + psswd[3];
                   } else if (index == 4) {
-                    imagePath = 'assets/images/luffy.jpeg';
+                    imagePath = imagePath + psswd[4];
                   } else if (index == 5) {
-                    imagePath = 'assets/images/goku.jpg';
+                    imagePath = imagePath + psswd[5];
                   }
+
 
                   return Container(
                     decoration: BoxDecoration(
@@ -141,22 +125,25 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                         color: Color(0xFF4A6987)),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF4A6987), elevation: 0),
+                          primary: Color(0xFF4A6987), elevation: 0),
                       onPressed: () {
+                        print(index);
                         setState(() {
                           if (displayedItems.length < 3) {
-                            displayedItems.add(elements[index]);
+                            displayedItems.add(psswd[index]);
+                            intro.add(index);
                           }
                         });
-                        /// if displayedItems is not equal to  password
+                        // si displayedItems no es igual a password
                         for (int i = 0; i < displayedItems.length; i++) {
-                          if (displayedItems[i] != password[i]) {
-                            /// if picto-passwords doesn't match it shows an X
+                          if (intro[i] != int.parse(secuencia[i])) {
+                            // si deja de coincidir
                             setState(() {
                               displayedItems.clear();
+                              intro.clear();
                               showError = true;
                             });
-                            /// After 1 seconds, the X dissappear
+                            // Después de 1 segundo, ocultar la X
                             Future.delayed(Duration(seconds: 1), () {
                               setState(() {
                                 showError = false;
@@ -168,25 +155,26 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                         }
 
                         if(displayedItems.length == 3){
-                          /// If the password is Ok, it goes to the [student_home.dart]
+                          // contraseña correcta
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>
-                                StudentHome(idStudent: idStudent)),
+                                StudentHome(idStudent: id_student.toString())),
                           );
                         }
                       },
-                      child: Image.asset(
-                        imagePath,
-                        width: MediaQuery.of(context).size.width * 0.30,
-                        height: MediaQuery.of(context).size.width * 0.30,
+                      child:
+
+                      Image.network("${dotenv.env['API_URL']}/${imagePath}",
+                        width: MediaQuery.sizeOf(context).width * 0.3,
+                        height: MediaQuery.sizeOf(context).height * 0.2,
                       ),
                     ),
                   );
                 },
               ),
             ),
-            /// Container to show the [displayedItems] pictures
+            // Container para mostrar las imágenes correspondientes a displayedItems
             Container(
               height: 200,
               width: MediaQuery.sizeOf(context).width,
@@ -200,35 +188,36 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                     String currentElement = displayedItems[index];
 
                     // Selecciona la imagen en función de la comprobación
-                    String imagePath = "";
+                    String imagePath = 'images/';
 
-                    int elementIndex = elements.indexOf(currentElement);
-
+                    int elementIndex = psswd.indexOf(currentElement);
                     if (elementIndex == 0) {
-                      imagePath = 'assets/images/spiderman.png';
+                      imagePath = imagePath + psswd[0];
                     } else if (elementIndex == 1) {
-                      imagePath = 'assets/images/batman.jpeg';
+                      imagePath = imagePath + psswd[1];
                     } else if (elementIndex == 2) {
-                      imagePath = 'assets/images/superman.jpg';
+                      imagePath = imagePath + psswd[2];
                     } else if (elementIndex == 3) {
-                      imagePath = 'assets/images/pantera.jpeg';
+                      imagePath = imagePath + psswd[3];
                     } else if (elementIndex == 4) {
-                      imagePath = 'assets/images/luffy.jpeg';
+                      imagePath = imagePath + psswd[4];
                     } else if (elementIndex == 5) {
-                      imagePath = 'assets/images/goku.jpeg';
+                      imagePath = imagePath + psswd[5];
                     }
 
                     return Column(
                       children: [
-                        Image.asset(
-                          imagePath,
-                          width: MediaQuery.sizeOf(context).width * 0.3,
-                          height: MediaQuery.sizeOf(context).height * 0.2,
+                        Container(
+
+                          child: Image.network("${dotenv.env['API_URL']}/${imagePath}",
+                            width: MediaQuery.sizeOf(context).width * 0.3,
+                            height: MediaQuery.sizeOf(context).height * 0.2,
+                          ),
                         ),
                       ],
                     );
                   }),
-                  /// Container show the X if it the password doesn't match
+                  // Container para mostrar la X en caso de error
                   Visibility(
                     visible: showError,
                     child: Container(
@@ -246,7 +235,6 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
                 ],
               ),
             ),
-            // TODO: Quitar boton limpiar
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -264,4 +252,3 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
     );
   }
 }
-
