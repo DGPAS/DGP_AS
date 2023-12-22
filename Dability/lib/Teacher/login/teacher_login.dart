@@ -49,7 +49,10 @@ class _AdminLoginState extends State<AdminLogin> {
       if (admins[i]['login'] == email && admins[i]['password'] == password) {
         return 0;
       }
-      if (teachers[i]['login'] == email && teachers[i]['password'] == password) {
+
+    }
+    for(int i = 0; i < teachers.length; i++) {
+      if (teachers[i]['user'] == email && teachers[i]['password'] == password) {
         return 1;
       }
     }
@@ -188,7 +191,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         int loginCorrecto = authenticateUser(
-                            _emailController.text, _passwordController.text, adminsList, teachersList);
+                            _emailController.text, _passwordController.text, admins, teachers);
 
                         if(loginCorrecto == 0 || loginCorrecto == 1){
                           setState(() {

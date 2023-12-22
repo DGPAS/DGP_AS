@@ -54,7 +54,7 @@ class _AddModStudentState extends State<AddModStudent> {
   DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   /// Lists that store and manage the password of an student
-  List<String> selectedPasswd = ['','','',''];
+  List<String> selectedPasswd = ['','','','','','',''];
   List<String> selectedDBPasswd = [];
 
   /// Form that contains the name of the student to add or modify
@@ -66,6 +66,11 @@ class _AddModStudentState extends State<AddModStudent> {
   TextForm surnameForm = TextForm(
       requiredField: true,
       title: "Apellido del Estudiante",
+      type: TextFormType.title);
+
+  TextForm passForm = TextForm(
+      requiredField: true,
+      title: "Orden de las 3 imágenes de la contraseña: ",
       type: TextFormType.title);
 
   /// Init State
@@ -227,7 +232,7 @@ class _AddModStudentState extends State<AddModStudent> {
       if (_photo != null) {
         await uploadPhoto(actualStudentId, _photo!);
       }
-      await uploadPassword(actualStudentId, selectedPasswd);
+      await uploadPassword(actualStudentId, selectedPasswd, "");
     } else {
       await updateStudent(idStudent, nameStudent!, surnameStudent!,
           readCheck!, soundCheck!, videoCheck!);
@@ -402,7 +407,7 @@ class _AddModStudentState extends State<AddModStudent> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text("Contraseña del Estudiante ordenada"),
+                    const Text("Imágenes para la contraseña del estudiante"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -508,11 +513,133 @@ class _AddModStudentState extends State<AddModStudent> {
                         ),
                       ),
                     ),
+
                   ],
                 ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        /// Image pictogram 4
+                        GestureDetector(
+                          onTap: () async {
+                            final picker = ImagePicker();
+                            final XFile? pickedFile = await picker.pickImage(
+                                source: ImageSource.gallery, imageQuality: 100);
+
+                            setState(() {
+                              selectedPasswd[4] = pickedFile!.path;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            margin: const EdgeInsets.all(20),
+                            child: DottedBorder(
+                              color: Colors.black,
+                              strokeWidth: 1,
+                              dashPattern: [10, 6],
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(20),
+                              child: SizedBox(
+                                height: 200,
+                                width: 200,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(45),
+                                    child: _getPasswd(selectedPasswd[4],4)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        /// Image pictogram 5
+                        GestureDetector(
+                          onTap: () async {
+                            final picker = ImagePicker();
+                            final XFile? pickedFile = await picker.pickImage(
+                                source: ImageSource.gallery, imageQuality: 100);
+
+                            setState(() {
+                              selectedPasswd[5] = pickedFile!.path;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            margin: const EdgeInsets.all(20),
+                            child: DottedBorder(
+                              color: Colors.black,
+                              strokeWidth: 1,
+                              dashPattern: [10, 6],
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(20),
+                              child: SizedBox(
+                                height: 200,
+                                width: 200,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(45),
+                                    child: _getPasswd(selectedPasswd[5],5)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        /// Image pictogram 6
+                        GestureDetector(
+                          onTap: () async {
+                            final picker = ImagePicker();
+                            final XFile? pickedFile = await picker.pickImage(
+                                source: ImageSource.gallery, imageQuality: 100);
+
+                            setState(() {
+                              selectedPasswd[6] = pickedFile!.path;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            margin: const EdgeInsets.all(20),
+                            child: DottedBorder(
+                              color: Colors.black,
+                              strokeWidth: 1,
+                              dashPattern: [10, 6],
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(20),
+                              child: SizedBox(
+                                height: 200,
+                                width: 200,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(45),
+                                    child: _getPasswd(selectedPasswd[6],6)),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: passForm,
+                      ),
+                      ),
+                      ],
+                    ),
                   ],
                 ),
               ),
+
               /// Format attributes of student
               const Text('Formatos aptos para el estudiante'),
               SizedBox(
@@ -790,8 +917,9 @@ class _AddModStudentState extends State<AddModStudent> {
                   surnameStudent = surnameForm.getText();
                   if ((nameStudent == '' || nameStudent == null) ||
                       (surnameStudent == '' || surnameStudent == null) ||
-                      (selectedPasswd[1] == '' || selectedPasswd[2] == '' || selectedPasswd[3] == '')) {
-                    print("Los campos nombre, apellido, y los 3 pictogramas de la contraseña son obligatorios");
+                      (selectedPasswd[1] == '' || selectedPasswd[2] == '' || selectedPasswd[3] == '' ||
+                          selectedPasswd[4] == '' || selectedPasswd[5] == '' || selectedPasswd[6] == '')) {
+                    print("Los campos nombre, apellido, y los 6 pictogramas de la contraseña son obligatorios");
                   } else {
                     submitForm(actualStudentId);
                     Navigator.of(context).pop();

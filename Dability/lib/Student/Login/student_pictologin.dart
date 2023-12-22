@@ -35,7 +35,6 @@ class _StudentPictoLoginState extends State<StudentPictoLogin> {
     super.initState();
     print('Init');
     getData();
-    secuencia = psswd[6];
   }
 
   Future<void> getData() async{

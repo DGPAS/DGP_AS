@@ -179,7 +179,7 @@ Future<void> uploadPhoto(String actualStudentId, File photo) async {
 /// It uploads it with [selectedPasswd] by [actualStudentId]
 ///
 /// Throws an [error] if the query fails
-Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd) async {
+Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd, String pass) async {
   String uri = "${dotenv.env['API_URL']}/upload_password.php";
   try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
@@ -188,11 +188,20 @@ Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd)
         "pictogram1", selectedPasswd[1]);
     request.files.add(pictogram1);
     var pictogram2 = await http.MultipartFile.fromPath(
-        "pictogram2", selectedPasswd[2]);
+        "pictogram2", selectedPasswd[2]) ;
     request.files.add(pictogram2);
     var pictogram3 = await http.MultipartFile.fromPath(
         "pictogram3", selectedPasswd[3]);
     request.files.add(pictogram3);
+    var pictogram4 = await http.MultipartFile.fromPath(
+        "pictogram4", selectedPasswd[4]);
+    request.files.add(pictogram4);
+    var pictogram5 = await http.MultipartFile.fromPath(
+        "pictogram5", selectedPasswd[5]);
+    request.files.add(pictogram5);
+    var pictogram6 = await http.MultipartFile.fromPath(
+        "pictogram6", selectedPasswd[6]);
+    request.files.add(pictogram6);
     var response = await request.send();
 
     if (response.statusCode == 200) {

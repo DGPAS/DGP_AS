@@ -1,10 +1,10 @@
+import 'dart:convert';
+
 import 'package:dability/Student/Login/student_pictologin.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
-/// # Page to list all the students
-///
-/// It shows the photo of the students to select one and access to his
-/// pictologin
 class StudentLogin extends StatefulWidget {
   const StudentLogin({super.key});
 
@@ -14,24 +14,40 @@ class StudentLogin extends StatefulWidget {
 
 class _StudentLoginState extends State<StudentLogin> {
 
-  List<String> students = []; // lista de estudiantes
+  List<dynamic> students = [];
+  List<dynamic> stds = [];
+
+  Future<void> getAlumnos() async{
+    String uri = "${dotenv.env['API_URL']}/view_students.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        setState(() {
+          stds = json.decode(response.body);
+        });
+      } else {
+        print('Error en la solicitud: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getData() async{
+    await getAlumnos();
+    students.addAll(stds);
+  }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      students.add("JOAQUIN");
-      students.add("MANUEL");
-      students.add("SARA");
-      students.add("RUBEN");
-      students.add("JUAN");
-      students.add("ALICIA");
-    });
+    print("init");
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -41,7 +57,6 @@ class _StudentLoginState extends State<StudentLogin> {
               child: Text(
                 'Login Student',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -71,42 +86,37 @@ class _StudentLoginState extends State<StudentLogin> {
             ),
           ],
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white,),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         backgroundColor: Color(0xFF4A6987),
       ),
       body: Container(
         alignment: Alignment.bottomCenter,
         padding: EdgeInsets.all(20),
-        /// It builds all the students list
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Column number
-            crossAxisSpacing: 8.0, // Horizontal gap in grid
-            mainAxisSpacing: 8.0, // Vertical gap in grid
+            crossAxisCount: 2, // Número de columnas
+            crossAxisSpacing: 8.0, // Espaciado horizontal entre los elementos del grid
+            mainAxisSpacing: 8.0, // Espaciado vertical entre los elementos del grid
           ),
-          itemCount: 6, // Total number of Students on grid (3 rows x 2 columns = 6 elements)
+          itemCount: students.length, // Número total de elementos en el grid (3 filas x 2 columnas = 6 elementos)
           itemBuilder: (context, int index) {
             return Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Color(0xFF4A6987)
               ),
-              // color: Colors.blue,
+              // color: Colors.blue, // Puedes cambiar el color según tus necesidades
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF4A6987),
+                    primary: Color(0xFF4A6987), // Establece el color de fondo del botón como transparente
                     elevation: 0
                 ),
                 onPressed: () {
-                  /// On pressed, it goes to the [student_pictologin.dart]
+                  print(int.parse(students[index]["id"]));
+                  // llevarte al alumno seleccionado
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => StudentPictoLogin(id_student: 23)), /// Pasar el id del alumno correspondiente o un Map<String, dynamic> student completo
+
+                    MaterialPageRoute(builder: (context) => StudentPictoLogin(id_student: int.parse(students[index]["id"]))),
                   );
                 },
                 child: Column(
@@ -117,7 +127,7 @@ class _StudentLoginState extends State<StudentLogin> {
                         height: MediaQuery.of(context).size.width * 0.35,
                       ),
                       Text(
-                        students[index],
+                        students[index]['firstName'],
                         style: TextStyle(color: Colors.white),
                       ),
                     ]
