@@ -4,6 +4,7 @@ import 'Teacher/Educator/educator_home.dart';
 import 'Teacher/login/teacher_login.dart';
 import 'Student/Login/student_login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dcdg/dcdg.dart';
 
 void main() async {
   /// Loads the environment variables from .env
@@ -22,6 +23,7 @@ class DAbility extends StatelessWidget {
       // Remove the debug tag
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Scolar',
         primarySwatch: Colors.blue,
         colorScheme: ColorScheme(
             brightness:  Brightness.light,
@@ -76,12 +78,11 @@ class _HomePageState extends State<HomePage> {
                 )),
             /// Slogan
             Text(
-              "Soluciones de accesibilidad para la independencia y facilidad de todos",
+              "Soluciones de accesibilidad para la independencia y facilidad de todos".toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF4A6987),
                 fontSize: 20.0, //MediaQuery.of(context).size.height * 0.03,
-                fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
                 height: 0,
               ),
@@ -110,9 +111,9 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     child: const Text(
-                      'Acceso para profesorado',
+                      'ACCESO PARA PROFESORADO',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
@@ -137,9 +138,9 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     child: const Text(
-                      'Acceder como Estudiante',
+                      'ACCEDER COMO ESTUDIANTE',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),

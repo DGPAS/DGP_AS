@@ -62,7 +62,7 @@ class _StudentHomeState extends State<StudentHome> {
                 child: Text(
                 student['text'] == 1 ? _getTitle() : "",
                   textAlign: TextAlign.center, // Centra el texto
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 40),
                 ),
               ),
             ),
@@ -138,7 +138,7 @@ class _StudentHomeState extends State<StudentHome> {
                     Text(
                       'AGENDA PERSONAL',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 30,
                         color: Colors.white,
                       ),
                       textAlign: TextAlign.center,

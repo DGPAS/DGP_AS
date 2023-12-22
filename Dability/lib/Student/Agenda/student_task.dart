@@ -63,7 +63,7 @@ class _StudentTaskState extends State<StudentTask> {
                   child: Text(
                     widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 30),
                   ),
                 ),
               ),
@@ -153,9 +153,8 @@ class _StudentTaskState extends State<StudentTask> {
                                 // color: Colors.white,
                                    color: Colors.black,
                                 fontSize: _orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
-                                    ? MediaQuery.of(context).size.width *0.03     /// landscape
-                                    : MediaQuery.of(context).size.width *0.035,    /// portrait
-                                fontFamily: 'Inter',
+                                    ? MediaQuery.of(context).size.width *0.04     /// landscape
+                                    : MediaQuery.of(context).size.width *0.045,    /// portrait
                                 fontWeight: FontWeight.w700,
                                 height: 0,
                               ),
@@ -212,7 +211,7 @@ class _StudentTaskState extends State<StudentTask> {
                           Text(
                             'DESCRIPCIÓN',
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.height * 0.03,
+                              fontSize: MediaQuery.of(context).size.height * 0.04,
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.left,
@@ -220,7 +219,7 @@ class _StudentTaskState extends State<StudentTask> {
                           Text(
                             task['description'].toString().toUpperCase(),
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.height * 0.02,
+                              fontSize: MediaQuery.of(context).size.height * 0.035,
                             ),
                             textAlign: TextAlign.justify,
                           )

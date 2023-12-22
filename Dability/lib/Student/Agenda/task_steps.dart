@@ -57,7 +57,7 @@ class _TaskStepsState extends State<TaskSteps> {
                 child: Text(
                   widget.student['text'] == 1 ? task['taskName'].toString().toUpperCase() : "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                 ),
               ),
             ),
@@ -139,7 +139,7 @@ class _TaskStepsState extends State<TaskSteps> {
                           widget.student['text'] == 1 ? steps[index].description.toString().toUpperCase() : "",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: MediaQuery.of(context).size.height * 0.025,
+                              fontSize: MediaQuery.of(context).size.height * 0.035,
                             ),
                         ),
                       ),
@@ -176,7 +176,7 @@ class _TaskStepsState extends State<TaskSteps> {
                                 'MARCAR PASO COMPLETADO',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: MediaQuery.of(context).size.height * 0.030
+                                  fontSize: MediaQuery.of(context).size.height * 0.04
                                 ),
                               ),
                               if(widget.student['text'] == 1)

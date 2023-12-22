@@ -71,7 +71,7 @@ class _AgendaState extends State<Agenda> {
                 child: Text(
                 student['text'] == 1 ? 'AGENDA' : "",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 40),
                 ),
               ),
             ),
@@ -181,8 +181,8 @@ class _AgendaState extends State<Agenda> {
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: orientation(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) == Orientation.landscape
-                                                      ? MediaQuery.of(context).size.width *0.04   /// landscape
-                                                      : MediaQuery.of(context).size.width *0.04,  /// portrait
+                                                      ? MediaQuery.of(context).size.width *0.05   /// landscape
+                                                      : MediaQuery.of(context).size.width *0.05,  /// portrait
                                                 ),
                                               ),
                                             ),
