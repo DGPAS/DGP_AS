@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:dability/Api_Requests/steps_requests.dart';
 import 'package:dability/Api_Requests/task_requests.dart';
-/// # Page for add or modify a task
+/// # Page for add or modify a tasknewer
 ///
 /// It receives a required param [typeForm] that indicates if it is
 /// for add a task or modify the given one with [task]

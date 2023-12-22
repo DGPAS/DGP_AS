@@ -120,7 +120,7 @@ class _FinishTaskState extends State<FinishTask> {
                         widget.student['text'] == 1 ? "¿Has terminado la tarea?".toUpperCase() : "",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
+                          fontSize: MediaQuery.of(context).size.height * 0.040,
                         ),
                       ),
                     ),
@@ -157,12 +157,12 @@ class _FinishTaskState extends State<FinishTask> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               if(widget.student['text'] == 1) const Text("NO",
-                                  style: TextStyle(color: Colors.white),),
+                                  style: TextStyle(color: Colors.white, fontSize: 30),),
                               Text(
                                 'X',
                                 style: TextStyle(
                                   color: Colors.red,
-                                  fontSize: 25,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -195,7 +195,7 @@ class _FinishTaskState extends State<FinishTask> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             if (widget.student['text'] == 1) const Text("SI",
-                                style: TextStyle(color: Colors.white),),
+                                style: TextStyle(color: Colors.white, fontSize: 30),),
                             Image.asset(
                               'assets/images/checkIcon.png',
                               width: MediaQuery.of(context).size.height * 0.05,

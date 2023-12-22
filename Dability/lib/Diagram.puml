@@ -1,0 +1,555 @@
+@startuml
+set namespaceSeparator ::
+
+class "dability::Components::text_form.dart::TextForm" {
+  +bool requiredField
+  +String title
+  +TextFormType type
+  +String text
+  +String? originalText
+  +String getText()
+  +State<TextForm> createState()
+}
+
+"dability::Components::text_form.dart::TextForm" o-- "dability::Components::enum_types.dart::TextFormType"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Components::text_form.dart::TextForm"
+
+class "dability::Components::text_form.dart::_TextFormState" {
+  -GlobalKey<FormState> _formKey
+  +String requiredField
+  +String title
+  +TextFormType type
+  +bool isRequiredField
+  +String? originalText
+  +TextEditingController controller
+  +void initState()
+  +void dispose()
+  -void _getLastValue()
+  +double getContentPadding()
+  +Widget build()
+}
+
+"dability::Components::text_form.dart::_TextFormState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dability::Components::text_form.dart::_TextFormState" o-- "dability::Components::enum_types.dart::TextFormType"
+"dability::Components::text_form.dart::_TextFormState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Components::text_form.dart::_TextFormState"
+
+class "dability::Components::enum_types.dart::TextFormType" {
+  +int index
+  {static} +List<TextFormType> values
+  {static} +TextFormType title
+  {static} +TextFormType description
+}
+
+"dability::Components::enum_types.dart::TextFormType" o-- "dability::Components::enum_types.dart::TextFormType"
+"dart::core::Enum" <|-- "dability::Components::enum_types.dart::TextFormType"
+
+class "dability::Components::enum_types.dart::StepsFormType" {
+  +int index
+  {static} +List<StepsFormType> values
+  {static} +StepsFormType gallery
+  {static} +StepsFormType camera
+}
+
+"dability::Components::enum_types.dart::StepsFormType" o-- "dability::Components::enum_types.dart::StepsFormType"
+"dart::core::Enum" <|-- "dability::Components::enum_types.dart::StepsFormType"
+
+class "dability::Components::enum_types.dart::AddModType" {
+  +int index
+  {static} +List<AddModType> values
+  {static} +AddModType add
+  {static} +AddModType mod
+}
+
+"dability::Components::enum_types.dart::AddModType" o-- "dability::Components::enum_types.dart::AddModType"
+"dart::core::Enum" <|-- "dability::Components::enum_types.dart::AddModType"
+
+class "dability::Components::student_task_chart.dart::StudentTaskChart" {
+  +List<dynamic> tasks
+  +State<StudentTaskChart> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Components::student_task_chart.dart::StudentTaskChart"
+
+class "dability::Components::student_task_chart.dart::_StudentTaskChartState" {
+  +List<int> numTaskPerDay
+  +List<ChartSeries> data
+  +List<Series<dynamic, dynamic>> series
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Components::student_task_chart.dart::_StudentTaskChartState"
+
+class "dability::Components::student_task_chart.dart::ChartSeries" {
+  +int numTasks
+  +int days
+}
+
+class "dability::Components::list_step.dart::ListStep" {
+  +int numStep
+  +String image
+  +String description
+  +Map<String, dynamic> toJson()
+}
+
+class "dability::Teacher::Educator::educator_home.dart::EducatorHome" {
+  +State<EducatorHome> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Educator::educator_home.dart::EducatorHome"
+
+class "dability::Teacher::Educator::educator_home.dart::_EducatorHomeState" {
+  +ButtonStyle style
+  +Widget build()
+}
+
+"dability::Teacher::Educator::educator_home.dart::_EducatorHomeState" o-- "flutter::src::material::button_style.dart::ButtonStyle"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Educator::educator_home.dart::_EducatorHomeState"
+
+class "dability::Teacher::Educator::myStudents::student_statistics.dart::StudentStatistics" {
+  +Map<String, dynamic> student
+  +State<StudentStatistics> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Educator::myStudents::student_statistics.dart::StudentStatistics"
+
+class "dability::Teacher::Educator::myStudents::student_statistics.dart::_StudentStatisticsState" {
+  -TextEditingController _controller
+  +Map<String, dynamic> student
+  +List<dynamic> tasks
+  +List<dynamic> filteredTasks
+  +double maxWidth
+  +void initState()
+  +dynamic getData()
+  +void filterSearchResults()
+  +Widget build()
+}
+
+"dability::Teacher::Educator::myStudents::student_statistics.dart::_StudentStatisticsState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Educator::myStudents::student_statistics.dart::_StudentStatisticsState"
+
+class "dability::Teacher::Educator::myStudents::my_students.dart::MyStudents" {
+  +State<MyStudents> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Educator::myStudents::my_students.dart::MyStudents"
+
+class "dability::Teacher::Educator::myStudents::my_students.dart::_MyStudentsState" {
+  -TextEditingController _controller
+  +String idEducator
+  +List<dynamic> students
+  +double widthMax
+  +List<dynamic> displayedItems
+  +void initState()
+  +dynamic getData()
+  +void filterSearchResults()
+  +Widget build()
+}
+
+"dability::Teacher::Educator::myStudents::my_students.dart::_MyStudentsState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Educator::myStudents::my_students.dart::_MyStudentsState"
+
+class "dability::Teacher::login::teacher_login.dart::AdminLogin" {
+  +State<AdminLogin> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::login::teacher_login.dart::AdminLogin"
+
+class "dability::Teacher::login::teacher_login.dart::_AdminLoginState" {
+  -GlobalKey<FormState> _formKey
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  +String userEmail
+  +String userPassword
+  +String educatorEmail
+  +String educatorPassword
+  +bool loginError
+  +int authenticateUser()
+  +Widget build()
+}
+
+"dability::Teacher::login::teacher_login.dart::_AdminLoginState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dability::Teacher::login::teacher_login.dart::_AdminLoginState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::login::teacher_login.dart::_AdminLoginState"
+
+class "dability::Teacher::Admin::admin_home.dart::AdminHome" {
+  +State<AdminHome> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::admin_home.dart::AdminHome"
+
+class "dability::Teacher::Admin::admin_home.dart::_AdminHomeState" {
+  +ButtonStyle style
+  +Widget build()
+}
+
+"dability::Teacher::Admin::admin_home.dart::_AdminHomeState" o-- "flutter::src::material::button_style.dart::ButtonStyle"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::admin_home.dart::_AdminHomeState"
+
+class "dability::Teacher::Admin::studentManagement::student_management.dart::StudentManagement" {
+  +State<StudentManagement> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::studentManagement::student_management.dart::StudentManagement"
+
+class "dability::Teacher::Admin::studentManagement::student_management.dart::_StudentManagementState" {
+  -TextEditingController _controller
+  +List<dynamic> students
+  +double widthMax
+  +List<dynamic> displayedItems
+  +void initState()
+  +dynamic getData()
+  +void filterSearchResults()
+  +Widget build()
+}
+
+"dability::Teacher::Admin::studentManagement::student_management.dart::_StudentManagementState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::studentManagement::student_management.dart::_StudentManagementState"
+
+class "dability::Teacher::Admin::studentManagement::add_agenda.dart::AddAgendaTask" {
+  +Map<String, dynamic>? student
+  +State<AddAgendaTask> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::studentManagement::add_agenda.dart::AddAgendaTask"
+
+class "dability::Teacher::Admin::studentManagement::add_agenda.dart::_AddAgendaTaskState" {
+  +List<dynamic> tasks
+  +double widthMax
+  +int selected
+  +Color notSelectedColor
+  +Color selectedColor
+  +List<dynamic> displayedItems
+  +DateTime? startDate
+  +DateTime? endDate
+  +DateTime? doneDate
+  +String actualTaskId
+  +String actualStudentId
+  +void initState()
+  +dynamic submitForm()
+  +dynamic getData()
+  +String getTitle()
+  +String getSubmitButton()
+  +Widget build()
+}
+
+"dability::Teacher::Admin::studentManagement::add_agenda.dart::_AddAgendaTaskState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::studentManagement::add_agenda.dart::_AddAgendaTaskState"
+
+class "dability::Teacher::Admin::studentManagement::mod_agenda.dart::ModAgendaTask" {
+  +Map<String, dynamic> task
+  +State<ModAgendaTask> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::studentManagement::mod_agenda.dart::ModAgendaTask"
+
+class "dability::Teacher::Admin::studentManagement::mod_agenda.dart::_ModAgendaTaskState" {
+  +DateTime startDate
+  +DateTime endDate
+  +String actualTaskId
+  +String actualStudentId
+  +void initState()
+  +dynamic submitForm()
+  +String getTitle()
+  +String getSubmitButton()
+  +Widget build()
+  -BoxDecoration _buildBoxDecoration()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::studentManagement::mod_agenda.dart::_ModAgendaTaskState"
+
+class "dability::Teacher::Admin::studentManagement::add_mod_student.dart::AddModStudent" {
+  +AddModType typeForm
+  +Map<String, dynamic>? student
+  +State<AddModStudent> createState()
+}
+
+"dability::Teacher::Admin::studentManagement::add_mod_student.dart::AddModStudent" o-- "dability::Components::enum_types.dart::AddModType"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::studentManagement::add_mod_student.dart::AddModStudent"
+
+class "dability::Teacher::Admin::studentManagement::add_mod_student.dart::_AddModStudentState" {
+  -TextEditingController _controller
+  +List<dynamic> displayedItems
+  +List<dynamic> tasks
+  +AddModType typeForm
+  +String? id
+  +String actualStudentId
+  +String title
+  +String? nameStudent
+  +String? surnameStudent
+  -File? _photo
+  +String selectedPhoto
+  +bool? readCheck
+  +bool? videoCheck
+  +bool? soundCheck
+  +DateTime? startDate
+  +DateTime? endDate
+  +List<String> selectedPasswd
+  +List<String> selectedDBPasswd
+  +TextForm nameForm
+  +TextForm surnameForm
+  +void initState()
+  +dynamic getData()
+  +void filterSearchResults()
+  +dynamic submitForm()
+  -Widget _getImage()
+  -Widget _getPasswd()
+  +Widget build()
+}
+
+"dability::Teacher::Admin::studentManagement::add_mod_student.dart::_AddModStudentState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dability::Teacher::Admin::studentManagement::add_mod_student.dart::_AddModStudentState" o-- "dability::Components::enum_types.dart::AddModType"
+"dability::Teacher::Admin::studentManagement::add_mod_student.dart::_AddModStudentState" o-- "dart::io::File"
+"dability::Teacher::Admin::studentManagement::add_mod_student.dart::_AddModStudentState" o-- "dability::Components::text_form.dart::TextForm"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::studentManagement::add_mod_student.dart::_AddModStudentState"
+
+class "dability::Teacher::Admin::taskManagement::steps_task_form.dart::StepsTaskForm" {
+  +bool requiredField
+  +List<ListStep> steps
+  +State<StepsTaskForm> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::taskManagement::steps_task_form.dart::StepsTaskForm"
+
+class "dability::Teacher::Admin::taskManagement::steps_task_form.dart::_StepsTaskFormState" {
+  +String requiredField
+  +bool isRequiredField
+  +List<ListStep> steps
+  +String selectedImage
+  +String selectedVideo
+  +String actualDescription
+  +TextEditingController descriptionController
+  -TextEditingController _numStep
+  +TextForm textForm
+  +bool error
+  -void _getLastDescriptionValue()
+  +void initState()
+  +void dispose()
+  -Widget _getForm()
+  -Widget _getImage()
+  +Widget build()
+  -BoxDecoration _buildBoxDecoration()
+}
+
+"dability::Teacher::Admin::taskManagement::steps_task_form.dart::_StepsTaskFormState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dability::Teacher::Admin::taskManagement::steps_task_form.dart::_StepsTaskFormState" o-- "dability::Components::text_form.dart::TextForm"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::taskManagement::steps_task_form.dart::_StepsTaskFormState"
+
+class "dability::Teacher::Admin::taskManagement::task_management.dart::TaskManagement" {
+  +State<TaskManagement> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::taskManagement::task_management.dart::TaskManagement"
+
+class "dability::Teacher::Admin::taskManagement::task_management.dart::_TaskManagementState" {
+  -TextEditingController _controller
+  +List<dynamic> tasks
+  +double maxWidth
+  +List<dynamic> displayedItems
+  +void initState()
+  +dynamic getData()
+  +void filterSearchResults()
+  +Widget build()
+}
+
+"dability::Teacher::Admin::taskManagement::task_management.dart::_TaskManagementState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::taskManagement::task_management.dart::_TaskManagementState"
+
+class "dability::Teacher::Admin::taskManagement::add_mod_task.dart::AddModTask" {
+  +AddModType typeForm
+  +Map<String, dynamic>? task
+  +State<AddModTask> createState()
+}
+
+"dability::Teacher::Admin::taskManagement::add_mod_task.dart::AddModTask" o-- "dability::Components::enum_types.dart::AddModType"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Teacher::Admin::taskManagement::add_mod_task.dart::AddModTask"
+
+class "dability::Teacher::Admin::taskManagement::add_mod_task.dart::_AddModTaskState" {
+  +TextForm titleForm
+  +TextForm descriptionForm
+  +String? title
+  +String? description
+  +String? idTask
+  +String? thumbnail
+  +Image? thumbnailImage
+  +String? videoUrl
+  +bool isPressed
+  +AddModType? typeForm
+  +List<ListStep> steps
+  +List<ListStep> copy
+  +List<ListStep> auxSteps
+  +String actualTaskId
+  +String selectedImage
+  +String selectedVideo
+  +void initState()
+  +dynamic getData()
+  +dynamic submitForm()
+  +String getTitle()
+  +String getSubmitButton()
+  -Widget _getImage()
+  +List<Widget> getSteps()
+  +Widget build()
+  -BoxDecoration _buildBoxDecoration()
+}
+
+"dability::Teacher::Admin::taskManagement::add_mod_task.dart::_AddModTaskState" o-- "dability::Components::text_form.dart::TextForm"
+"dability::Teacher::Admin::taskManagement::add_mod_task.dart::_AddModTaskState" o-- "flutter::src::widgets::image.dart::Image"
+"dability::Teacher::Admin::taskManagement::add_mod_task.dart::_AddModTaskState" o-- "dability::Components::enum_types.dart::AddModType"
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Teacher::Admin::taskManagement::add_mod_task.dart::_AddModTaskState"
+
+class "dability::dability.dart::DAbility" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dability::dability.dart::DAbility"
+
+class "dability::dability.dart::HomePage" {
+  +String title
+  +State<HomePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::dability.dart::HomePage"
+
+class "dability::dability.dart::_HomePageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::dability.dart::_HomePageState"
+
+class "dability::Student::Agenda::student_task.dart::StudentTask" {
+  +Map<String, dynamic> task
+  +Map<String, dynamic> student
+  +State<StudentTask> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::Agenda::student_task.dart::StudentTask"
+
+class "dability::Student::Agenda::student_task.dart::_StudentTaskState" {
+  +bool done
+  +Map<String, dynamic> task
+  +List<ListStep> steps
+  +void initState()
+  +dynamic getData()
+  -Orientation _orientation()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::Agenda::student_task.dart::_StudentTaskState"
+
+class "dability::Student::Agenda::finish_task.dart::FinishTask" {
+  +Map<String, dynamic> task
+  +Map<String, dynamic> student
+  +State<FinishTask> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::Agenda::finish_task.dart::FinishTask"
+
+class "dability::Student::Agenda::finish_task.dart::_FinishTaskState" {
+  +String taskName
+  +String id
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::Agenda::finish_task.dart::_FinishTaskState"
+
+class "dability::Student::Agenda::agenda.dart::Agenda" {
+  +Map<String, dynamic> student
+  +State<Agenda> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::Agenda::agenda.dart::Agenda"
+
+class "dability::Student::Agenda::agenda.dart::_AgendaState" {
+  +Map<String, dynamic> student
+  +List<dynamic> tasks
+  +List<dynamic> currentTasks
+  +int numTasksPerPage
+  +int numPages
+  +bool isImageVisible
+  +int counter
+  +void initState()
+  +dynamic getData()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::Agenda::agenda.dart::_AgendaState"
+
+class "dability::Student::Agenda::task_steps.dart::TaskSteps" {
+  +List<ListStep> steps
+  +Map<String, dynamic> task
+  +Map<String, dynamic> student
+  +State<TaskSteps> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::Agenda::task_steps.dart::TaskSteps"
+
+class "dability::Student::Agenda::task_steps.dart::_TaskStepsState" {
+  +Map<String, dynamic> task
+  +List<ListStep> steps
+  +int index
+  +int numberOfSteps
+  +List<bool> checkedStep
+  +bool isImageVisible
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::Agenda::task_steps.dart::_TaskStepsState"
+
+class "dability::Student::Login::student_pictologin.dart::StudentPictoLogin" {
+  +String idStudent
+  +State<StudentPictoLogin> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::Login::student_pictologin.dart::StudentPictoLogin"
+
+class "dability::Student::Login::student_pictologin.dart::_StudentPictoLoginState" {
+  +String idStudent
+  +List<String> elements
+  +String student
+  +List<String> students
+  +List<String> displayedItems
+  +List<String> password
+  +bool showError
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::Login::student_pictologin.dart::_StudentPictoLoginState"
+
+class "dability::Student::Login::student_login.dart::StudentLogin" {
+  +State<StudentLogin> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::Login::student_login.dart::StudentLogin"
+
+class "dability::Student::Login::student_login.dart::_StudentLoginState" {
+  +List<String> students
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::Login::student_login.dart::_StudentLoginState"
+
+class "dability::Student::student_home.dart::StudentHome" {
+  +String idStudent
+  +State<StudentHome> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dability::Student::student_home.dart::StudentHome"
+
+class "dability::Student::student_home.dart::_StudentHomeState" {
+  +Map<String, dynamic> student
+  +String name
+  +void initState()
+  +dynamic getData()
+  -String _getTitle()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dability::Student::student_home.dart::_StudentHomeState"
+
+
+@enduml
