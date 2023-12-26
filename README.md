@@ -1,75 +1,21 @@
-<?php
+# Ejecución de d-ability
 
-include("dbconnection.php");
-$con = dbconnection();
+Bienvenido al proyecto d-ability del grupo accesible solutions. Este README te guiará a través del proceso de ejecución de la aplicación.
 
-if (
-    isset($_FILES['pictogram1']) &&
-    isset($_FILES['pictogram2']) &&
-    isset($_FILES['pictogram3']) &&
-    isset($_FILES['pictogram4']) &&
-    isset($_FILES['pictogram5']) && 
-    isset($_FILES['pictogram6']) &&
-    isset($_POST['idStudent']) &&
-    isset($_POST['pass'])  // Agregado el campo 'pass'
-) {
-    $pictogram1 = $_FILES['pictogram1']['name'];
-    $pictogram2 = $_FILES['pictogram2']['name'];
-    $pictogram3 = $_FILES['pictogram3']['name'];
-    $pictogram4 = $_FILES['pictogram4']['name'];
-    $pictogram5 = $_FILES['pictogram5']['name'];
-    $pictogram6 = $_FILES['pictogram6']['name'];
-    $idStudent = $_POST['idStudent'];
-    $pass = $_POST['pass'];  // Nuevo campo 'pass'
+## Requisitos previos
+Asegúrate de tener instalado lo siguiente en tu sistema Windows antes de comenzar:
 
-    $pictogram1Path = 'images/' . $pictogram1;
-    $tmp_name1 = $_FILES['pictogram1']['tmp_name'];
-    move_uploaded_file($tmp_name1, $pictogram1Path);
+- [XAMPP](https://www.apachefriends.org/index.html) instalado y configurado.
+- Android Studio o Visual Studio Code para compilar la aplicación
+- Archivos del proyecto descargados.
 
-    $pictogram2Path = 'images/' . $pictogram2;
-    $tmp_name2 = $_FILES['pictogram2']['tmp_name'];
-    move_uploaded_file($tmp_name2, $pictogram2Path);
+## Pasos de ejecución
 
-    $pictogram3Path = 'images/' . $pictogram3;
-    $tmp_name3 = $_FILES['pictogram3']['tmp_name'];
-    move_uploaded_file($tmp_name3, $pictogram3Path);
-
-    $pictogram4Path = 'images/' . $pictogram4;
-    $tmp_name4 = $_FILES['pictogram4']['tmp_name'];
-    move_uploaded_file($tmp_name4, $pictogram4Path);
-
-    $pictogram5Path = 'images/' . $pictogram5;
-    $tmp_name5 = $_FILES['pictogram5']['tmp_name'];
-    move_uploaded_file($tmp_name5, $pictogram5Path);
-
-    $pictogram6Path = 'images/' . $pictogram6;
-    $tmp_name6 = $_FILES['pictogram6']['tmp_name'];
-    move_uploaded_file($tmp_name6, $pictogram6Path);
-
-    $query = "INSERT INTO `passwordstudent`(`idStudent`, `pictogram1`, `pictogram2`, `pictogram3`, `pictogram4`, `pictogram5`, `pictogram6`, `pass`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = mysqli_prepare($con, $query);
-
-    mysqli_stmt_bind_param($stmt, "isssssss", $idStudent, $pictogram1, $pictogram2, $pictogram3, $pictogram4, $pictogram5, $pictogram6, $pass);
-
-    $exe = mysqli_stmt_execute($stmt);
-
-    $arr = [];
-
-    if ($exe) {
-        $arr["success"] = "true";
-        $arr["idStudent"] = mysqli_insert_id($con);
-    } else {
-        $arr["success"] = "false";
-        $arr["error"] = mysqli_error($con);
-    }
-
-    mysqli_stmt_close($stmt);
-} else {
-    $arr["success"] = "false";
-    die('Error de paso de parametros: ' . mysqli_error());
-}
-
-print(json_encode($arr));
-
-?>
+1. Instala [XAMPP](https://www.apachefriends.org/index.html) en tu sistema.
+2. Copia los archivos de la carpeta API al directorio de instalación de XAMPP, específicamente en `xampp/htdocs`.
+3. Accede a [localhost/phpmyadmin](http://localhost/phpmyadmin) y crea una nueva base de datos llamada `d-ability`.
+4. Importa el archivo `.sql` proporcionado en el directorio del proyecto a la base de datos `d-ability`.
+5. Asegúrate de que tu dispositivo y tu PC estén conectados al mismo WiFi.
+6. Abre PowerShell (Windows) o un terminal (Linux) y ejecuta el siguiente comando para obtener tu dirección IP dentro de la red WiFi:
+   ```ipconfig``` en Windows e ```ifconfig``` en Linux. Busca la IP correspondiente al adaptador de red inalámbrico y copiala.
+7. En el directorio del proyecto de Android, modifica el archivo .env y establece la dirección IP obtenida en el paso anterior.
