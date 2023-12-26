@@ -54,7 +54,7 @@ class _AddModStudentState extends State<AddModStudent> {
   DateTime? endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   /// Lists that store and manage the password of an student
-  List<String> selectedPasswd = ['','','','','','',''];
+  List<String> selectedPasswd = ['','','','','','','',''];
   List<String> selectedDBPasswd = [];
 
   /// Form that contains the name of the student to add or modify
@@ -156,7 +156,7 @@ class _AddModStudentState extends State<AddModStudent> {
   /// Function that calls [getStudentPassword] who returns the DataBase student
   /// password and adds it to [selectedPasswd] and [selectedDBPasswd]
   Future<void> getData () async {
-    selectedPasswd = await getStudentPassword(actualStudentId);
+    selectedPasswd = await getPswd(int.parse(actualStudentId));
     tasks = await getStudentAgendaAll(actualStudentId); // setState?
     setState(() {
       selectedDBPasswd.clear();
@@ -226,13 +226,14 @@ class _AddModStudentState extends State<AddModStudent> {
   /// its id [idStudent], it updates the photo and
   /// it updates the password
   Future<void> submitForm (String idStudent) async {
+
     if (typeForm == AddModType.add) {
       actualStudentId = await insertStudent(nameStudent!, surnameStudent!,
                             readCheck!, soundCheck!, videoCheck!);
       if (_photo != null) {
         await uploadPhoto(actualStudentId, _photo!);
       }
-      await uploadPassword(actualStudentId, selectedPasswd, "");
+      await uploadPassword(actualStudentId, selectedPasswd, selectedPasswd[7]);
     } else {
       await updateStudent(idStudent, nameStudent!, surnameStudent!,
           readCheck!, soundCheck!, videoCheck!);
@@ -290,7 +291,7 @@ class _AddModStudentState extends State<AddModStudent> {
       }
       else {
         print("getPasswd -------- Cargo de network (else)");
-        return Image.network("${dotenv.env['API_URL']}/images/students/passwords/$urlPath");
+        return Image.network("${dotenv.env['API_URL']}/images/$urlPath");
       }
     }
   }
@@ -915,6 +916,7 @@ class _AddModStudentState extends State<AddModStudent> {
                 onPressed: () {
                   nameStudent = nameForm.getText();
                   surnameStudent = surnameForm.getText();
+                  selectedPasswd[7] = passForm.getText();
                   if ((nameStudent == '' || nameStudent == null) ||
                       (surnameStudent == '' || surnameStudent == null) ||
                       (selectedPasswd[1] == '' || selectedPasswd[2] == '' || selectedPasswd[3] == '' ||

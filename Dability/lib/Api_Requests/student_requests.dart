@@ -77,28 +77,64 @@ Future<void> deleteStudent(String idStudent) async {
 /// existing student with id = [actualStudentId] from DataBase
 ///
 /// Throws an [error] if the query fails
-Future<List<String>> getStudentPassword(String actualStudentId) async {
-  List<String> selectedPasswd =  ['','','',''];
-
-  /// Uri whose IP is on .env that calls API
-  String uri = "${dotenv.env['API_URL']}/view_student_password.php?idStudent=$actualStudentId";
+Future<List<String>> getPswdLogin(int id_student) async{
+  List<String> psd = [];
+  String uri = "${dotenv.env['API_URL']}/get_student_password_v2.php?idStudent=$id_student";
   try {
-    var res = await http.get(Uri.parse(uri));
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> decodedData = json.decode(response.body);
 
-    var response = jsonDecode(res.body);
-    if (response["success"] == "true") {
-      print("Contraseña obtenida");
-        selectedPasswd[1] = response["data"]["pictogram1"].toString();
-        selectedPasswd[2] = response["data"]["pictogram2"].toString();
-        selectedPasswd[3] = response["data"]["pictogram3"].toString();
+      // Accede a la propiedad 'data' del mapa
+      Map<String, dynamic> data = decodedData['data'];
+
+      // Crear una lista de strings con los valores de las propiedades 'pictogram1' a 'pictogram6'
+      psd = [
+        data['pictogram1'],
+        data['pictogram2'],
+        data['pictogram3'],
+        data['pictogram4'],
+        data['pictogram5'],
+        data['pictogram6'],
+        data['pass'],
+      ];
     } else {
-      print("Error en response getStudentPassword");
+      print('Error en la solicitud: ${response.statusCode}');
     }
-  } catch (error) {
-    print(error);
+  } catch (e) {
+    print(e);
   }
+  return psd;
+}
 
-  return selectedPasswd;
+Future<List<String>> getPswd(int id_student) async{
+  List<String> psd = [];
+  String uri = "${dotenv.env['API_URL']}/get_student_password_v2.php?idStudent=$id_student";
+  try {
+    var response = await http.get(Uri.parse(uri));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> decodedData = json.decode(response.body);
+
+      // Accede a la propiedad 'data' del mapa
+      Map<String, dynamic> data = decodedData['data'];
+
+      // Crear una lista de strings con los valores de las propiedades 'pictogram1' a 'pictogram6'
+      psd = [
+        data['pass'],
+        data['pictogram1'],
+        data['pictogram2'],
+        data['pictogram3'],
+        data['pictogram4'],
+        data['pictogram5'],
+        data['pictogram6'],
+      ];
+    } else {
+      print('Error en la solicitud: ${response.statusCode}');
+    }
+  } catch (e) {
+    print(e);
+  }
+  return psd;
 }
 
 
@@ -184,6 +220,7 @@ Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd,
   try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
     request.fields['idStudent'] = actualStudentId;
+    request.fields['pass'] = pass;
     var pictogram1 = await http.MultipartFile.fromPath(
         "pictogram1", selectedPasswd[1]);
     request.files.add(pictogram1);
@@ -208,7 +245,7 @@ Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd,
       print("Image Uploaded");
     }
     else {
-      print("Error en la subida");
+      print("Error en la subida - ${response.statusCode}: ${response.reasonPhrase}");
     }
   } catch (error) {
     print(error);
@@ -222,7 +259,7 @@ Future<void> uploadPassword(String actualStudentId, List<String> selectedPasswd,
 ///
 /// Throws an [error] if the query fails
 Future<void> updatePassword(String actualStudentId, List<String> selectedPasswd) async {
-  String uri = "${dotenv.env['API_URL']}/update_password.php";
+  String uri = "${dotenv.env['API_URL']}/upload_password.php";
   try {
     var request = http.MultipartRequest('POST', Uri.parse(uri));
     request.fields['idStudent'] = actualStudentId;
@@ -230,18 +267,27 @@ Future<void> updatePassword(String actualStudentId, List<String> selectedPasswd)
         "pictogram1", selectedPasswd[1]);
     request.files.add(pictogram1);
     var pictogram2 = await http.MultipartFile.fromPath(
-        "pictogram2", selectedPasswd[2]);
+        "pictogram2", selectedPasswd[2]) ;
     request.files.add(pictogram2);
     var pictogram3 = await http.MultipartFile.fromPath(
         "pictogram3", selectedPasswd[3]);
     request.files.add(pictogram3);
+    var pictogram4 = await http.MultipartFile.fromPath(
+        "pictogram4", selectedPasswd[4]);
+    request.files.add(pictogram4);
+    var pictogram5 = await http.MultipartFile.fromPath(
+        "pictogram5", selectedPasswd[5]);
+    request.files.add(pictogram5);
+    var pictogram6 = await http.MultipartFile.fromPath(
+        "pictogram6", selectedPasswd[6]);
+    request.files.add(pictogram6);
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      print("Password Updated");
+      print("Image Uploaded");
     }
     else {
-      print("Error en la subida");
+      print("Error en la subida - ${response.statusCode}: ${response.reasonPhrase}");
     }
   } catch (error) {
     print(error);

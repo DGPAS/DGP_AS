@@ -1,0 +1,44 @@
+<?php
+
+include("dbconnection.php");
+$con = dbconnection();
+$home = getenv('HOME');
+
+    if (isset($_FILES['image']) && isset($_POST['idStudent'])) {
+        $image = $_FILES['image']['name'];
+        $idStudent = $_POST['idStudent'];
+
+        $imagePath = 'images/students/' . $image;
+        $tmp_name = $_FILES['image']['tmp_name'];
+
+        move_uploaded_file($tmp_name, $imagePath);
+
+        $query = "UPDATE `student` SET `picture`=? WHERE `id`=?";
+
+        $stmt = mysqli_prepare($con, $query);
+        
+        mysqli_stmt_bind_param($stmt, "si", $image, $idStudent);
+
+        $exe = mysqli_stmt_execute($stmt);
+
+        $arr = [];
+
+        if ($exe) {
+            $arr["success"] = "true";
+            $arr["idStudent"] = mysqli_insert_id($con);
+        } else {
+            $arr["success"] = "false";
+            $arr["error"] = mysqli_error($con);
+        }
+
+        mysqli_stmt_close($stmt);
+    }
+    else {
+        $arr["success"] = "false";
+        die('Error de paso de parametros: ' . mysqli_error());
+    }
+
+print(json_encode($arr));
+
+
+?>

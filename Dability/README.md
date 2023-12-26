@@ -1,16 +1,21 @@
-# dability
+# Ejecución de d-ability
 
-Aplicación D-ability.
+Bienvenido al proyecto d-ability del grupo accesible solutions. Este README te guiará a través del proceso de ejecución de la aplicación.
 
-## Getting Started
+## Requisitos previos
+Asegúrate de tener instalado lo siguiente en tu sistema Windows antes de comenzar:
 
-This project is a starting point for a Flutter application.
+- [XAMPP](https://www.apachefriends.org/index.html) instalado y configurado.
+- Android Studio o Visual Studio Code para compilar la aplicación
+- Archivos del proyecto descargados.
 
-A few resources to get you started if this is your first Flutter project:
+## Pasos de ejecución
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Instala [XAMPP](https://www.apachefriends.org/index.html) en tu sistema.
+2. Copia los archivos de la carpeta API al directorio de instalación de XAMPP, específicamente en `xampp/htdocs`.
+3. Accede a [localhost/phpmyadmin](http://localhost/phpmyadmin) y crea una nueva base de datos llamada `d-ability`.
+4. Importa el archivo `.sql` proporcionado en el directorio del proyecto a la base de datos `d-ability`.
+5. Asegúrate de que tu dispositivo y tu PC estén conectados al mismo WiFi.
+6. Abre PowerShell (Windows) o un terminal (Linux) y ejecuta el siguiente comando para obtener tu dirección IP dentro de la red WiFi:
+   ```ipconfig``` en Windows e ```ifconfig``` en Linux. Busca la IP correspondiente al adaptador de red inalámbrico y copiala.
+7. En el directorio del proyecto de Android, modifica el archivo .env y establece la dirección IP obtenida en el paso anterior.
