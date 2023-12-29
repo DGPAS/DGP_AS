@@ -2,7 +2,7 @@
 
 function dbconnection()
 {
-    $con = mysqli_connect("localhost", "root", "password", "D-ability");
+    $con = mysqli_connect("localhost", "root", "", "D-ability");
 
     if (!$con) {
         die('Error de conexión: ' . mysqli_connect_error());
